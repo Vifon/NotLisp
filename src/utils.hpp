@@ -38,46 +38,6 @@ Maybe<T> operator>>(Maybe<T>& maybe, F fun)
     }
 }
 
-// template <typename T>
-// Maybe<T> operator>>(const Maybe<T>& maybe, Maybe<T>(*fun)(T))
-// {
-//     if (maybe) {
-//         return fun(*maybe);
-//     } else {
-//         return Nothing;
-//     }
-// }
-
-// template <typename T>
-// Maybe<T> operator>>(Maybe<T>& maybe, Maybe<T>(*fun)(T&))
-// {
-//     if (maybe) {
-//         return fun(*maybe);
-//     } else {
-//         return Nothing;
-//     }
-// }
-
-// template <typename T>
-// Maybe<T> operator>>(const Maybe<T>& maybe, Maybe<T>(*fun)(const T&))
-// {
-//     if (maybe) {
-//         return fun(*maybe);
-//     } else {
-//         return Nothing;
-//     }
-// }
-
-// template <typename T>
-// Maybe<T> operator>>(const Maybe<T>& maybe, std::function<Maybe<T>(T)>)
-// {
-//     if (maybe) {
-//         return fun(*maybe);
-//     } else {
-//         return Nothing;
-//     }
-// }
-
 } // namespace vfn
 
 #endif

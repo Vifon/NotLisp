@@ -1,5 +1,5 @@
 set(lexer_SOURCES
-  # lexer.cpp
+  lexer.cpp
   )
 
 set(lexer_HEADERS
@@ -7,4 +7,4 @@ set(lexer_HEADERS
   tokens.hpp
   )
 
-# add_executable(lexer ${lexer_SOURCES})
+add_library(lexer STATIC ${lexer_SOURCES})
