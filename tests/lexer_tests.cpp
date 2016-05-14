@@ -5,7 +5,7 @@
 #include <sstream>
 
 #include "../src/lexer/lexer.hpp"
-#include "../src/lexer/tokens.hpp"
+#include "../src/lexer/tokens/keyword.hpp"
 
 TEST_CASE("Scan no valid tokens", "[lexer]")
 {
@@ -34,13 +34,8 @@ TEST_CASE("Scan integer", "[lexer][int]")
     std::stringstream stream{"42"};
     vfn::Lexer l{stream};
 
-    auto& token = l.readToken();
-    REQUIRE(token.isValid());
-    REQUIRE(typeid(token) == typeid(vfn::NumberToken));
-
-    auto num_token = dynamic_cast<vfn::NumberToken*>(&token);
-    REQUIRE(num_token != nullptr);
-    REQUIRE(l.getToken() == 42);
+    REQUIRE(l.readToken() == 42);
+    REQUIRE_FALSE(l.readToken().isValid());
 
     REQUIRE(l.tokensRead() == 1);
 }

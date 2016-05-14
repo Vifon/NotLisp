@@ -2,6 +2,11 @@
 
 #include "lexer.hpp"
 
+#include "tokens/invalid_token.hpp"
+#include "tokens/keyword_token.hpp"
+#include "tokens/number_token.hpp"
+#include "tokens/var_token.hpp"
+
 namespace vfn {
 
 /**

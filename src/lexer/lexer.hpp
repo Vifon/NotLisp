@@ -6,7 +6,7 @@
 #include <memory>
 #include <string>
 
-#include "tokens.hpp"
+#include "tokens/token.hpp"
 
 namespace vfn {
 
