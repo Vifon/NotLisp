@@ -109,38 +109,17 @@ class Token
     /**
      * Compare a numeric constant with a number.
      */
-    bool operator==(unsigned int n) const
-    {
-        try {
-            return asInt() == n;
-        } catch (bad_token_cast& e) {
-            return false;
-        }
-    }
+    virtual bool operator==(unsigned int n) const { return false; }
 
     /**
      * Compare a variable with a string.
      */
-    bool operator==(const std::string& str) const
-    {
-        try {
-            return asVar() == str;
-        } catch (bad_token_cast& e) {
-            return false;
-        }
-    }
+    virtual bool operator==(const std::string& str) const { return false; }
 
     /**
      * Compare a keyword with a keyword symbol.
      */
-    bool operator==(Keyword keyword) const
-    {
-        try {
-            return asKeyword() == keyword;
-        } catch (bad_token_cast& e) {
-            return false;
-        }
-    }
+    virtual bool operator==(Keyword keyword) const { return false; }
 
   protected:
     Token() { }
@@ -165,6 +144,11 @@ class NumberToken : public Token
     unsigned int asInt() const override
     {
         return value;
+    }
+
+    bool operator==(unsigned int n) const override
+    {
+        return asInt() == n;
     }
 
   private:
@@ -193,6 +177,11 @@ class KeywordToken : public Token
         return keyword;
     }
 
+    bool operator==(Keyword keyword) const override
+    {
+        return asKeyword() == keyword;
+    }
+
     /**
      * The represented keyword.
      */
@@ -215,6 +204,11 @@ class VarToken : public Token
     const std::string& asVar() const override
     {
         return name;
+    }
+
+    bool operator==(const std::string& str) const override
+    {
+        return asVar() == str;
     }
 
     /**
