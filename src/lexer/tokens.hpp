@@ -4,8 +4,9 @@
 #ifndef _h_VFN_TOKENS_
 #define _h_VFN_TOKENS_
 
-#include <sstream>
 #include <exception>
+#include <sstream>
+#include <map>
 
 namespace vfn {
 
@@ -14,6 +15,8 @@ namespace vfn {
  */
 enum class Keyword {
     // Braces
+    ParenBegin,                 ///< <tt>'('</tt>
+    ParenEnd,                   ///< <tt>')'</tt>
     ListBegin,                  ///< <tt>'['</tt>
     ListEnd,                    ///< <tt>']'</tt>
     BlockBegin,                 ///< <tt>'{'</tt>
@@ -78,7 +81,7 @@ class Token
     }
 
     /**
-     * Try to read the numerical value of this token.
+     * Try to get the numerical value of this token.
      */
     virtual unsigned int asInt() const
     {
@@ -86,7 +89,7 @@ class Token
     }
 
     /**
-     * Try to read the numerical value of this token.
+     * Try to get the keyword associated with this token.
      */
     virtual Keyword asKeyword() const
     {
@@ -94,7 +97,7 @@ class Token
     }
 
     /**
-     * Try to read the name of the variable represented by this token.
+     * Try to get the name of the variable represented by this token.
      */
     virtual const std::string& asVar() const
     {
@@ -123,9 +126,6 @@ class NumberToken : public Token
         ss >> value;
     }
 
-    /**
-     * @return The numerical value of this token.
-     */
     unsigned int asInt() const override
     {
         return value;
@@ -148,6 +148,10 @@ class KeywordToken : public Token
         : keyword(s)
     { }
 
+    KeywordToken(const std::string& s)
+        : keyword(mapping.at(s))
+    { }
+
     Keyword asKeyword() const override
     {
         return keyword;
@@ -157,6 +161,9 @@ class KeywordToken : public Token
      * The represented keyword.
      */
     const Keyword keyword;
+
+  private:
+    static const std::map<std::string, Keyword> mapping;
 };
 
 /**

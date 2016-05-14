@@ -82,6 +82,8 @@ void Lexer::skipComment()
  */
 bool Lexer::tryComment()
 {
+    rewind();
+
     if (readChar() == '#') {
         skipComment();
         return true;
@@ -97,6 +99,8 @@ bool Lexer::tryComment()
  */
 bool Lexer::tryInteger()
 {
+    rewind();
+
     char c = readChar();
     if (c >= '1' && c <= '9') {
         while ((c = readChar()) && c >= '0' && c <= '9') { }
@@ -118,6 +122,37 @@ bool Lexer::tryInteger()
 }
 
 /**
+ * Try to read all the available a keyword types.
+ *
+ * @return Whether the operation was successful.
+ */
+bool Lexer::tryKeyword()
+{
+    return tryKeyword("(")
+        || tryKeyword(")")
+        || tryKeyword("[")
+        || tryKeyword("]")
+        || tryKeyword("{")
+        || tryKeyword("}")
+        || tryKeyword("if")
+        || tryKeyword("else")
+        || tryKeyword("let")
+        || tryKeyword("fun")
+        || tryKeyword("for")
+        || tryKeyword("in")
+        || tryKeyword("return")
+        || tryKeyword("+")
+        || tryKeyword("-")
+        || tryKeyword("*")
+        || tryKeyword("/")
+        || tryKeyword("==") // The order of '==' and '=' is important!
+        || tryKeyword("=")
+        || tryKeyword("!=")
+        || tryKeyword(",")
+        || tryKeyword(";");
+}
+
+/**
  * Try to read a keyword.
  *
  * @param keyword A keyword pattern to read.
@@ -125,14 +160,67 @@ bool Lexer::tryInteger()
  */
 bool Lexer::tryKeyword(const char* keyword)
 {
-    // TODO: not implemented
-    return false;
+    rewind();
+
+    char c = '\0';
+
+    while (*keyword != '\0') {
+        if ((c = readChar()) != *keyword++) {
+            unreadChar();
+            return false;
+        }
+    }
+
+    if (checkWordBoundary(c)) {
+        try {
+            token.reset(new KeywordToken(buffer));
+        } catch (std::out_of_range& e) {
+            return false;
+        }
+        return true;
+    } else {
+        return false;
+    }
 }
 
+/**
+ * Try to read a variable name.
+ *
+ * @return Whether the operation was successful.
+ */
 bool Lexer::tryVariable()
 {
-    // TODO: not implemented
-    return false;
+    rewind();
+
+    char c = readChar();
+
+    // The first character should =~ /[a-zA-Z]/.
+    if (!std::isalpha(c)) {
+        return false;
+    }
+
+    while (isWordChar(c = readChar())) { }
+    unreadChar();
+
+    token.reset(new VarToken(buffer));
+    return true;
+}
+
+/**
+ * Check if the character is alphanumeric or an underscore.
+ */
+bool Lexer::isWordChar(char c)
+{
+    return (std::isalnum(c) || c == '_');
+}
+
+/**
+ * Check if either the given character or the next one is a non-word
+ * character.
+ */
+bool Lexer::checkWordBoundary(char c) const
+{
+    return !(isWordChar(c) && isWordChar(in.peek()));
 }
 
 /**
@@ -171,7 +259,9 @@ Token& Lexer::readToken()
 
     rewind();
 
-    tryInteger();
+    tryInteger()
+        || tryKeyword()
+        || tryVariable();
 
     if (token->isValid()) {
         ++tokenCounter;

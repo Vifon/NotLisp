@@ -29,12 +29,15 @@ class Lexer
     void unreadChar();
     void skipWhitespace();
     void skipComment();
+    bool checkWordBoundary(char c) const;
+    static bool isWordChar(char c);
 
     void clearToken();
     const char* rewind();
 
     bool tryComment();
     bool tryInteger();
+    bool tryKeyword();
     bool tryKeyword(const char* keyword);
     bool tryVariable();
 
