@@ -1,7 +1,6 @@
 set(tests_SOURCES
   catch_main.cpp
   lexer_tests.cpp
-  utils_tests.cpp
   )
 
 set(tests_HEADERS
