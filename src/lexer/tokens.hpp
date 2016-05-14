@@ -106,6 +106,42 @@ class Token
 
     virtual ~Token() { };
 
+    /**
+     * Compare a numeric constant with a number.
+     */
+    bool operator==(unsigned int n) const
+    {
+        try {
+            return asInt() == n;
+        } catch (bad_token_cast& e) {
+            return false;
+        }
+    }
+
+    /**
+     * Compare a variable with a string.
+     */
+    bool operator==(const std::string& str) const
+    {
+        try {
+            return asVar() == str;
+        } catch (bad_token_cast& e) {
+            return false;
+        }
+    }
+
+    /**
+     * Compare a keyword with a keyword symbol.
+     */
+    bool operator==(Keyword keyword) const
+    {
+        try {
+            return asKeyword() == keyword;
+        } catch (bad_token_cast& e) {
+            return false;
+        }
+    }
+
   protected:
     Token() { }
 };
