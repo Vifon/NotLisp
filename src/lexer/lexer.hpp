@@ -19,8 +19,8 @@ class Lexer
   public:
     Lexer(std::istream& stream);
 
-    Token* readToken();
-    Token* getToken();
+    Token& readToken();
+    Token& getToken();
 
     unsigned int tokensRead() const { return tokenCounter; }
 
@@ -33,8 +33,10 @@ class Lexer
     void clearToken();
     const char* rewind();
 
-    bool tryInteger();
     bool tryComment();
+    bool tryInteger();
+    bool tryKeyword(const char* keyword);
+    bool tryVariable();
 
     /**
      * An input stream.

@@ -11,11 +11,9 @@ namespace vfn {
  */
 Lexer::Lexer(std::istream& stream)
     : in(stream)
-    , buffer()
-    , buf_ptr(buffer.c_str())
-    , token()
     , tokenCounter(0)
 {
+    clearToken();
 }
 
 /**
@@ -78,24 +76,6 @@ void Lexer::skipComment()
 }
 
 /**
- * Try to read an integer.
- *
- * @return Whether the operation was successful.
- */
-bool Lexer::tryInteger()
-{
-    char c = readChar();
-    if (c >= '1' && c <= '9') {
-        while ((c = readChar()) && c >= '0' && c <= '9') { }
-        unreadChar();
-        token.reset(new NumberToken(buffer));
-        return true;
-    }
-
-    return false;
-}
-
-/**
  * Try to read a comment. The comment is then ignored.
  *
  * @return Whether the operation was successful.
@@ -111,13 +91,58 @@ bool Lexer::tryComment()
 }
 
 /**
+ * Try to read an integer.
+ *
+ * @return Whether the operation was successful.
+ */
+bool Lexer::tryInteger()
+{
+    char c = readChar();
+    if (c >= '1' && c <= '9') {
+        while ((c = readChar()) && c >= '0' && c <= '9') { }
+        unreadChar();
+        token.reset(new NumberToken(buffer));
+        return true;
+    } else {
+        // Zero cannot be followed by any other digits.
+        if (c == '0') {
+            c = in.peek();
+            if (!(c >= '0' && c <= '9')) {
+                token.reset(new NumberToken(buffer));
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Try to read a keyword.
+ *
+ * @param keyword A keyword pattern to read.
+ * @return Whether the operation was successful.
+ */
+bool Lexer::tryKeyword(const char* keyword)
+{
+    // TODO: not implemented
+    return false;
+}
+
+bool Lexer::tryVariable()
+{
+    // TODO: not implemented
+    return false;
+}
+
+/**
  * Reset the current token data.
  *
  * This includes the token buffer and the pointer used to iterate it.
  */
 void Lexer::clearToken()
 {
-    token.reset(nullptr);
+    token.reset(new InvalidToken);
     buffer.clear();
     rewind();
 }
@@ -137,7 +162,7 @@ const char* Lexer::rewind()
  *
  * @return Reference to the new token.
  */
-Token* Lexer::readToken()
+Token& Lexer::readToken()
 {
     do {
         clearToken();
@@ -148,7 +173,7 @@ Token* Lexer::readToken()
 
     tryInteger();
 
-    if (token != nullptr) {
+    if (token->isValid()) {
         ++tokenCounter;
     }
 
@@ -158,9 +183,9 @@ Token* Lexer::readToken()
 /**
  * @return A reference to the last read token.
  */
-Token* Lexer::getToken()
+Token& Lexer::getToken()
 {
-    return token.get();
+    return *token;
 }
 
 } // namespace vfn

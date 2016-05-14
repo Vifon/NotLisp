@@ -1,6 +1,5 @@
 set(lexer_SOURCES
   lexer.cpp
-  tokens.cpp
   )
 
 set(lexer_HEADERS

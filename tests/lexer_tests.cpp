@@ -20,7 +20,7 @@ TEST_CASE("Scan no valid tokens", "[lexer]")
 
     vfn::Lexer l{stream};
 
-    REQUIRE(l.readToken() == nullptr);
+    REQUIRE(!l.readToken().isValid());
     REQUIRE(l.tokensRead() == 0);
 }
 
@@ -29,15 +29,26 @@ TEST_CASE("Scan integer", "[lexer][int]")
     std::stringstream stream{"42"};
     vfn::Lexer l{stream};
 
-    auto token = l.readToken();
-    REQUIRE(token);
-    REQUIRE(typeid(*token) == typeid(vfn::NumberToken));
+    auto& token = l.readToken();
+    REQUIRE(token.isValid());
+    REQUIRE(typeid(token) == typeid(vfn::NumberToken));
 
-    auto num_token = dynamic_cast<vfn::NumberToken*>(token);
+    auto num_token = dynamic_cast<vfn::NumberToken*>(&token);
     REQUIRE(num_token != nullptr);
-    REQUIRE(num_token->getValue() == 42);
-    REQUIRE(l.getToken()->asInt() == 42);
+    REQUIRE(l.getToken().asInt() == 42);
 
+    REQUIRE(l.tokensRead() == 1);
+}
+
+TEST_CASE("Scan integer zero", "[lexer][int]")
+{
+    std::stringstream stream{"0 00"};
+    vfn::Lexer l{stream};
+
+    REQUIRE(l.readToken().isValid());
+    REQUIRE(l.getToken().asInt() == 0);
+
+    REQUIRE(!l.readToken().isValid());
     REQUIRE(l.tokensRead() == 1);
 }
 
@@ -46,10 +57,10 @@ TEST_CASE("Scan multiple integers", "[lexer][int]")
     std::stringstream stream{"42 130 1000"};
     vfn::Lexer l{stream};
 
-    REQUIRE(l.readToken()->asInt() == 42);
-    REQUIRE(l.readToken()->asInt() == 130);
-    REQUIRE(l.readToken()->asInt() == 1000);
-    REQUIRE(l.readToken() == nullptr);
+    REQUIRE(l.readToken().asInt() == 42);
+    REQUIRE(l.readToken().asInt() == 130);
+    REQUIRE(l.readToken().asInt() == 1000);
+    REQUIRE(!l.readToken().isValid());
 
     REQUIRE(l.tokensRead() == 3);
 }
