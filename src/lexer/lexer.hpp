@@ -17,22 +17,16 @@ namespace vfn {
 class Lexer
 {
   public:
-    /**
-     * Create a new @p Lexer instance reading on @p stream.
-     *
-     * @param stream The used input stream.
-     */
     Lexer(std::istream& stream);
 
-    Token& readToken();
+    Token* readToken();
+    Token* getToken();
 
-    /**
-     * @return A reference to the last read token.
-     */
-    Token& getToken() { return *token; }
+    unsigned int tokensRead() const { return tokenCounter; }
 
   private:
-    char readChar();
+    int readChar();
+    void unreadChar();
     void skipWhitespace();
     void skipComment();
 
@@ -40,6 +34,7 @@ class Lexer
     const char* rewind();
 
     bool tryInteger();
+    bool tryComment();
 
     /**
      * An input stream.
@@ -63,6 +58,11 @@ class Lexer
      * The last token read.
      */
     std::unique_ptr<Token> token;
+
+    /**
+     * Number of the tokens already read.
+     */
+    unsigned int tokenCounter;
 };
 
 } // namespace vfn

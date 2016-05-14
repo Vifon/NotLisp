@@ -12,6 +12,8 @@ namespace vfn {
 class Token
 {
   public:
+    int asInt();
+
     virtual ~Token() { };
   protected:
     Token() { }
@@ -26,7 +28,7 @@ class NumberToken : public Token
     /**
      * Parse the buffer and store the numerical value.
      */
-    NumberToken(const char* buf)
+    NumberToken(const std::string& buf)
     {
         std::stringstream ss;
         ss << buf;
@@ -47,12 +49,6 @@ class NumberToken : public Token
      */
     unsigned int value;
 };
-
-/**
- * A token rejected by the lexer.
- */
-class InvalidToken : public Token
-{ };
 
 } // namespace vfn
 

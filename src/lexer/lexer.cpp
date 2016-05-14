@@ -4,11 +4,17 @@
 
 namespace vfn {
 
+/**
+ * Create a new @p Lexer instance reading on @p stream.
+ *
+ * @param stream The used input stream.
+ */
 Lexer::Lexer(std::istream& stream)
     : in(stream)
     , buffer()
     , buf_ptr(buffer.c_str())
     , token()
+    , tokenCounter(0)
 {
 }
 
@@ -21,19 +27,40 @@ Lexer::Lexer(std::istream& stream)
  *
  * @return The newly read character.
  */
-char Lexer::readChar()
+int Lexer::readChar()
 {
-    if (*buf_ptr) {
+    if (*buf_ptr != '\0') {
         return *buf_ptr++;
     } else {
-        buffer += in.get();
+        char c = in.get();
+        if (in.good()) {
+            buffer += c;
+            buf_ptr = &buffer.back() + 1;
+            return buffer.back();
+        } else {
+            return -1;
+        }
+    }
+}
+
+/**
+ * Return the last read character back into the input stream. Remove
+ * this character from the read buffer too.
+ */
+void Lexer::unreadChar()
+{
+    if (in.good()) {
+        in.unget();
+        buffer.pop_back();
         buf_ptr = &buffer.back() + 1;
-        return buffer.back();
     }
 }
 
 /**
  * Skip to the next non-whitespace character in the input stream.
+ *
+ * @note It does not consider the buffer. It always operates on the
+ * input stream.
  */
 void Lexer::skipWhitespace()
 {
@@ -57,8 +84,30 @@ void Lexer::skipComment()
  */
 bool Lexer::tryInteger()
 {
-    // TODO: not implemented
+    char c = readChar();
+    if (c >= '1' && c <= '9') {
+        while ((c = readChar()) && c >= '0' && c <= '9') { }
+        unreadChar();
+        token.reset(new NumberToken(buffer));
+        return true;
+    }
+
     return false;
+}
+
+/**
+ * Try to read a comment. The comment is then ignored.
+ *
+ * @return Whether the operation was successful.
+ */
+bool Lexer::tryComment()
+{
+    if (readChar() == '#') {
+        skipComment();
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -68,6 +117,7 @@ bool Lexer::tryInteger()
  */
 void Lexer::clearToken()
 {
+    token.reset(nullptr);
     buffer.clear();
     rewind();
 }
@@ -87,23 +137,30 @@ const char* Lexer::rewind()
  *
  * @return Reference to the new token.
  */
-Token& Lexer::readToken()
+Token* Lexer::readToken()
 {
-    clearToken();
-    skipWhitespace();
-    readChar();
+    do {
+        clearToken();
+        skipWhitespace();
+    } while (tryComment());
 
-    switch (buffer.back()) {
-    case '#':
-        skipComment();
-        return readToken();
-    case 'a' ... 'z':
-        skipComment();
+    rewind();
+
+    tryInteger();
+
+    if (token != nullptr) {
+        ++tokenCounter;
     }
 
-    token.reset(new InvalidToken);
-
     return getToken();
+}
+
+/**
+ * @return A reference to the last read token.
+ */
+Token* Lexer::getToken()
+{
+    return token.get();
 }
 
 } // namespace vfn
