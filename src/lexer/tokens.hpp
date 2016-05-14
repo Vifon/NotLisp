@@ -5,8 +5,8 @@
 #define _h_VFN_TOKENS_
 
 #include <exception>
+#include <ostream>
 #include <sstream>
-#include <map>
 
 namespace vfn {
 
@@ -45,6 +45,11 @@ enum class Keyword {
     Semicolon,                  ///< <tt>';'</tt>
 };
 
+std::ostream& operator<<(std::ostream& out, Keyword keyword);
+
+/**
+ * Invalid @p Token type for the used operation.
+ */
 class bad_token_cast : public std::exception
 {
   public:
@@ -121,9 +126,19 @@ class Token
      */
     virtual bool operator==(Keyword keyword) const { return false; }
 
+    /**
+     * Print a token to a stream.
+     */
+    virtual std::ostream& show(std::ostream& out) const
+    {
+        throw bad_token_cast("Not showable");
+    }
+
   protected:
     Token() { }
 };
+
+std::ostream& operator<<(std::ostream& out, const Token& token);
 
 /**
  * A numerical constant.
@@ -151,6 +166,11 @@ class NumberToken : public Token
         return asInt() == n;
     }
 
+    std::ostream& show(std::ostream& out) const override
+    {
+        return out << "[num: " << asInt() << "]";
+    }
+
   private:
     /**
      * Numerical value of this token.
@@ -168,9 +188,7 @@ class KeywordToken : public Token
         : keyword(s)
     { }
 
-    KeywordToken(const std::string& s)
-        : keyword(mapping.at(s))
-    { }
+    KeywordToken(const std::string& s);
 
     Keyword asKeyword() const override
     {
@@ -182,13 +200,12 @@ class KeywordToken : public Token
         return asKeyword() == keyword;
     }
 
+    std::ostream& show(std::ostream& out) const override;
+
     /**
      * The represented keyword.
      */
     const Keyword keyword;
-
-  private:
-    static const std::map<std::string, Keyword> mapping;
 };
 
 /**
@@ -209,6 +226,11 @@ class VarToken : public Token
     bool operator==(const std::string& str) const override
     {
         return asVar() == str;
+    }
+
+    std::ostream& show(std::ostream& out) const override
+    {
+        return out << "[var: " << asVar() << "]";
     }
 
     /**
