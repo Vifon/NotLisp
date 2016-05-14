@@ -64,3 +64,21 @@ TEST_CASE("Scan multiple integers", "[lexer][int]")
 
     REQUIRE(l.tokensRead() == 3);
 }
+
+TEST_CASE("Scan integers with comments", "[lexer][int][comment]")
+{
+    std::stringstream stream{(
+            "42   # A nice number indeed\n"
+            "107  # Another one\n"
+            "# Let's throw in some commented numbers: 12 83\n"
+            "0    # Let's end it with a zero (0)\n"
+            )};
+    vfn::Lexer l{stream};
+
+    REQUIRE(l.readToken().asInt() == 42);
+    REQUIRE(l.readToken().asInt() == 107);
+    REQUIRE(l.readToken().asInt() == 0);
+    REQUIRE(!l.readToken().isValid());
+
+    REQUIRE(l.tokensRead() == 3);
+}
