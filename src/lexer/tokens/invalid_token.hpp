@@ -12,6 +12,10 @@ namespace vfn {
 class InvalidToken : public Token
 {
   public:
+    InvalidToken()
+        : Token(TokenType::Invalid)
+    {}
+
     bool isValid() const override
     {
         return false;

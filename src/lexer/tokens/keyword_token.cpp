@@ -31,8 +31,14 @@ static const std::map<std::string, Keyword> keyword_mapping{{
         {";"      , Keyword::Semicolon},
     }};
 
+KeywordToken::KeywordToken(Keyword s)
+    : Token(TokenType::Keyword)
+    , keyword(s)
+{ }
+
 KeywordToken::KeywordToken(const std::string& s)
-    : keyword(keyword_mapping.at(s))
+    : Token(TokenType::Keyword)
+    , keyword(keyword_mapping.at(s))
 { }
 
 std::ostream& KeywordToken::show(std::ostream& out) const

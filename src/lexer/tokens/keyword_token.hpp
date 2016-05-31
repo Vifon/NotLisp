@@ -16,10 +16,7 @@ namespace vfn {
 class KeywordToken : public Token
 {
   public:
-    KeywordToken(Keyword s)
-        : keyword(s)
-    { }
-
+    KeywordToken(Keyword s);
     KeywordToken(const std::string& s);
 
     Keyword asKeyword() const override

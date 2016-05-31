@@ -11,6 +11,16 @@
 namespace vfn {
 
 /**
+ * A tag used to distinguish various token types without using RTTI.
+ */
+enum class TokenType {
+    Keyword,
+    Number,
+    Var,
+    Invalid,
+};
+
+/**
  * A generic abstract Token.
  */
 class Token
@@ -74,8 +84,17 @@ class Token
         throw bad_token_cast("Not showable");
     }
 
+    /**
+     * An enum used to easily switch over various token types.
+     *
+     * @note Must be set by the derived type's ctor!
+     */
+    const TokenType type;
+
   protected:
-    Token() { }
+    Token(TokenType type)
+        : type(type)
+    { }
 };
 
 std::ostream& operator<<(std::ostream& out, const Token& token);

@@ -20,6 +20,7 @@ class NumberToken : public Token
      * Parse the buffer and store the numerical value.
      */
     NumberToken(const std::string& buf)
+        : Token(TokenType::Number)
     {
         std::stringstream ss;
         ss << buf;

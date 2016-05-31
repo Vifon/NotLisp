@@ -16,7 +16,8 @@ class VarToken : public Token
 {
   public:
     VarToken(const std::string& buf)
-        : name(buf)
+        : Token(TokenType::Var)
+        , name(buf)
     { }
 
     const std::string& asVar() const override
