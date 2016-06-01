@@ -37,6 +37,11 @@ class NumberToken : public Token
         return asInt() == n;
     }
 
+    Token* clone() const override
+    {
+        return new NumberToken(*this);
+    }
+
     std::ostream& show(std::ostream& out) const override
     {
         return out << "[num: " << asInt() << "]";

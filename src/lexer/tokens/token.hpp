@@ -85,6 +85,14 @@ class Token
     }
 
     /**
+     * Copy the object while preserving polymorphism.
+     */
+    virtual Token* clone() const
+    {
+        return new Token(*this);
+    }
+
+    /**
      * An enum used to easily switch over various token types.
      *
      * @note Must be set by the derived type's ctor!

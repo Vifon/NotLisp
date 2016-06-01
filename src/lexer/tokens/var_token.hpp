@@ -35,6 +35,11 @@ class VarToken : public Token
         return out << "[var: " << asVar() << "]";
     }
 
+    Token* clone() const override
+    {
+        return new VarToken(*this);
+    }
+
     /**
      * The name of the represented variable.
      */

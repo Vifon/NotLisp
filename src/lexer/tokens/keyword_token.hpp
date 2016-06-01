@@ -29,6 +29,11 @@ class KeywordToken : public Token
         return asKeyword() == keyword;
     }
 
+    Token* clone() const override
+    {
+        return new KeywordToken(*this);
+    }
+
     std::ostream& show(std::ostream& out) const override;
 
     /**
