@@ -1,6 +1,7 @@
 set(tests_SOURCES
   catch_main.cpp
   lexer_tests.cpp
+  parser_tests.cpp
   )
 
 set(tests_HEADERS
@@ -9,4 +10,5 @@ set(tests_HEADERS
 
 add_executable(test_all ${tests_SOURCES})
 target_link_libraries(test_all
-  lexer)
+  lexer
+  parser)
