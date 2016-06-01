@@ -4,7 +4,7 @@
 
 #include <istream>
 #include <memory>
-#include <string>
+#include <sstream>
 
 #include "tokens/token.hpp"
 
@@ -25,21 +25,21 @@ class Lexer
     unsigned int tokensRead() const { return tokenCounter; }
 
   private:
-    int readChar();
-    void unreadChar();
+    char acceptChar();
     void skipWhitespace();
     void skipComment();
     bool checkWordBoundary(char c) const;
     static bool isWordChar(char c);
 
     void clearToken();
-    const char* rewind();
 
     bool tryComment();
     bool tryInteger();
+    bool tryOperator();
+    bool tryEqualsSign();
     bool tryKeyword();
-    bool tryKeyword(const char* keyword);
-    bool tryVariable();
+    bool tryPattern(const char* keyword);
+    bool tryKeywordOrVariable();
 
     /**
      * An input stream.
@@ -49,15 +49,7 @@ class Lexer
     /**
      * The already read part of the current token.
      */
-    std::string buffer;
-
-    /**
-     * The currently considered character of the current token.
-     *
-     * If points to <tt>'\0'</tt>, the new character will be read and
-     * appended to the buffer.
-     */
-    const char* buf_ptr;
+    std::stringstream buffer;
 
     /**
      * The last token read.
@@ -68,6 +60,11 @@ class Lexer
      * Number of the tokens already read.
      */
     unsigned int tokenCounter;
+
+    /**
+     * The first character of the next token.
+     */
+    char nextChar;
 };
 
 } // namespace vfn

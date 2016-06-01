@@ -17,58 +17,30 @@ namespace vfn {
 Lexer::Lexer(std::istream& stream)
     : in(stream)
     , tokenCounter(0)
+    , nextChar(in.get())
 {
     clearToken();
 }
 
 /**
- * Read a single char.
+ * Accept @p nextChar into @p buffer and extract the next character
+ * from the stream.
  *
- * The character is read from the input stream or from the buffer of
- * previously read chars, if @p rewind was called. In the first case,
- * the character is stored in that buffer.
- *
- * @return The newly read character.
+ * @return The next character from the stream.
  */
-int Lexer::readChar()
+char Lexer::acceptChar()
 {
-    if (*buf_ptr != '\0') {
-        return *buf_ptr++;
-    } else {
-        char c = in.get();
-        if (in.good()) {
-            buffer += c;
-            buf_ptr = &buffer.back() + 1;
-            return buffer.back();
-        } else {
-            return -1;
-        }
-    }
-}
-
-/**
- * Return the last read character back into the input stream. Remove
- * this character from the read buffer too.
- */
-void Lexer::unreadChar()
-{
-    if (in.good()) {
-        in.unget();
-        buffer.pop_back();
-        buf_ptr = &buffer.back() + 1;
-    }
+    buffer.put(nextChar);
+    return nextChar = in.get();
 }
 
 /**
  * Skip to the next non-whitespace character in the input stream.
- *
- * @note It does not consider the buffer. It always operates on the
- * input stream.
  */
 void Lexer::skipWhitespace()
 {
-    while (in && std::isspace(in.peek())) {
-        in.get();
+    while (in && std::isspace(nextChar)) {
+        nextChar = in.get();
     }
 }
 
@@ -78,6 +50,7 @@ void Lexer::skipWhitespace()
 void Lexer::skipComment()
 {
     while (in && in.get() != '\n') { }
+    nextChar = in.get();
 }
 
 /**
@@ -87,9 +60,7 @@ void Lexer::skipComment()
  */
 bool Lexer::tryComment()
 {
-    rewind();
-
-    if (readChar() == '#') {
+    if (nextChar == '#') {
         skipComment();
         return true;
     } else {
@@ -104,20 +75,15 @@ bool Lexer::tryComment()
  */
 bool Lexer::tryInteger()
 {
-    rewind();
-
-    char c = readChar();
-    if (c >= '1' && c <= '9') {
-        while ((c = readChar()) && c >= '0' && c <= '9') { }
-        unreadChar();
-        token.reset(new NumberToken(buffer));
+    if (nextChar >= '1' && nextChar <= '9') {
+        while (acceptChar() >= '0' && nextChar <= '9') { }
+        token.reset(new NumberToken(buffer.str()));
         return true;
     } else {
         // Zero cannot be followed by any other digits.
-        if (c == '0') {
-            c = in.peek();
-            if (!(c >= '0' && c <= '9')) {
-                token.reset(new NumberToken(buffer));
+        if (nextChar == '0') {
+            if (!(acceptChar() >= '0' && nextChar <= '9')) {
+                token.reset(new NumberToken(buffer.str()));
                 return true;
             }
         }
@@ -127,58 +93,72 @@ bool Lexer::tryInteger()
 }
 
 /**
- * Try to read all the available a keyword types.
+ * Try to read an operator.
  *
  * @return Whether the operation was successful.
  */
-bool Lexer::tryKeyword()
+bool Lexer::tryOperator()
 {
-    return tryKeyword("(")
-        || tryKeyword(")")
-        || tryKeyword("[")
-        || tryKeyword("]")
-        || tryKeyword("{")
-        || tryKeyword("}")
-        || tryKeyword("if")
-        || tryKeyword("else")
-        || tryKeyword("let")
-        || tryKeyword("fun")
-        || tryKeyword("for")
-        || tryKeyword("in")
-        || tryKeyword("return")
-        || tryKeyword("+")
-        || tryKeyword("-")
-        || tryKeyword("*")
-        || tryKeyword("/")
-        || tryKeyword("==") // The order of '==' and '=' is important!
-        || tryKeyword("=")
-        || tryKeyword("!=")
-        || tryKeyword(",")
-        || tryKeyword(";");
+    return tryPattern("(")
+        || tryPattern(")")
+        || tryPattern("[")
+        || tryPattern("]")
+        || tryPattern("{")
+        || tryPattern("}")
+        || tryPattern("+")
+        || tryPattern("-")
+        || tryPattern("*")
+        || tryPattern("/")
+        || tryPattern("!=")
+        || tryPattern(",")
+        || tryPattern(";")
+        || tryEqualsSign();
 }
 
 /**
- * Try to read a keyword.
- *
- * @param keyword A keyword pattern to read.
- * @return Whether the operation was successful.
+ * Try to read either "==" or "=".
  */
-bool Lexer::tryKeyword(const char* keyword)
+bool Lexer::tryEqualsSign()
 {
-    rewind();
+    if (nextChar == '=') {
+        if (acceptChar() == '=') {
+            acceptChar();
+        }
 
-    char c = '\0';
-
-    while (*keyword != '\0') {
-        if ((c = readChar()) != *keyword++) {
-            unreadChar();
+        try {
+            token.reset(new KeywordToken(buffer.str()));
+            return true;
+        } catch (std::out_of_range& e) {
             return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+/**
+ * Try to read a specific pattern.
+ *
+ * @param pattern A pattern to read.
+ * @return Whether the operation was successful.
+ *
+ * @note The consumed characters are not returned to the stream. Make
+ * sure the pattern will be known to fail or not peeking just one
+ * character ahead.
+ */
+bool Lexer::tryPattern(const char* pattern)
+{
+    while (*pattern != '\0') {
+        if (nextChar != *pattern++) {
+            return false;
+        } else {
+            acceptChar();
         }
     }
 
-    if (checkWordBoundary(c)) {
+    if (checkWordBoundary(nextChar)) {
         try {
-            token.reset(new KeywordToken(buffer));
+            token.reset(new KeywordToken(buffer.str()));
         } catch (std::out_of_range& e) {
             return false;
         }
@@ -189,25 +169,25 @@ bool Lexer::tryKeyword(const char* keyword)
 }
 
 /**
- * Try to read a variable name.
+ * Try to read a keyword or a variable name.
  *
  * @return Whether the operation was successful.
  */
-bool Lexer::tryVariable()
+bool Lexer::tryKeywordOrVariable()
 {
-    rewind();
-
-    char c = readChar();
-
     // The first character should =~ /[a-zA-Z]/.
-    if (!std::isalpha(c)) {
+    if (!std::isalpha(nextChar)) {
         return false;
     }
 
-    while (isWordChar(c = readChar())) { }
-    unreadChar();
+    while (isWordChar(acceptChar())) { }
 
-    token.reset(new VarToken(buffer));
+    try {
+        token.reset(new KeywordToken(buffer.str()));
+    } catch (std::out_of_range& e) {
+        token.reset(new VarToken(buffer.str()));
+    }
+
     return true;
 }
 
@@ -225,7 +205,7 @@ bool Lexer::isWordChar(char c)
  */
 bool Lexer::checkWordBoundary(char c) const
 {
-    return !(isWordChar(c) && isWordChar(in.peek()));
+    return !(isWordChar(buffer.str().back()) && isWordChar(nextChar));
 }
 
 /**
@@ -237,21 +217,14 @@ void Lexer::clearToken()
 {
     token.reset(new InvalidToken);
     buffer.clear();
-    rewind();
-}
-
-/**
- * Reset the token buffer iterator.
- *
- * @return The new value of the buffer iterator.
- */
-const char* Lexer::rewind()
-{
-    return buf_ptr = buffer.c_str();
+    buffer.str(std::string());
 }
 
 /**
  * Read the next token. Discard the current one.
+ *
+ * After it returns an invalid token, the behavior of further calls is
+ * undefined.
  *
  * @return Reference to the new token.
  */
@@ -262,11 +235,9 @@ Token& Lexer::readToken()
         skipWhitespace();
     } while (tryComment());
 
-    rewind();
-
     tryInteger()
-        || tryKeyword()
-        || tryVariable();
+        || tryOperator()
+        || tryKeywordOrVariable();
 
     if (token->isValid()) {
         ++tokenCounter;
