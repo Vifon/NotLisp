@@ -77,13 +77,13 @@ bool Lexer::tryInteger()
 {
     if (nextChar >= '1' && nextChar <= '9') {
         while (acceptChar() >= '0' && nextChar <= '9') { }
-        token.reset(new NumberToken(buffer.str()));
+        token.reset(new NumberToken{buffer.str()});
         return true;
     } else {
         // Zero cannot be followed by any other digits.
         if (nextChar == '0') {
             if (!(acceptChar() >= '0' && nextChar <= '9')) {
-                token.reset(new NumberToken(buffer.str()));
+                token.reset(new NumberToken{buffer.str()});
                 return true;
             }
         }
@@ -126,7 +126,7 @@ bool Lexer::tryEqualsSign()
         }
 
         try {
-            token.reset(new KeywordToken(buffer.str()));
+            token.reset(new KeywordToken{buffer.str()});
             return true;
         } catch (std::out_of_range& e) {
             return false;
@@ -158,7 +158,7 @@ bool Lexer::tryPattern(const char* pattern)
 
     if (checkWordBoundary(nextChar)) {
         try {
-            token.reset(new KeywordToken(buffer.str()));
+            token.reset(new KeywordToken{buffer.str()});
         } catch (std::out_of_range& e) {
             return false;
         }
@@ -183,9 +183,9 @@ bool Lexer::tryKeywordOrVariable()
     while (isWordChar(acceptChar())) { }
 
     try {
-        token.reset(new KeywordToken(buffer.str()));
+        token.reset(new KeywordToken{buffer.str()});
     } catch (std::out_of_range& e) {
-        token.reset(new VarToken(buffer.str()));
+        token.reset(new VarToken{buffer.str()});
     }
 
     return true;
@@ -217,7 +217,7 @@ void Lexer::clearToken()
 {
     token.reset(new InvalidToken);
     buffer.clear();
-    buffer.str(std::string());
+    buffer.str(std::string{});
 }
 
 /**
