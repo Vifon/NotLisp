@@ -6,6 +6,8 @@
 
 #include "ast/Assign.hpp"
 #include "ast/Block.hpp"
+#include "ast/Call.hpp"
+#include "ast/Tuple.hpp"
 
 namespace vfn {
 
@@ -35,6 +37,8 @@ Parser::NodePtr Parser::readLine()
     NodePtr line;
     if (TokenPtr varname = checkToken(TokenType::Var)) {
         line = readAssignOrCall(varname->asVar());
+    } else if (checkKeyword(Keyword::Let)) {
+        line = readDeclaration();
     } else {
         // TODO
         return nullptr;
@@ -55,6 +59,17 @@ Parser::NodePtr Parser::readLines()
     return block;
 }
 
+Parser::NodePtr Parser::readDeclaration()
+{
+    TokenPtr varname = requireToken(TokenType::Var);
+    requireKeyword(Keyword::Assignment);
+    NodePtr value = readExpression();
+    NodePtr assignment{new ast::Assign{varname->asVar(), std::move(value)}};
+    // NodePtr declaration{new ast::Declaration{std::move(assignment)}};
+    // return declaration;
+    return assignment;      // TODO
+}
+
 Parser::NodePtr Parser::readAssignOrCall(const std::string& varname)
 {
     if (checkKeyword(Keyword::Assignment)) {
@@ -62,8 +77,10 @@ Parser::NodePtr Parser::readAssignOrCall(const std::string& varname)
         NodePtr assignment{new ast::Assign{varname, std::move(value)}};
         return assignment;
     } else if (checkKeyword(Keyword::ParenBegin)) {
-        // TODO
-        throw unexpected_token();
+        NodePtr tuple = readTuple();
+        requireKeyword(Keyword::ParenEnd);
+        NodePtr call{new ast::Call{varname, std::move(tuple)}};
+        return call;
     } else {
         throw unexpected_token();
     }
@@ -74,6 +91,21 @@ Parser::NodePtr Parser::readExpression()
     // TODO
     advance();
     return nullptr;
+}
+
+Parser::NodePtr Parser::readTuple()
+{
+    std::vector<NodePtr> expressions;
+
+    do {
+        NodePtr expr = readExpression();
+        expressions.push_back(std::move(expr));
+    } while (checkKeyword(Keyword::Comma));
+
+    requireKeyword(Keyword::ParenEnd);
+
+    NodePtr tuple{new ast::Tuple(std::move(expressions))};
+    return tuple;
 }
 
 Parser::TokenPtr Parser::checkToken(TokenType expected)

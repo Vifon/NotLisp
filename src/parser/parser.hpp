@@ -44,8 +44,10 @@ class Parser
     NodePtr readLine();
     NodePtr readLines();
     NodePtr readBlock();
+    NodePtr readDeclaration();
     NodePtr readAssignOrCall(const std::string& varname);
     NodePtr readExpression();
+    NodePtr readTuple();
 
     TokenPtr checkToken(TokenType expected);
     TokenPtr checkKeyword(Keyword expected);

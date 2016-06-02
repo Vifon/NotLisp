@@ -19,10 +19,11 @@ class Assign : public Node
         , value(std::move(value))
     {}
 
-    void evaluate() const override
+    ResultPtr evaluate() const override
     {
         // TODO
         std::cout << "I'm assigning " << value.get() << " to " << variable << std::endl;
+        return ResultPtr{new VoidResult};
     }
 
   private:

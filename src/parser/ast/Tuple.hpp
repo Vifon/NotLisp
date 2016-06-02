@@ -1,28 +1,29 @@
-// File: Block.hpp
+// File: Tuple.hpp
 #pragma once
-
-#include "Node.hpp"
 
 #include <memory>
 #include <vector>
+
+#include "Node.hpp"
 
 namespace vfn {
 
 namespace ast {
 
-class Block : public Node
+class Tuple : public Node
 {
   public:
-    Block(std::vector<std::unique_ptr<Node>>&& subtrees)
+    Tuple(std::vector<std::unique_ptr<Node>>&& subtrees)
         : subtrees(std::move(subtrees))
     {}
 
     ResultPtr evaluate() const override
     {
+        std::vector<ResultPtr> evaluated{subtrees.size()};
         for (auto& subtree : subtrees) {
-            subtree->evaluate();
+            evaluated.push_back(subtree->evaluate());
         }
-        return ResultPtr{new VoidResult};
+        return ResultPtr{new ListResult{std::move(evaluated)}};
     }
 
   private:

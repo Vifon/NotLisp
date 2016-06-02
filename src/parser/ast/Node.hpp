@@ -1,6 +1,8 @@
 // File: Node.hpp
 #pragma once
 
+#include "Result.hpp"
+
 namespace vfn {
 
 namespace ast {
@@ -10,7 +12,7 @@ class Node
   public:
     virtual ~Node() { }
 
-    virtual void evaluate() const = 0;
+    virtual ResultPtr evaluate() const = 0;
 };
 
 } // namespace ast
