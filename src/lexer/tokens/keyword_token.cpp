@@ -32,12 +32,12 @@ static const std::map<std::string, Keyword> keyword_mapping{{
     }};
 
 KeywordToken::KeywordToken(Keyword s)
-    : Token(TokenType::Keyword)
+    : Token(Type::Keyword)
     , keyword(s)
 { }
 
 KeywordToken::KeywordToken(const std::string& s)
-    : Token(TokenType::Keyword)
+    : Token(Type::Keyword)
     , keyword(keyword_mapping.at(s))
 { }
 

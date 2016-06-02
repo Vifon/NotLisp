@@ -13,7 +13,7 @@ class InvalidToken : public Token
 {
   public:
     InvalidToken()
-        : Token(TokenType::Invalid)
+        : Token(Type::Invalid)
     {}
 
     bool isValid() const override

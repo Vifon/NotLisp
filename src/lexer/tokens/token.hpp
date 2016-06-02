@@ -11,21 +11,21 @@
 namespace vfn {
 
 /**
- * A tag used to distinguish various token types without using RTTI.
- */
-enum class TokenType {
-    Keyword,
-    Number,
-    Var,
-    Invalid,
-};
-
-/**
  * A generic abstract Token.
  */
 class Token
 {
   public:
+    /**
+     * A tag used to distinguish various token types without using RTTI.
+     */
+    enum class Type {
+        Keyword,
+        Number,
+        Var,
+        Invalid,
+    };
+
     /**
      * Whether the token is valid. Overriden in the @p InvalidToken
      * subclass.
@@ -97,10 +97,10 @@ class Token
      *
      * @note Must be set by the derived type's ctor!
      */
-    const TokenType type;
+    const Type type;
 
   protected:
-    Token(TokenType type)
+    Token(Type type)
         : type(type)
     { }
 };

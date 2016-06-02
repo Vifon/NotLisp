@@ -35,7 +35,7 @@ Parser::NodePtr Parser::readBlock()
 Parser::NodePtr Parser::readLine()
 {
     NodePtr line;
-    if (TokenPtr varname = checkToken(TokenType::Var)) {
+    if (TokenPtr varname = checkToken(Token::Type::Var)) {
         line = readAssignOrCall(varname->asVar());
     } else if (checkKeyword(Keyword::Let)) {
         line = readDeclaration();
@@ -61,7 +61,7 @@ Parser::NodePtr Parser::readLines()
 
 Parser::NodePtr Parser::readDeclaration()
 {
-    TokenPtr varname = requireToken(TokenType::Var);
+    TokenPtr varname = requireToken(Token::Type::Var);
     requireKeyword(Keyword::Assignment);
     NodePtr value = readExpression();
     NodePtr assignment{new ast::Assign{varname->asVar(), std::move(value)}};
@@ -108,7 +108,7 @@ Parser::NodePtr Parser::readTuple()
     return tuple;
 }
 
-Parser::TokenPtr Parser::checkToken(TokenType expected)
+Parser::TokenPtr Parser::checkToken(Token::Type expected)
 {
     TokenPtr token{getToken().clone()};
 
@@ -124,7 +124,7 @@ Parser::TokenPtr Parser::checkKeyword(Keyword expected)
 {
     TokenPtr token{getToken().clone()};
 
-    if (token->type != TokenType::Keyword || token->asKeyword() != expected) {
+    if (token->type != Token::Type::Keyword || token->asKeyword() != expected) {
         return nullptr;
     } else {
         advance();
@@ -132,7 +132,7 @@ Parser::TokenPtr Parser::checkKeyword(Keyword expected)
     }
 }
 
-Parser::TokenPtr Parser::requireToken(TokenType expected)
+Parser::TokenPtr Parser::requireToken(Token::Type expected)
 {
     TokenPtr token = checkToken(expected);
     if (token) {

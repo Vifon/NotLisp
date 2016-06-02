@@ -49,9 +49,9 @@ class Parser
     NodePtr readExpression();
     NodePtr readTuple();
 
-    TokenPtr checkToken(TokenType expected);
+    TokenPtr checkToken(Token::Type expected);
     TokenPtr checkKeyword(Keyword expected);
-    TokenPtr requireToken(TokenType expected);
+    TokenPtr requireToken(Token::Type expected);
     TokenPtr requireKeyword(Keyword expected);
 
     Token& getToken();

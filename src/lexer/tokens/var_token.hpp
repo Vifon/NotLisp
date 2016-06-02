@@ -16,7 +16,7 @@ class VarToken : public Token
 {
   public:
     VarToken(const std::string& buf)
-        : Token(TokenType::Var)
+        : Token(Type::Var)
         , name(buf)
     { }
 
