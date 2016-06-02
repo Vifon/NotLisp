@@ -35,13 +35,17 @@ Parser::NodePtr Parser::readBlock()
 Parser::NodePtr Parser::readLine()
 {
     NodePtr line;
+
+    if (lexer->eof()) {
+        return nullptr;
+    }
+
     if (TokenPtr varname = checkToken(Token::Type::Var)) {
         line = readAssignOrCall(varname->asVar());
     } else if (checkKeyword(Keyword::Let)) {
         line = readDeclaration();
     } else {
         // TODO
-        return nullptr;
     }
 
     requireKeyword(Keyword::Semicolon);

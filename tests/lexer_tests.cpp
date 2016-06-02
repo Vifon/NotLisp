@@ -36,6 +36,7 @@ TEST_CASE("Scan integer", "[lexer][int]")
 
     REQUIRE(l.readToken() == 42);
     REQUIRE_FALSE(l.readToken().isValid());
+    REQUIRE(l.eof());
 
     REQUIRE(l.tokensRead() == 1);
 }
@@ -61,6 +62,7 @@ TEST_CASE("Scan multiple integers", "[lexer][int]")
     REQUIRE(l.readToken() == 130);
     REQUIRE(l.readToken() == 1000);
     REQUIRE_FALSE(l.readToken().isValid());
+    REQUIRE(l.eof());
 
     REQUIRE(l.tokensRead() == 3);
 }
@@ -80,6 +82,7 @@ TEST_CASE("Scan integers with comments", "[lexer][int][comment]")
     REQUIRE(l.readToken() == 107);
     REQUIRE(l.readToken() == 0);
     REQUIRE_FALSE(l.readToken().isValid());
+    REQUIRE(l.eof());
 
     REQUIRE(l.tokensRead() == 3);
 }
@@ -108,6 +111,7 @@ TEST_CASE("Differentiate the assignment and equality operators", "[lexer][keywor
     REQUIRE(l.readToken() == vfn::Keyword::Assignment);
 
     REQUIRE_FALSE(l.readToken().isValid());
+    REQUIRE(l.eof());
 
     REQUIRE(l.tokensRead() == 11);
 }
@@ -124,6 +128,7 @@ TEST_CASE("Scan an assignment expression", "[lexer][keyword][var][int]")
     REQUIRE(l.readToken() == vfn::Keyword::Semicolon);
 
     REQUIRE_FALSE(l.readToken().isValid());
+    REQUIRE(l.eof());
 
     REQUIRE(l.tokensRead() == 5);
 }
@@ -139,6 +144,7 @@ TEST_CASE("Scan a variable starting with a keyword-like prefix", "[lexer][keywor
     REQUIRE(l.readToken() == vfn::Keyword::Semicolon);
 
     REQUIRE_FALSE(l.readToken().isValid());
+    REQUIRE(l.eof());
 
     REQUIRE(l.tokensRead() == 4);
 }
@@ -279,4 +285,5 @@ map(car, map(cdr, nested_list));  # => [2, 4, 6]
     REQUIRE(l.readToken() == vfn::Keyword::Semicolon);
 
     REQUIRE_FALSE(l.readToken().isValid());
+    REQUIRE(l.eof());
 }

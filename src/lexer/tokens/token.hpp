@@ -24,6 +24,7 @@ class Token
         Number,
         Var,
         Invalid,
+        EndOfFile,
     };
 
     /**

@@ -21,6 +21,9 @@ class Lexer
 
     Token& readToken();
     Token& getToken();
+    const Token& getToken() const;
+
+    bool eof() const;
 
     unsigned int tokensRead() const { return tokenCounter; }
 

@@ -254,4 +254,17 @@ Token& Lexer::getToken()
     return *token;
 }
 
+/**
+ * @return A const reference to the last read token.
+ */
+const Token& Lexer::getToken() const
+{
+    return *token;
+}
+
+bool Lexer::eof() const
+{
+    return in.eof();
+}
+
 } // namespace vfn
