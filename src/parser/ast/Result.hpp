@@ -24,7 +24,7 @@ class Result
 
     virtual ~Result() { }
 
-    virtual unsigned int asInt() const
+    virtual int asInt() const
     {
         throw bad_result_cast("Not an integer");
     }
@@ -53,18 +53,18 @@ class VoidResult : public Result
 class NumberResult : public Result
 {
   public:
-    NumberResult(unsigned int n)
+    NumberResult(int n)
         : Result(Result::Type::Int)
         , value(n)
     { }
 
-    unsigned int asInt() const override
+    int asInt() const override
     {
         return value;
     }
 
   private:
-    unsigned int value;
+    int value;
 };
 
 class ListResult : public Result
