@@ -35,3 +35,12 @@ TEST_CASE("Parse a declaration", "[parser][decl]")
     auto ast = parser.parse();
     ast->evaluate();
 }
+
+TEST_CASE("Parse a function call", "[parser][call][tuple]")
+{
+    std::stringstream stream{"myfun(arg); myfun2(arg1, arg2);"};
+    vfn::Parser parser{std::make_unique<vfn::Lexer>(vfn::Lexer{stream})};
+
+    auto ast = parser.parse();
+    ast->evaluate();
+}

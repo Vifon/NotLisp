@@ -97,12 +97,13 @@ Parser::NodePtr Parser::readTuple()
 {
     std::vector<NodePtr> expressions;
 
+    // TODO: empty tuple?
     do {
         NodePtr expr = readExpression();
         expressions.push_back(std::move(expr));
     } while (checkKeyword(Keyword::Comma));
 
-    NodePtr tuple{new ast::Tuple(std::move(expressions))};
+    NodePtr tuple{new ast::Tuple{std::move(expressions)}};
     return tuple;
 }
 
