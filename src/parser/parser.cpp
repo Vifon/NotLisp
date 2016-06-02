@@ -102,8 +102,6 @@ Parser::NodePtr Parser::readTuple()
         expressions.push_back(std::move(expr));
     } while (checkKeyword(Keyword::Comma));
 
-    requireKeyword(Keyword::ParenEnd);
-
     NodePtr tuple{new ast::Tuple(std::move(expressions))};
     return tuple;
 }
