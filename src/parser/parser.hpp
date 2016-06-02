@@ -10,24 +10,28 @@
 
 namespace vfn {
 
-class unexpected_token : public std::exception
+class unexpected_input : public std::exception
 {
   public:
-    unexpected_token(const char* msg)
-        : message(msg)
-    { }
+    unexpected_input(const Token& token)
+        : message("Unexpected token: ")
+    {
+        std::stringstream ss;
+        ss << token;
+        message += ss.str();
+    }
 
-    unexpected_token()
+    unexpected_input()
         : message("Unexpected token")
     { }
 
     const char* what() const noexcept override
     {
-        return message;
+        return message.c_str();
     }
 
   private:
-    const char* message;
+    std::string message;
 };
 
 class Parser

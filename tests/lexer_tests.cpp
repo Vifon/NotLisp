@@ -50,6 +50,7 @@ TEST_CASE("Scan integer zero", "[lexer][int]")
     REQUIRE(l.getToken() == 0);
 
     REQUIRE_FALSE(l.readToken().isValid());
+    REQUIRE_FALSE(l.eof());
     REQUIRE(l.tokensRead() == 1);
 }
 

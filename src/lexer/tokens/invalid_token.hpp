@@ -12,14 +12,27 @@ namespace vfn {
 class InvalidToken : public Token
 {
   public:
-    InvalidToken()
+    InvalidToken(char next = '\0')
         : Token(Type::Invalid)
+        , next(next)
     {}
 
     bool isValid() const override
     {
         return false;
     }
+
+    std::ostream& show(std::ostream& out) const override
+    {
+        if (next == '\0') {
+            return out;
+        } else {
+            return out << "[invalid: '" << next << "']";
+        }
+    }
+
+  private:
+    const char next;
 };
 
 } // namespace vfn

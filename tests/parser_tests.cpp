@@ -44,3 +44,13 @@ TEST_CASE("Parse a function call", "[parser][call][tuple]")
     auto ast = parser.parse();
     ast->evaluate();
 }
+
+TEST_CASE("Detect an invalid token", "[parser][error]")
+{
+    std::stringstream stream{"myfun(arg)|;"};
+    vfn::Parser parser{std::make_unique<vfn::Lexer>(vfn::Lexer{stream})};
+
+    vfn::Parser::NodePtr ast;
+    REQUIRE_THROWS_AS(ast = parser.parse(), vfn::unexpected_input);
+    REQUIRE(ast == nullptr);
+}

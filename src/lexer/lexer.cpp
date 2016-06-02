@@ -2,6 +2,7 @@
 
 #include "lexer.hpp"
 
+#include "tokens/eof_token.hpp"
 #include "tokens/invalid_token.hpp"
 #include "tokens/keyword_token.hpp"
 #include "tokens/number_token.hpp"
@@ -215,7 +216,7 @@ bool Lexer::checkWordBoundary(char c) const
  */
 void Lexer::clearToken()
 {
-    token.reset(new InvalidToken);
+    token.reset(new InvalidToken{nextChar});
     buffer.clear();
     buffer.str(std::string{});
 }
@@ -241,6 +242,10 @@ Token& Lexer::readToken()
 
     if (token->isValid()) {
         ++tokenCounter;
+    }
+
+    if (!token->isValid() && eof()) {
+        token.reset(new EOFToken);
     }
 
     return getToken();

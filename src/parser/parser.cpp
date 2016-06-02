@@ -86,7 +86,7 @@ Parser::NodePtr Parser::readAssignOrCall(const std::string& varname)
         NodePtr call{new ast::Call{varname, std::move(tuple)}};
         return call;
     } else {
-        throw unexpected_token();
+        throw unexpected_input(getToken());
     }
 }
 
@@ -141,7 +141,7 @@ Parser::TokenPtr Parser::requireToken(Token::Type expected)
     if (token) {
         return token;
     } else {
-        throw unexpected_token();
+        throw unexpected_input(getToken());
     }
 }
 
@@ -151,7 +151,7 @@ Parser::TokenPtr Parser::requireKeyword(Keyword expected)
     if (token) {
         return token;
     } else {
-        throw unexpected_token();
+        throw unexpected_input(getToken());
     }
 }
 

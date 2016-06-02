@@ -6,6 +6,7 @@ set(tokens_SOURCES
 
 set(tokens_HEADERS
   bad_token_cast.hpp
+  eof_token.hpp
   invalid_token.hpp
   keyword.hpp
   keyword_token.hpp
