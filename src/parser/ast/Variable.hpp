@@ -2,8 +2,7 @@
 #pragma once
 
 #include "Node.hpp"
-
-#include <memory>
+#include "VoidValue.hpp"
 
 namespace vfn {
 
@@ -16,10 +15,9 @@ class Variable : public Node
         : name(varname)
     {}
 
-    ResultPtr evaluate() const override
+    ValuePtr evaluate() override
     {
-        // TODO
-        return ResultPtr{new VoidResult};
+        return lookup(name);
     }
 
   private:

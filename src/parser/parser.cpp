@@ -8,12 +8,16 @@
 #include "ast/BinaryOperator.hpp"
 #include "ast/Block.hpp"
 #include "ast/Call.hpp"
+#include "ast/Declaration.hpp"
+#include "ast/Filter.hpp"
 #include "ast/Function.hpp"
+#include "ast/Map.hpp"
+#include "ast/Print.hpp"
 #include "ast/Return.hpp"
 #include "ast/Tuple.hpp"
 #include "ast/UnaryOperator.hpp"
+#include "ast/Value.hpp"
 #include "ast/Variable.hpp"
-#include "ast/Result.hpp"
 
 namespace vfn {
 
@@ -48,7 +52,8 @@ Parser::NodePtr Parser::readLine()
 
     if (TokenPtr varname = checkToken(Token::Type::Var)) {
         if (checkKeyword(Keyword::Assignment)) {
-            line = readAssign(varname->asVar());
+            NodePtr value = readExpression();
+            line.reset(new ast::Assign{varname->asVar(), std::move(value)});
         } else {
             requireKeyword(Keyword::ParenBegin);
             line = readCall(varname->asVar());
@@ -58,6 +63,25 @@ Parser::NodePtr Parser::readLine()
     } else if (checkKeyword(Keyword::Return)) {
         NodePtr value = readExpression();
         line.reset(new ast::Return{std::move(value)});
+    } else if (checkKeyword(Keyword::Print)) {
+        requireKeyword(Keyword::ParenBegin);
+        NodePtr value = readExpression();
+        requireKeyword(Keyword::ParenEnd);
+        line.reset(new ast::Print{std::move(value)});
+    } else if (checkKeyword(Keyword::Map)) {
+        requireKeyword(Keyword::ParenBegin);
+        NodePtr fun = readExpression();
+        requireKeyword(Keyword::Comma);
+        NodePtr list = readExpression();
+        requireKeyword(Keyword::ParenEnd);
+        line.reset(new ast::Map{std::move(fun), std::move(list)});
+    } else if (checkKeyword(Keyword::Filter)) {
+        requireKeyword(Keyword::ParenBegin);
+        NodePtr fun = readExpression();
+        requireKeyword(Keyword::Comma);
+        NodePtr list = readExpression();
+        requireKeyword(Keyword::ParenEnd);
+        line.reset(new ast::Filter{std::move(fun), std::move(list)});
     } else {
         // TODO
     }
@@ -82,29 +106,31 @@ Parser::NodePtr Parser::readDeclaration()
     TokenPtr varname = requireToken(Token::Type::Var);
     requireKeyword(Keyword::Assignment);
     NodePtr value = readExpression();
-    NodePtr assignment{new ast::Assign{varname->asVar(), std::move(value)}};
-    // NodePtr declaration{new ast::Declaration{std::move(assignment)}};
-    // return declaration;
-    return assignment;      // TODO
-}
-
-Parser::NodePtr Parser::readAssign(const std::string& varname)
-{
-    NodePtr value = readExpression();
-    NodePtr assignment{new ast::Assign{varname, std::move(value)}};
-    return assignment;
+    std::unique_ptr<ast::Assign> assignment{new ast::Assign{varname->asVar(), std::move(value)}};
+    NodePtr declaration{new ast::Declaration{std::move(assignment)}};
+    return declaration;
 }
 
 Parser::NodePtr Parser::readCall(const std::string& varname)
 {
-    NodePtr tuple = readTuple();
-    requireKeyword(Keyword::ParenEnd);
-    NodePtr call{new ast::Call{varname, std::move(tuple)}};
-    return call;
+    if (checkKeyword(Keyword::ParenEnd)) {
+        NodePtr call{new ast::Call{varname}};
+        return call;
+    } else {
+        NodePtr tuple = readTuple();
+        requireKeyword(Keyword::ParenEnd);
+        NodePtr call{new ast::Call{varname, std::move(tuple)}};
+        return call;
+    }
+}
+
+Parser::NodePtr Parser::readExpression()
+{
+    return readComparison();
 }
 
 // TODO: higher order function
-Parser::NodePtr Parser::readExpression()
+Parser::NodePtr Parser::readComparison()
 {
     NodePtr lhs = readSum();
     if (checkKeyword(Keyword::Equals) || checkKeyword(Keyword::NotEquals)) {
@@ -168,12 +194,17 @@ Parser::NodePtr Parser::readValue()
 Parser::NodePtr Parser::readLiteral()
 {
     if (TokenPtr num = checkToken(Token::Type::Number)) {
-        NodePtr literal{new ast::NumberResult{static_cast<signed int>(num->asInt())}};
+        NodePtr literal{new ast::NumberValue{static_cast<signed int>(num->asInt())}};
         return literal;
     } else if (checkKeyword(Keyword::ListBegin)) {
-        NodePtr list = readTuple();
-        requireKeyword(Keyword::ListEnd);
-        return list;
+        if (checkKeyword(Keyword::ListEnd)) {
+            NodePtr empty_list{new ast::Tuple};
+            return empty_list;
+        } else {
+            NodePtr list = readTuple();
+            requireKeyword(Keyword::ListEnd);
+            return list;
+        }
     } else {
         return readFunction();
     }
@@ -183,7 +214,7 @@ Parser::NodePtr Parser::readFunction()
 {
     requireKeyword(Keyword::Fun);
     requireKeyword(Keyword::ParenBegin);
-    NodePtr args = readTuple();  // TODO: VarTuple
+    NodePtr args = readVarTuple();
     requireKeyword(Keyword::ParenEnd);
     NodePtr body = readBlock();
 
@@ -195,10 +226,25 @@ Parser::NodePtr Parser::readTuple()
 {
     std::vector<NodePtr> expressions;
 
-    // TODO: empty tuple?
+    // Empty tuple is handled by the caller.
     do {
         NodePtr expr = readExpression();
         expressions.push_back(std::move(expr));
+    } while (checkKeyword(Keyword::Comma));
+
+    NodePtr tuple{new ast::Tuple{std::move(expressions)}};
+    return tuple;
+}
+
+Parser::NodePtr Parser::readVarTuple()
+{
+    std::vector<NodePtr> expressions;
+
+    // Empty tuple is handled by the caller.
+    do {
+        TokenPtr varname = requireToken(Token::Type::Var);
+        NodePtr var{new ast::Variable{varname->asVar()}};
+        expressions.push_back(std::move(var));
     } while (checkKeyword(Keyword::Comma));
 
     NodePtr tuple{new ast::Tuple{std::move(expressions)}};

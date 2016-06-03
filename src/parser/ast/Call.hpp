@@ -1,9 +1,10 @@
 // File: Call.hpp
 #pragma once
 
-#include "Node.hpp"
+#include <string>
 
-#include <memory>
+#include "Node.hpp"
+#include "VoidValue.hpp"
 
 namespace vfn {
 
@@ -15,13 +16,16 @@ class Call : public Node
     Call(const std::string& function, NodePtr&& args)
         : function_name(function)
         , arguments_tuple(std::move(args))
-    {}
+    { }
 
-    ResultPtr evaluate() const override
+    Call(const std::string& function)
+        : function_name(function)
+    { }
+
+    ValuePtr evaluate() override
     {
         // TODO
-        std::cout << "Calling " << function_name << std::endl;
-        return ResultPtr{new VoidResult};
+        return ValuePtr{new VoidValue};
     }
 
   private:

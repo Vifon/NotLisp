@@ -1,10 +1,10 @@
 // File: Block.hpp
 #pragma once
 
-#include "Node.hpp"
-
-#include <memory>
 #include <vector>
+
+#include "Node.hpp"
+#include "VoidValue.hpp"
 
 namespace vfn {
 
@@ -17,12 +17,12 @@ class Block : public Node
         : subtrees(std::move(subtrees))
     {}
 
-    ResultPtr evaluate() const override
+    ValuePtr evaluate() override
     {
         for (auto& subtree : subtrees) {
             subtree->evaluate();
         }
-        return ResultPtr{new VoidResult};
+        return ValuePtr{new VoidValue};
     }
 
   private:

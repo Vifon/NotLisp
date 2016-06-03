@@ -1,4 +1,4 @@
-// File: Return.hpp
+// File: Print.hpp
 #pragma once
 
 #include "Node.hpp"
@@ -7,17 +7,16 @@ namespace vfn {
 
 namespace ast {
 
-class Return : public Node
+class Print : public Node
 {
   public:
-    Return(NodePtr&& expr)
+    Print(NodePtr&& expr)
         : expr(std::move(expr))
     {}
 
     ValuePtr evaluate() override
     {
-        // TODO
-        return expr->evaluate();
+        // TODO: cout
     }
 
   private:

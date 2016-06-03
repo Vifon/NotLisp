@@ -1,10 +1,10 @@
 // File: BinaryOperator.hpp
 #pragma once
 
-#include "Node.hpp"
-
-#include <memory>
 #include <sstream>
+
+#include "Node.hpp"
+#include "NumberValue.hpp"
 
 namespace vfn {
 
@@ -19,30 +19,30 @@ class BinaryOperator : public Node
         , rhs(std::move(rhs))
     {}
 
-    ResultPtr evaluate() const override
+    ValuePtr evaluate() override
     {
-        ResultPtr lhs_val = lhs->evaluate();
-        ResultPtr rhs_val = rhs->evaluate();
-        ResultPtr result;
+        ValuePtr lhs_val = lhs->evaluate();
+        ValuePtr rhs_val = rhs->evaluate();
+        ValuePtr result;
 
         switch (op) {
         case Keyword::Equals:
-            result.reset(new NumberResult(*lhs_val == *rhs_val));
+            result.reset(new NumberValue(*lhs_val == *rhs_val));
             break;
         case Keyword::NotEquals:
-            result.reset(new NumberResult(!(*lhs_val == *rhs_val)));
+            result.reset(new NumberValue(!(*lhs_val == *rhs_val)));
             break;
         case Keyword::Plus:
-            result.reset(new NumberResult(lhs_val->asInt() + rhs_val->asInt()));
+            result.reset(new NumberValue(lhs_val->asInt() + rhs_val->asInt()));
             break;
         case Keyword::Minus:
-            result.reset(new NumberResult(lhs_val->asInt() - rhs_val->asInt()));
+            result.reset(new NumberValue(lhs_val->asInt() - rhs_val->asInt()));
             break;
         case Keyword::Mult:
-            result.reset(new NumberResult(lhs_val->asInt() * rhs_val->asInt()));
+            result.reset(new NumberValue(lhs_val->asInt() * rhs_val->asInt()));
             break;
         case Keyword::Div:
-            result.reset(new NumberResult(lhs_val->asInt() / rhs_val->asInt()));
+            result.reset(new NumberValue(lhs_val->asInt() / rhs_val->asInt()));
             break;
         default:
             std::stringstream ss{"Invalid operator: "};

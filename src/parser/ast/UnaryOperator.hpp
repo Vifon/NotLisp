@@ -1,10 +1,10 @@
 // File: UnaryOperator.hpp
 #pragma once
 
-#include "Node.hpp"
-
-#include <memory>
 #include <sstream>
+
+#include "Node.hpp"
+#include "NumberValue.hpp"
 
 namespace vfn {
 
@@ -18,14 +18,14 @@ class UnaryOperator : public Node
         , operand(std::move(operand))
     {}
 
-    ResultPtr evaluate() const override
+    ValuePtr evaluate() override
     {
-        ResultPtr value = operand->evaluate();
-        ResultPtr result;
+        ValuePtr value = operand->evaluate();
+        ValuePtr result;
 
         switch (op) {
         case Keyword::Minus:
-            result.reset(new NumberResult(-value->asInt()));
+            result.reset(new NumberValue(-value->asInt()));
             break;
         default:
             std::stringstream ss{"Invalid operator: "};

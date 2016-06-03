@@ -1,25 +1,31 @@
 // File: Function.hpp
 #pragma once
 
-#include "Result.hpp"
+#include "Value.hpp"
+#include "VoidValue.hpp"
 
 namespace vfn {
 
 namespace ast {
 
-class Function : public Result
+class Function : public Value
 {
   public:
     Function(NodePtr&& args, NodePtr&& body)
-        : Result(Type::Function)
+        : Value(Type::Function)
         , args(std::move(args))
         , body(std::move(body))
     {}
 
-    ResultPtr evaluate() const override
+    Function(NodePtr&& body)
+        : Value(Type::Function)
+        , body(std::move(body))
+    {}
+
+    ValuePtr evaluate() override
     {
         // TODO
-        return ResultPtr{new VoidResult};
+        return ValuePtr{new VoidValue};
     }
 
   private:

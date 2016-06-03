@@ -2,11 +2,7 @@
 #pragma once
 
 #include "Node.hpp"
-#include "Result.hpp"
-
-#include <memory>
-
-#include <iostream>             // TODO
+#include "VoidValue.hpp"
 
 namespace vfn {
 
@@ -20,15 +16,15 @@ class Assign : public Node
         , value(std::move(value))
     {}
 
-    ResultPtr evaluate() const override
+    ValuePtr evaluate() override
     {
-        // TODO
-        std::cout << "I'm assigning " << value.get() << " to " << variable << std::endl;
-        return ResultPtr{new VoidResult};
+        lookup(variable) = std::move(value->evaluate());
+        return ValuePtr{new VoidValue};
     }
 
-  private:
     const std::string variable;
+
+  private:
     NodePtr value;
 };
 

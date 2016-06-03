@@ -7,7 +7,7 @@
 
 #include "../lexer/lexer.hpp"
 #include "ast/Node.hpp"
-#include "ast/Result.hpp"
+#include "ast/Value.hpp"
 
 namespace vfn {
 
@@ -50,15 +50,16 @@ class Parser
     NodePtr readLines();
     NodePtr readBlock();
     NodePtr readDeclaration();
-    NodePtr readAssign(const std::string& varname);
     NodePtr readCall(const std::string& varname);
     NodePtr readExpression();
+    NodePtr readComparison();
     NodePtr readSum();
     NodePtr readMult();
     NodePtr readValue();
     NodePtr readLiteral();
     NodePtr readFunction();
     NodePtr readTuple();
+    NodePtr readVarTuple();
 
     TokenPtr checkToken(Token::Type expected);
     TokenPtr checkKeyword(Keyword expected);
