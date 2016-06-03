@@ -1,22 +1,20 @@
 // File: Result.hpp
 #pragma once
 
-#include <memory>
 #include <vector>
 
 #include "bad_result_cast.hpp"
+#include "Node.hpp"
 
 namespace vfn {
 
 namespace ast {
 
-class Result;
-using ResultPtr = std::unique_ptr<Result>;
-
-class Result
+class Result : public Node
 {
   public:
     enum class Type {
+        Function,
         Int,
         List,
         Void,
@@ -34,6 +32,11 @@ class Result
         throw bad_result_cast("Not a list");
     }
 
+    virtual bool operator==(const Result& rhs) const
+    {
+        return type == rhs.type;
+    }
+
     const Type type;
 
   protected:
@@ -48,6 +51,11 @@ class VoidResult : public Result
     VoidResult()
         : Result(Result::Type::Void)
     { }
+
+    ResultPtr evaluate() const override
+    {
+        return ResultPtr{new VoidResult{*this}};
+    }
 };
 
 class NumberResult : public Result
@@ -61,6 +69,16 @@ class NumberResult : public Result
     int asInt() const override
     {
         return value;
+    }
+
+    bool operator==(const Result& rhs) const override
+    {
+        return Result::operator==(rhs) && asInt() == rhs.asInt();
+    }
+
+    ResultPtr evaluate() const override
+    {
+        return ResultPtr{new NumberResult{*this}};
     }
 
   private:
@@ -78,6 +96,17 @@ class ListResult : public Result
     const std::vector<ResultPtr>& asList() const override
     {
         return list;
+    }
+
+    bool operator==(const Result& rhs) const override
+    {
+        return Result::operator==(rhs) && asList() == rhs.asList();
+    }
+
+    ResultPtr evaluate() const override
+    {
+        // TODO: shared_ptr?
+        // return ResultPtr{new ListResult{*this}};
     }
 
   private:

@@ -54,3 +54,11 @@ TEST_CASE("Detect an invalid token", "[parser][error]")
     REQUIRE_THROWS_AS(ast = parser.parse(), vfn::unexpected_input);
     REQUIRE(ast == nullptr);
 }
+
+TEST_CASE("Parse a return statement", "[parser][return]")
+{
+    std::stringstream stream{"return 42;"};
+    vfn::Parser parser{std::make_unique<vfn::Lexer>(vfn::Lexer{stream})};
+
+    auto ast = parser.parse();
+}

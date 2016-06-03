@@ -13,7 +13,7 @@ namespace ast {
 class Block : public Node
 {
   public:
-    Block(std::vector<std::unique_ptr<Node>>&& subtrees)
+    Block(std::vector<NodePtr>&& subtrees)
         : subtrees(std::move(subtrees))
     {}
 
@@ -26,7 +26,7 @@ class Block : public Node
     }
 
   private:
-    std::vector<std::unique_ptr<Node>> subtrees;
+    std::vector<NodePtr> subtrees;
 };
 
 } // namespace ast

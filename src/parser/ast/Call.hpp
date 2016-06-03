@@ -12,7 +12,7 @@ namespace ast {
 class Call : public Node
 {
   public:
-    Call(const std::string& function, std::unique_ptr<Node>&& args)
+    Call(const std::string& function, NodePtr&& args)
         : function_name(function)
         , arguments_tuple(std::move(args))
     {}
@@ -26,7 +26,7 @@ class Call : public Node
 
   private:
     const std::string function_name;
-    std::unique_ptr<Node> arguments_tuple;
+    NodePtr arguments_tuple;
 };
 
 } // namespace ast

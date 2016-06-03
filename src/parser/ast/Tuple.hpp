@@ -13,7 +13,7 @@ namespace ast {
 class Tuple : public Node
 {
   public:
-    Tuple(std::vector<std::unique_ptr<Node>>&& subtrees)
+    Tuple(std::vector<NodePtr>&& subtrees)
         : subtrees(std::move(subtrees))
     {}
 
@@ -27,7 +27,7 @@ class Tuple : public Node
     }
 
   private:
-    std::vector<std::unique_ptr<Node>> subtrees;
+    std::vector<NodePtr> subtrees;
 };
 
 } // namespace ast

@@ -2,6 +2,7 @@
 #pragma once
 
 #include "Node.hpp"
+#include "Result.hpp"
 
 #include <memory>
 
@@ -14,7 +15,7 @@ namespace ast {
 class Assign : public Node
 {
   public:
-    Assign(const std::string& variable, std::unique_ptr<Node>&& value)
+    Assign(const std::string& variable, NodePtr&& value)
         : variable(variable)
         , value(std::move(value))
     {}
@@ -28,7 +29,7 @@ class Assign : public Node
 
   private:
     const std::string variable;
-    std::unique_ptr<Node> value;
+    NodePtr value;
 };
 
 } // namespace ast

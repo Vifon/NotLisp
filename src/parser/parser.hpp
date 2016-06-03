@@ -7,6 +7,7 @@
 
 #include "../lexer/lexer.hpp"
 #include "ast/Node.hpp"
+#include "ast/Result.hpp"
 
 namespace vfn {
 
@@ -37,7 +38,7 @@ class unexpected_input : public std::exception
 class Parser
 {
   public:
-    using NodePtr = std::unique_ptr<ast::Node>;
+    using NodePtr = ast::NodePtr;
     using TokenPtr = std::unique_ptr<Token>;
 
     Parser(std::unique_ptr<Lexer> lexer);
@@ -49,8 +50,14 @@ class Parser
     NodePtr readLines();
     NodePtr readBlock();
     NodePtr readDeclaration();
-    NodePtr readAssignOrCall(const std::string& varname);
+    NodePtr readAssign(const std::string& varname);
+    NodePtr readCall(const std::string& varname);
     NodePtr readExpression();
+    NodePtr readSum();
+    NodePtr readMult();
+    NodePtr readValue();
+    NodePtr readLiteral();
+    NodePtr readFunction();
     NodePtr readTuple();
 
     TokenPtr checkToken(Token::Type expected);
