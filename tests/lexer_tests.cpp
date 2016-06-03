@@ -166,12 +166,13 @@ nested_list = [[1, 2], [3, 4], [5, 6]];
 map(car, nested_list);  # => [1, 3, 5]
 map(cdr, nested_list);  # => [[2], [4], [6]]
 map(car, map(cdr, nested_list));  # => [2, 4, 6]
+print(10);
 )";
 
     std::stringstream stream{PROGRAM};
     vfn::Lexer l{stream};
 
-    REQUIRE(l.readToken() == "map");
+    REQUIRE(l.readToken() == vfn::Keyword::Map);
     REQUIRE(l.readToken() == vfn::Keyword::ParenBegin);
     REQUIRE(l.readToken() == vfn::Keyword::Fun);
     REQUIRE(l.readToken() == vfn::Keyword::ParenBegin);
@@ -225,7 +226,7 @@ map(car, map(cdr, nested_list));  # => [2, 4, 6]
     REQUIRE(l.readToken() == vfn::Keyword::BlockEnd);
     REQUIRE(l.readToken() == vfn::Keyword::Semicolon);
 
-    REQUIRE(l.readToken() == "map");
+    REQUIRE(l.readToken() == vfn::Keyword::Map);
     REQUIRE(l.readToken() == vfn::Keyword::ParenBegin);
     REQUIRE(l.readToken() == "multiply_by_2");
     REQUIRE(l.readToken() == vfn::Keyword::Comma);
@@ -256,7 +257,7 @@ map(car, map(cdr, nested_list));  # => [2, 4, 6]
     REQUIRE(l.readToken() == vfn::Keyword::ListEnd);
     REQUIRE(l.readToken() == vfn::Keyword::Semicolon);
 
-    REQUIRE(l.readToken() == "map");
+    REQUIRE(l.readToken() == vfn::Keyword::Map);
     REQUIRE(l.readToken() == vfn::Keyword::ParenBegin);
     REQUIRE(l.readToken() == "car");
     REQUIRE(l.readToken() == vfn::Keyword::Comma);
@@ -264,7 +265,7 @@ map(car, map(cdr, nested_list));  # => [2, 4, 6]
     REQUIRE(l.readToken() == vfn::Keyword::ParenEnd);
     REQUIRE(l.readToken() == vfn::Keyword::Semicolon);
 
-    REQUIRE(l.readToken() == "map");
+    REQUIRE(l.readToken() == vfn::Keyword::Map);
     REQUIRE(l.readToken() == vfn::Keyword::ParenBegin);
     REQUIRE(l.readToken() == "cdr");
     REQUIRE(l.readToken() == vfn::Keyword::Comma);
@@ -272,16 +273,22 @@ map(car, map(cdr, nested_list));  # => [2, 4, 6]
     REQUIRE(l.readToken() == vfn::Keyword::ParenEnd);
     REQUIRE(l.readToken() == vfn::Keyword::Semicolon);
 
-    REQUIRE(l.readToken() == "map");
+    REQUIRE(l.readToken() == vfn::Keyword::Map);
     REQUIRE(l.readToken() == vfn::Keyword::ParenBegin);
     REQUIRE(l.readToken() == "car");
     REQUIRE(l.readToken() == vfn::Keyword::Comma);
-    REQUIRE(l.readToken() == "map");
+    REQUIRE(l.readToken() == vfn::Keyword::Map);
     REQUIRE(l.readToken() == vfn::Keyword::ParenBegin);
     REQUIRE(l.readToken() == "cdr");
     REQUIRE(l.readToken() == vfn::Keyword::Comma);
     REQUIRE(l.readToken() == "nested_list");
     REQUIRE(l.readToken() == vfn::Keyword::ParenEnd);
+    REQUIRE(l.readToken() == vfn::Keyword::ParenEnd);
+    REQUIRE(l.readToken() == vfn::Keyword::Semicolon);
+
+    REQUIRE(l.readToken() == vfn::Keyword::Print);
+    REQUIRE(l.readToken() == vfn::Keyword::ParenBegin);
+    REQUIRE(l.readToken() == 10);
     REQUIRE(l.readToken() == vfn::Keyword::ParenEnd);
     REQUIRE(l.readToken() == vfn::Keyword::Semicolon);
 

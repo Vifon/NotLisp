@@ -26,6 +26,9 @@ enum class Keyword {
     For,                        ///< <tt>for</tt>
     In,                         ///< <tt>in</tt>
     Return,                     ///< <tt>return</tt>
+    Print,                      ///< <tt>print</tt>
+    Map,                        ///< <tt>map</tt>
+    Filter,                     ///< <tt>filter</tt>
 
     // Operators
     Plus,                       ///< <tt>'+'</tt>
