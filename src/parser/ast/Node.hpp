@@ -1,6 +1,8 @@
 // File: Node.hpp
 #pragma once
 
+#include <stdexcept>
+
 namespace vfn {
 
 namespace ast {
@@ -38,3 +40,5 @@ using NodePtr = std::unique_ptr<Node>;
 } // namespace ast
 
 } // namespace vfn
+
+#include "Value.hpp"      // Warning: Tricky order-dependent includes!
