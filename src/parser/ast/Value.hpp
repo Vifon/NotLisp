@@ -37,6 +37,11 @@ class Value : public Node
         return type == rhs.type;
     }
 
+    operator bool() const override
+    {
+        return true;
+    }
+
     const Type type;
 
   protected:

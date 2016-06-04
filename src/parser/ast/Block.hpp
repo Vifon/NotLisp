@@ -15,7 +15,9 @@ class Block : public Node
   public:
     Block(std::vector<NodePtr>&& subtrees)
         : subtrees(std::move(subtrees))
-    {}
+    { }
+
+    Block() { }
 
     ValuePtr evaluate() override
     {

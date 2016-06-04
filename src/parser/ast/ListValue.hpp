@@ -33,6 +33,11 @@ class ListValue : public Value
         // return ValuePtr{new ListValue{*this}};
     }
 
+    operator bool() const override
+    {
+        return !list.empty();
+    }
+
   private:
     std::vector<ValuePtr> list;
 };

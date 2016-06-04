@@ -1,4 +1,5 @@
 set(tokens_SOURCES
+  bad_token_cast.cpp
   keyword.cpp
   keyword_token.cpp
   token.cpp

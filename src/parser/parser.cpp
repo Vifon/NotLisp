@@ -8,9 +8,11 @@
 #include "ast/BinaryOperator.hpp"
 #include "ast/Block.hpp"
 #include "ast/Call.hpp"
+#include "ast/Cond.hpp"
 #include "ast/Declaration.hpp"
 #include "ast/Filter.hpp"
 #include "ast/Function.hpp"
+#include "ast/Loop.hpp"
 #include "ast/Map.hpp"
 #include "ast/Print.hpp"
 #include "ast/Return.hpp"
@@ -69,21 +71,15 @@ Parser::NodePtr Parser::readLine()
         requireKeyword(Keyword::ParenEnd);
         line.reset(new ast::Print{std::move(value)});
     } else if (checkKeyword(Keyword::Map)) {
-        requireKeyword(Keyword::ParenBegin);
-        NodePtr fun = readExpression();
-        requireKeyword(Keyword::Comma);
-        NodePtr list = readExpression();
-        requireKeyword(Keyword::ParenEnd);
-        line.reset(new ast::Map{std::move(fun), std::move(list)});
+        line = readMap();
     } else if (checkKeyword(Keyword::Filter)) {
-        requireKeyword(Keyword::ParenBegin);
-        NodePtr fun = readExpression();
-        requireKeyword(Keyword::Comma);
-        NodePtr list = readExpression();
-        requireKeyword(Keyword::ParenEnd);
-        line.reset(new ast::Filter{std::move(fun), std::move(list)});
+        line = readFilter();
+    } else if (checkKeyword(Keyword::If)) {
+        line = readCond();
+    } else if (checkKeyword(Keyword::For)) {
+        line = readLoop();
     } else {
-        // TODO
+        return nullptr;
     }
 
     requireKeyword(Keyword::Semicolon);
@@ -124,6 +120,61 @@ Parser::NodePtr Parser::readCall(const std::string& varname)
     }
 }
 
+Parser::NodePtr Parser::readCond()
+{
+    requireKeyword(Keyword::ParenBegin);
+    NodePtr condition = readExpression();
+    requireKeyword(Keyword::ParenEnd);
+    NodePtr block = readBlock();
+
+    if (checkKeyword(Keyword::Else)) {
+        NodePtr else_block = readBlock();
+        NodePtr cond{new ast::Cond{std::move(condition), std::move(block), std::move(else_block)}};
+        return cond;
+    } else {
+        NodePtr cond{new ast::Cond{std::move(condition), std::move(block)}};
+        return cond;
+    }
+}
+
+Parser::NodePtr Parser::readLoop()
+{
+    requireKeyword(Keyword::ParenBegin);
+    TokenPtr varname = requireToken(Token::Type::Var);
+    NodePtr iterator{new ast::Variable{varname->asVar()}};
+    requireKeyword(Keyword::In);
+    NodePtr collection = readExpression();
+    requireKeyword(Keyword::ParenEnd);
+    NodePtr block = readBlock();
+
+    NodePtr loop{new ast::Loop{std::move(iterator), std::move(collection), std::move(block)}};
+    return loop;
+}
+
+Parser::NodePtr Parser::readMap()
+{
+    requireKeyword(Keyword::ParenBegin);
+    NodePtr fun = readExpression();
+    requireKeyword(Keyword::Comma);
+    NodePtr list = readExpression();
+    requireKeyword(Keyword::ParenEnd);
+
+    NodePtr map{new ast::Map{std::move(fun), std::move(list)}};
+    return map;
+}
+
+Parser::NodePtr Parser::readFilter()
+{
+    requireKeyword(Keyword::ParenBegin);
+    NodePtr fun = readExpression();
+    requireKeyword(Keyword::Comma);
+    NodePtr list = readExpression();
+    requireKeyword(Keyword::ParenEnd);
+
+    NodePtr filter{new ast::Filter{std::move(fun), std::move(list)}};
+    return filter;
+}
+
 Parser::NodePtr Parser::readExpression()
 {
     return readComparison();
@@ -133,8 +184,9 @@ Parser::NodePtr Parser::readExpression()
 Parser::NodePtr Parser::readComparison()
 {
     NodePtr lhs = readSum();
+    TokenPtr token{getToken().clone()};
     if (checkKeyword(Keyword::Equals) || checkKeyword(Keyword::NotEquals)) {
-        Keyword op = getToken().asKeyword();
+        Keyword op = token->asKeyword();
         NodePtr rhs = readSum();
         NodePtr binary{new ast::BinaryOperator{op, std::move(lhs), std::move(rhs)}};
         return binary;
@@ -146,8 +198,9 @@ Parser::NodePtr Parser::readComparison()
 Parser::NodePtr Parser::readSum()
 {
     NodePtr lhs = readMult();
+    TokenPtr token{getToken().clone()};
     if (checkKeyword(Keyword::Plus) || checkKeyword(Keyword::Minus)) {
-        Keyword op = getToken().asKeyword();
+        Keyword op = token->asKeyword();
         NodePtr rhs = readMult();
         NodePtr binary{new ast::BinaryOperator{op, std::move(lhs), std::move(rhs)}};
         return binary;
@@ -159,8 +212,9 @@ Parser::NodePtr Parser::readSum()
 Parser::NodePtr Parser::readMult()
 {
     NodePtr lhs = readValue();
+    TokenPtr token{getToken().clone()};
     if (checkKeyword(Keyword::Mult) || checkKeyword(Keyword::Div)) {
-        Keyword op = getToken().asKeyword();
+        Keyword op = token->asKeyword();
         NodePtr rhs = readValue();
         NodePtr binary{new ast::BinaryOperator{op, std::move(lhs), std::move(rhs)}};
         return binary;
@@ -178,6 +232,10 @@ Parser::NodePtr Parser::readValue()
             NodePtr var{new ast::Variable{varname->asVar()}};
             return var;
         }
+    } else if (checkKeyword(Keyword::Map)) {
+        return readMap();
+    } else if (checkKeyword(Keyword::Filter)) {
+        return readFilter();
     } else if (checkKeyword(Keyword::ParenBegin)) {
         NodePtr expr = readExpression();
         requireKeyword(Keyword::ParenEnd);

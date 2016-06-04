@@ -41,7 +41,7 @@ class Token
      */
     virtual unsigned int asInt() const
     {
-        throw bad_token_cast("Not an integer");
+        throw bad_token_cast("Not an integer: ", *this);
     }
 
     /**
@@ -49,7 +49,7 @@ class Token
      */
     virtual Keyword asKeyword() const
     {
-        throw bad_token_cast("Not a keyword");
+        throw bad_token_cast("Not a keyword: ", *this);
     }
 
     /**
@@ -57,7 +57,7 @@ class Token
      */
     virtual const std::string& asVar() const
     {
-        throw bad_token_cast("Not a variable");
+        throw bad_token_cast("Not a variable: ", *this);
     }
 
     virtual ~Token() { };

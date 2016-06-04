@@ -6,6 +6,7 @@
 
 #include "../src/lexer/lexer.hpp"
 #include "../src/lexer/tokens/keyword.hpp"
+#include "constants.hpp"
 
 TEST_CASE("Scan no valid tokens", "[lexer]")
 {
@@ -150,25 +151,8 @@ TEST_CASE("Scan a variable starting with a keyword-like prefix", "[lexer][keywor
     REQUIRE(l.tokensRead() == 4);
 }
 
-TEST_CASE("Scan an example program", "[lexer][int][list][block][keyword][var]")
+TEST_CASE("Scan an example program", "[lexer][int][list][block][keyword][var][example]")
 {
-    const char* PROGRAM = R"(
-map(fun(x) { return x+42; },
-    [1, 2, 3, 4]));  # => [43, 44, 45, 46]
-
-list = [5, 6, 7];
-multiply_by_2 = fun(x) {
-    return x*2;
-};
-map(multiply_by_2, list);  # => [10, 12, 14]
-
-nested_list = [[1, 2], [3, 4], [5, 6]];
-map(car, nested_list);  # => [1, 3, 5]
-map(cdr, nested_list);  # => [[2], [4], [6]]
-map(car, map(cdr, nested_list));  # => [2, 4, 6]
-print(10);
-)";
-
     std::stringstream stream{PROGRAM};
     vfn::Lexer l{stream};
 
@@ -196,7 +180,6 @@ print(10);
     REQUIRE(l.readToken() == vfn::Keyword::Comma);
     REQUIRE(l.readToken() == 4);
     REQUIRE(l.readToken() == vfn::Keyword::ListEnd);
-    REQUIRE(l.readToken() == vfn::Keyword::ParenEnd);
     REQUIRE(l.readToken() == vfn::Keyword::ParenEnd);
     REQUIRE(l.readToken() == vfn::Keyword::Semicolon);
 

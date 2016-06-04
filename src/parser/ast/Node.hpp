@@ -1,9 +1,6 @@
 // File: Node.hpp
 #pragma once
 
-#include <memory>
-#include <string>
-
 namespace vfn {
 
 namespace ast {
@@ -17,6 +14,11 @@ class Node
     virtual ~Node() { }
 
     virtual ValuePtr evaluate() = 0;
+
+    virtual operator bool() const
+    {
+        throw std::runtime_error("Not castable");
+    }
 
   protected:
     // Node& parent;

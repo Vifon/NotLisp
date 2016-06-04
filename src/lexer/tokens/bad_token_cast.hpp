@@ -3,8 +3,12 @@
 #define _h_VFN_BAD_TOKEN_CAST_
 
 #include <exception>
+#include <sstream>
+#include <string>
 
 namespace vfn {
+
+class Token;
 
 /**
  * Invalid @p Token type for the used operation.
@@ -12,21 +16,14 @@ namespace vfn {
 class bad_token_cast : public std::exception
 {
   public:
-    bad_token_cast(const char* msg)
-        : message(msg)
-    { }
+    bad_token_cast(const char* msg, const Token& token);
+    bad_token_cast(const char* msg);
+    bad_token_cast();
 
-    bad_token_cast()
-        : message("")
-    { }
-
-    const char* what() const noexcept override
-    {
-        return message;
-    }
+    const char* what() const noexcept override;
 
   private:
-    const char* message;
+    std::string message;
 };
 
 } // namespace vfn

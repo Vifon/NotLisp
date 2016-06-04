@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Node.hpp"
+#include "Tuple.hpp"
 #include "VoidValue.hpp"
 
 namespace vfn {
@@ -20,6 +21,7 @@ class Call : public Node
 
     Call(const std::string& function)
         : function_name(function)
+        , arguments_tuple(new Tuple)
     { }
 
     ValuePtr evaluate() override
