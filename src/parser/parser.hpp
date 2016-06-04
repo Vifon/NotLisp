@@ -55,6 +55,10 @@ class Parser
     NodePtr readMap();
     NodePtr readFilter();
     NodePtr readExpression();
+    NodePtr readOperator(
+        NodePtr (Parser::*readThisOperator)(),
+        NodePtr (Parser::*readNextOperator)(),
+        Keyword kw1, Keyword kw2);
     NodePtr readComparison();
     NodePtr readSum();
     NodePtr readMult();

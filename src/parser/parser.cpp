@@ -180,47 +180,42 @@ Parser::NodePtr Parser::readExpression()
     return readComparison();
 }
 
-// TODO: higher order function
-Parser::NodePtr Parser::readComparison()
+Parser::NodePtr Parser::readOperator(
+    NodePtr (Parser::*readThisOperator)(),
+    NodePtr (Parser::*readNextOperator)(),
+    Keyword kw1, Keyword kw2)
 {
-    NodePtr lhs = readSum();
+    NodePtr lhs = (this->*readNextOperator)();
     TokenPtr token{getToken().clone()};
-    if (checkKeyword(Keyword::Equals) || checkKeyword(Keyword::NotEquals)) {
+    if (checkKeyword(kw1) || checkKeyword(kw2)) {
         Keyword op = token->asKeyword();
-        NodePtr rhs = readComparison();
+        NodePtr rhs = (this->*readThisOperator)();
         NodePtr binary{new ast::BinaryOperator{op, std::move(lhs), std::move(rhs)}};
         return binary;
     } else {
         return lhs;
     }
+}
+
+Parser::NodePtr Parser::readComparison()
+{
+    return readOperator(
+        &Parser::readComparison, &Parser::readSum,
+        Keyword::Equals, Keyword::NotEquals);
 }
 
 Parser::NodePtr Parser::readSum()
 {
-    NodePtr lhs = readMult();
-    TokenPtr token{getToken().clone()};
-    if (checkKeyword(Keyword::Plus) || checkKeyword(Keyword::Minus)) {
-        Keyword op = token->asKeyword();
-        NodePtr rhs = readSum();
-        NodePtr binary{new ast::BinaryOperator{op, std::move(lhs), std::move(rhs)}};
-        return binary;
-    } else {
-        return lhs;
-    }
+    return readOperator(
+        &Parser::readSum, &Parser::readMult,
+        Keyword::Plus, Keyword::Minus);
 }
 
 Parser::NodePtr Parser::readMult()
 {
-    NodePtr lhs = readValue();
-    TokenPtr token{getToken().clone()};
-    if (checkKeyword(Keyword::Mult) || checkKeyword(Keyword::Div)) {
-        Keyword op = token->asKeyword();
-        NodePtr rhs = readMult();
-        NodePtr binary{new ast::BinaryOperator{op, std::move(lhs), std::move(rhs)}};
-        return binary;
-    } else {
-        return lhs;
-    }
+    return readOperator(
+        &Parser::readMult, &Parser::readValue,
+        Keyword::Mult, Keyword::Div);
 }
 
 Parser::NodePtr Parser::readValue()
