@@ -74,6 +74,14 @@ TEST_CASE("Parse a return statement", "[parser][return]")
     auto ast = parser.parse();
 }
 
+TEST_CASE("Parse a complex expression", "[parser][expr]")
+{
+    std::stringstream stream{"return 7-10*2+8*1*(2+1);"};
+    vfn::Parser parser{std::make_unique<vfn::Lexer>(vfn::Lexer{stream})};
+
+    auto ast = parser.parse();
+}
+
 TEST_CASE("Parse an example program", "[parser][example]")
 {
     std::stringstream stream{PROGRAM};

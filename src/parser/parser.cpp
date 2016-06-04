@@ -187,7 +187,7 @@ Parser::NodePtr Parser::readComparison()
     TokenPtr token{getToken().clone()};
     if (checkKeyword(Keyword::Equals) || checkKeyword(Keyword::NotEquals)) {
         Keyword op = token->asKeyword();
-        NodePtr rhs = readSum();
+        NodePtr rhs = readComparison();
         NodePtr binary{new ast::BinaryOperator{op, std::move(lhs), std::move(rhs)}};
         return binary;
     } else {
@@ -201,7 +201,7 @@ Parser::NodePtr Parser::readSum()
     TokenPtr token{getToken().clone()};
     if (checkKeyword(Keyword::Plus) || checkKeyword(Keyword::Minus)) {
         Keyword op = token->asKeyword();
-        NodePtr rhs = readMult();
+        NodePtr rhs = readSum();
         NodePtr binary{new ast::BinaryOperator{op, std::move(lhs), std::move(rhs)}};
         return binary;
     } else {
@@ -215,7 +215,7 @@ Parser::NodePtr Parser::readMult()
     TokenPtr token{getToken().clone()};
     if (checkKeyword(Keyword::Mult) || checkKeyword(Keyword::Div)) {
         Keyword op = token->asKeyword();
-        NodePtr rhs = readValue();
+        NodePtr rhs = readMult();
         NodePtr binary{new ast::BinaryOperator{op, std::move(lhs), std::move(rhs)}};
         return binary;
     } else {
