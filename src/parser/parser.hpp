@@ -2,6 +2,7 @@
 #pragma once
 
 #include <exception>
+#include <initializer_list>
 #include <memory>
 #include <string>
 
@@ -56,9 +57,8 @@ class Parser
     NodePtr readFilter();
     NodePtr readExpression();
     NodePtr readOperator(
-        NodePtr (Parser::*readThisOperator)(),
-        NodePtr (Parser::*readNextOperator)(),
-        Keyword kw1, Keyword kw2);
+        NodePtr (Parser::*readNextExpression)(),
+        const std::initializer_list<Keyword>& operators);
     NodePtr readComparison();
     NodePtr readSum();
     NodePtr readMult();
@@ -70,6 +70,7 @@ class Parser
 
     TokenPtr checkToken(Token::Type expected);
     TokenPtr checkKeyword(Keyword expected);
+    TokenPtr checkKeywords(const std::initializer_list<Keyword>& expected);
     TokenPtr requireToken(Token::Type expected);
     TokenPtr requireKeyword(Keyword expected);
 

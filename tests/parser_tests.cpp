@@ -80,6 +80,7 @@ TEST_CASE("Parse a complex expression", "[parser][expr]")
     vfn::Parser parser{std::make_unique<vfn::Lexer>(vfn::Lexer{stream})};
 
     auto ast = parser.parse();
+    REQUIRE(ast->evaluate()->asInt() == 11);
 }
 
 TEST_CASE("Parse an example program", "[parser][example]")

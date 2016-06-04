@@ -181,41 +181,38 @@ Parser::NodePtr Parser::readExpression()
 }
 
 Parser::NodePtr Parser::readOperator(
-    NodePtr (Parser::*readThisOperator)(),
-    NodePtr (Parser::*readNextOperator)(),
-    Keyword kw1, Keyword kw2)
+    NodePtr (Parser::*readNextExpression)(),
+    const std::initializer_list<Keyword>& operators)
 {
-    NodePtr lhs = (this->*readNextOperator)();
-    TokenPtr token{getToken().clone()};
-    if (checkKeyword(kw1) || checkKeyword(kw2)) {
+    NodePtr lhs = (this->*readNextExpression)();
+    while (TokenPtr token{checkKeywords(operators)}) {
         Keyword op = token->asKeyword();
-        NodePtr rhs = (this->*readThisOperator)();
-        NodePtr binary{new ast::BinaryOperator{op, std::move(lhs), std::move(rhs)}};
-        return binary;
-    } else {
-        return lhs;
+        NodePtr rhs = (this->*readNextExpression)();
+        lhs.reset(new ast::BinaryOperator{op, std::move(lhs), std::move(rhs)});
     }
+
+    return lhs;
 }
 
 Parser::NodePtr Parser::readComparison()
 {
     return readOperator(
-        &Parser::readComparison, &Parser::readSum,
-        Keyword::Equals, Keyword::NotEquals);
+        &Parser::readSum,
+        {Keyword::Equals, Keyword::NotEquals});
 }
 
 Parser::NodePtr Parser::readSum()
 {
     return readOperator(
-        &Parser::readSum, &Parser::readMult,
-        Keyword::Plus, Keyword::Minus);
+        &Parser::readMult,
+        {Keyword::Plus, Keyword::Minus});
 }
 
 Parser::NodePtr Parser::readMult()
 {
     return readOperator(
-        &Parser::readMult, &Parser::readValue,
-        Keyword::Mult, Keyword::Div);
+        &Parser::readValue,
+        {Keyword::Mult, Keyword::Div});
 }
 
 Parser::NodePtr Parser::readValue()
@@ -326,6 +323,18 @@ Parser::TokenPtr Parser::checkKeyword(Keyword expected)
         advance();
         return token;
     }
+}
+
+Parser::TokenPtr Parser::checkKeywords(
+    const std::initializer_list<Keyword>& expected)
+{
+    for (auto& keyword : expected) {
+        if (TokenPtr token = checkKeyword(keyword)) {
+            return token;
+        }
+    }
+
+    return nullptr;
 }
 
 Parser::TokenPtr Parser::requireToken(Token::Type expected)

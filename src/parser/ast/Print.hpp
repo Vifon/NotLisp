@@ -1,7 +1,10 @@
 // File: Print.hpp
 #pragma once
 
+#include <iostream>
+
 #include "Node.hpp"
+#include "VoidValue.hpp"
 
 namespace vfn {
 
@@ -16,7 +19,9 @@ class Print : public Node
 
     ValuePtr evaluate() override
     {
-        // TODO: cout
+        // TODO: ostream operator<< for all Values
+        std::cout << expr->evaluate()->asInt() << std::endl;
+        return ValuePtr{new VoidValue};
     }
 
   private:

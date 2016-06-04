@@ -21,10 +21,13 @@ class Block : public Node
 
     ValuePtr evaluate() override
     {
+        ValuePtr ret{new VoidValue};;
+
         for (auto& subtree : subtrees) {
-            subtree->evaluate();
+            ret = subtree->evaluate();
         }
-        return ValuePtr{new VoidValue};
+
+        return ret;
     }
 
   private:
