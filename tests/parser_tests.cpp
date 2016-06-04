@@ -83,6 +83,15 @@ TEST_CASE("Parse a complex expression", "[parser][expr]")
     REQUIRE(ast->evaluate()->asInt() == 11);
 }
 
+TEST_CASE("Parse an unary minus", "[parser][unary]")
+{
+    std::stringstream stream{"return -10;"};
+    vfn::Parser parser{std::make_unique<vfn::Lexer>(vfn::Lexer{stream})};
+
+    auto ast = parser.parse();
+    REQUIRE(ast->evaluate()->asInt() == -10);
+}
+
 TEST_CASE("Parse an example program", "[parser][example]")
 {
     std::stringstream stream{PROGRAM};

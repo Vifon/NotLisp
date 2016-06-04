@@ -235,7 +235,7 @@ Parser::NodePtr Parser::readValue()
     } else if (checkKeyword(Keyword::Minus)) {
         NodePtr expr = readExpression();
         NodePtr unary{new ast::UnaryOperator{Keyword::Minus, std::move(expr)}};
-        return expr;
+        return unary;
     } else {
         return readLiteral();
     }
