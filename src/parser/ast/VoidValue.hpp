@@ -16,7 +16,7 @@ class VoidValue : public Value
 
     ValuePtr evaluate() override
     {
-        return ValuePtr{new VoidValue{*this}};
+        return shared_from_this();
     }
 };
 

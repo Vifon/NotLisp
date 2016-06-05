@@ -1,6 +1,7 @@
 // File: Value.hpp
 #pragma once
 
+#include <memory>
 #include <vector>
 
 #include "bad_result_cast.hpp"
@@ -10,7 +11,9 @@ namespace vfn {
 
 namespace ast {
 
-class Value : public Node
+class Value
+    : public Node
+    , public std::enable_shared_from_this<Value>
 {
   public:
     enum class Type {

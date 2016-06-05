@@ -29,8 +29,7 @@ class ListValue : public Value
 
     ValuePtr evaluate() override
     {
-        // TODO: shared_ptr?
-        // return ValuePtr{new ListValue{*this}};
+        return shared_from_this();
     }
 
     operator bool() const override

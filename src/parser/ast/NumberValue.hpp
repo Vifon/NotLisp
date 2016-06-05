@@ -27,7 +27,7 @@ class NumberValue : public Value
 
     ValuePtr evaluate() override
     {
-        return ValuePtr{new NumberValue{*this}};
+        return shared_from_this();
     }
 
   private:
