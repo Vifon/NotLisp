@@ -46,9 +46,9 @@ class Parser
     NodePtr parse();
 
   private:
-    NodePtr readLine();
-    NodePtr readLines();
-    NodePtr readBlock();
+    NodePtr readLine(bool is_toplevel = false);
+    NodePtr readLines(bool is_toplevel = false);
+    NodePtr readBlockOrLine(bool is_toplevel = false);
     NodePtr readDeclaration();
     NodePtr readCall(const std::string& varname);
     NodePtr readCond();

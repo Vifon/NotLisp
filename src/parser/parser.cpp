@@ -30,26 +30,28 @@ Parser::Parser(std::unique_ptr<Lexer> lexer)
 Parser::NodePtr Parser::parse()
 {
     advance();
-    return readLines();
+    return readLines(true);
 }
 
-Parser::NodePtr Parser::readBlock()
+Parser::NodePtr Parser::readBlockOrLine(bool is_toplevel)
 {
     if (checkKeyword(Keyword::BlockBegin)) {
-        NodePtr lines = readLines();
-        requireKeyword(Keyword::BlockEnd);
-        return lines;
+        return readLines();
     } else {
-        return readLine();
+        return readLine(is_toplevel);
     }
 }
 
-Parser::NodePtr Parser::readLine()
+Parser::NodePtr Parser::readLine(bool is_toplevel)
 {
     NodePtr line;
 
     if (lexer->eof()) {
-        return nullptr;
+        if (is_toplevel) {
+            return nullptr;
+        } else {
+            throw unexpected_input(getToken());
+        }
     }
 
     if (TokenPtr varname = checkToken(Token::Type::Var)) {
@@ -78,19 +80,21 @@ Parser::NodePtr Parser::readLine()
         line = readCond();
     } else if (checkKeyword(Keyword::For)) {
         line = readLoop();
-    } else {
+    } else if (!is_toplevel && checkKeyword(Keyword::BlockEnd)) {
         return nullptr;
+    } else {
+        throw unexpected_input(getToken());
     }
 
     requireKeyword(Keyword::Semicolon);
     return line;
 }
 
-Parser::NodePtr Parser::readLines()
+Parser::NodePtr Parser::readLines(bool is_toplevel)
 {
     std::vector<NodePtr> subtrees;
     NodePtr line;
-    while ((line = readLine()) != nullptr) {
+    while ((line = readBlockOrLine(is_toplevel)) != nullptr) {
         subtrees.push_back(std::move(line));
     }
     NodePtr block{new ast::Block{std::move(subtrees)}};
@@ -125,10 +129,10 @@ Parser::NodePtr Parser::readCond()
     requireKeyword(Keyword::ParenBegin);
     NodePtr condition = readExpression();
     requireKeyword(Keyword::ParenEnd);
-    NodePtr block = readBlock();
+    NodePtr block = readBlockOrLine();
 
     if (checkKeyword(Keyword::Else)) {
-        NodePtr else_block = readBlock();
+        NodePtr else_block = readBlockOrLine();
         NodePtr cond{new ast::Cond{std::move(condition), std::move(block), std::move(else_block)}};
         return cond;
     } else {
@@ -144,7 +148,7 @@ Parser::NodePtr Parser::readLoop()
     requireKeyword(Keyword::In);
     NodePtr collection = readExpression();
     requireKeyword(Keyword::ParenEnd);
-    NodePtr block = readBlock();
+    NodePtr block = readBlockOrLine();
 
     NodePtr loop{new ast::Loop{varname->asVar(), std::move(collection), std::move(block)}};
     return loop;
@@ -265,7 +269,8 @@ Parser::NodePtr Parser::readFunction()
     requireKeyword(Keyword::ParenBegin);
     NodePtr args = readVarTuple();
     requireKeyword(Keyword::ParenEnd);
-    NodePtr body = readBlock();
+    requireKeyword(Keyword::BlockBegin);
+    NodePtr body = readLines();
 
     NodePtr function{new ast::Function{std::move(args), std::move(body)}};
     return function;
