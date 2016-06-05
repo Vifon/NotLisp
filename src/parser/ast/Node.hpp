@@ -32,9 +32,9 @@ class Node
         }
     }
 
-    virtual void addVar(const std::string& varname)
+    virtual ValuePtr& addVar(const std::string& varname)
     {
-        parent->addVar(varname);
+        return parent->addVar(varname);
     }
 
     Node* parent;

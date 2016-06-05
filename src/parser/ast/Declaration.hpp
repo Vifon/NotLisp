@@ -21,8 +21,8 @@ class Declaration : public Node
 
     ValuePtr evaluate() override
     {
-        addVar(assignment->variable);
-        return assignment->evaluate();
+        ValuePtr result = assignment->evalOnlyValue();
+        return addVar(assignment->variable) = std::move(result);
     }
 
   private:

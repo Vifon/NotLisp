@@ -47,12 +47,12 @@ class Block : public Node
         }
     }
 
-    void addVar(const std::string& varname) override
+    ValuePtr& addVar(const std::string& varname) override
     {
         if (scope.count(varname)) {
             throw std::runtime_error("Variable already declared: " + varname);
         } else {
-            scope[varname] = ValuePtr{new VoidValue};
+            return scope[varname] = ValuePtr{new VoidValue};
         }
     }
 

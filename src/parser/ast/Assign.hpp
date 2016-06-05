@@ -20,8 +20,12 @@ class Assign : public Node
 
     ValuePtr evaluate() override
     {
-        lookup(variable) = value->evaluate();
-        return ValuePtr{new VoidValue};
+        return lookup(variable) = evalOnlyValue();
+    }
+
+    ValuePtr evalOnlyValue()
+    {
+        return value->evaluate();
     }
 
     const std::string variable;
