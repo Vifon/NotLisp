@@ -38,7 +38,6 @@ class Block : public Node
         return ret;
     }
 
-  protected:
     ValuePtr& lookup(const std::string& varname) override
     {
         if (scope.count(varname)) {
