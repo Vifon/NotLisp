@@ -46,14 +46,6 @@ Parser::NodePtr Parser::readLine(bool is_toplevel)
 {
     NodePtr line;
 
-    if (lexer->eof()) {
-        if (is_toplevel) {
-            return nullptr;
-        } else {
-            throw unexpected_input(getToken());
-        }
-    }
-
     if (TokenPtr varname = checkToken(Token::Type::Var)) {
         if (checkKeyword(Keyword::Assignment)) {
             NodePtr value = readExpression();
@@ -81,6 +73,8 @@ Parser::NodePtr Parser::readLine(bool is_toplevel)
     } else if (checkKeyword(Keyword::For)) {
         return readLoop();
     } else if (!is_toplevel && checkKeyword(Keyword::BlockEnd)) {
+        return nullptr;
+    } else if (is_toplevel && lexer->eof()){
         return nullptr;
     } else {
         throw unexpected_input(getToken());
