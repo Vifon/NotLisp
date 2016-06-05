@@ -1,6 +1,7 @@
 set(tests_SOURCES
   catch_main.cpp
   constants.cpp
+  eval_tests.cpp
   lexer_tests.cpp
   parser_tests.cpp
   )
