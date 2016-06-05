@@ -77,9 +77,9 @@ Parser::NodePtr Parser::readLine(bool is_toplevel)
     } else if (checkKeyword(Keyword::Filter)) {
         line = readFilter();
     } else if (checkKeyword(Keyword::If)) {
-        line = readCond();
+        return readCond();
     } else if (checkKeyword(Keyword::For)) {
-        line = readLoop();
+        return readLoop();
     } else if (!is_toplevel && checkKeyword(Keyword::BlockEnd)) {
         return nullptr;
     } else {
