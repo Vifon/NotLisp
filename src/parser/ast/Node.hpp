@@ -25,7 +25,11 @@ class Node
 
     virtual ValuePtr& lookup(const std::string& varname)
     {
-        return parent->lookup(varname);
+        if (parent) {
+            return parent->lookup(varname);
+        } else {
+            throw std::runtime_error("Undeclared variable: " + varname);
+        }
     }
 
     virtual void addVar(const std::string& varname)

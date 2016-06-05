@@ -20,16 +20,18 @@ class Loop : public Node
     {
         this->collection->parent = this;
         this->block->parent = this;
-
-        block->addVar(iterator);
     }
 
     ValuePtr evaluate() override
     {
-        for (auto& i : collection->evaluate()->asList()) {
+        auto list = collection->evaluate();
+
+        for (auto& i : list->asList()) {
+            block->addVar(iterator);
             block->lookup(iterator) = i;
             block->evaluate();
         }
+
         return ValuePtr{new VoidValue};
     }
 

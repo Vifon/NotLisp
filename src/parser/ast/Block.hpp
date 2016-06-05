@@ -33,6 +33,8 @@ class Block : public Node
             ret = subtree->evaluate();
         }
 
+        scope.clear();
+
         return ret;
     }
 
