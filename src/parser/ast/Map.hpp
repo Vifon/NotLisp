@@ -13,7 +13,10 @@ class Map : public Node
     Map(NodePtr&& fun, NodePtr&& list)
         : fun(std::move(fun))
         , list(std::move(list))
-    {}
+    {
+        this->fun->parent = this;
+        this->list->parent = this;
+    }
 
     ValuePtr evaluate() override
     {

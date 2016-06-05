@@ -15,7 +15,11 @@ class Tuple : public Node
   public:
     Tuple(std::vector<NodePtr>&& subtrees)
         : subtrees(std::move(subtrees))
-    { }
+    {
+        for (auto& node : this->subtrees) {
+            node->parent = this;
+        }
+    }
 
     Tuple() { }
 

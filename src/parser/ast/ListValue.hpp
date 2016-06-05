@@ -15,7 +15,11 @@ class ListValue : public Value
     ListValue(std::vector<ValuePtr>&& list)
         : Value(Value::Type::List)
         , list(std::move(list))
-    { }
+    {
+        for (auto& node : this->list) {
+            node->parent = this;
+        }
+    }
 
     const std::vector<ValuePtr>& asList() const override
     {

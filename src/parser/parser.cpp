@@ -141,13 +141,12 @@ Parser::NodePtr Parser::readLoop()
 {
     requireKeyword(Keyword::ParenBegin);
     TokenPtr varname = requireToken(Token::Type::Var);
-    NodePtr iterator{new ast::Variable{varname->asVar()}};
     requireKeyword(Keyword::In);
     NodePtr collection = readExpression();
     requireKeyword(Keyword::ParenEnd);
     NodePtr block = readBlock();
 
-    NodePtr loop{new ast::Loop{std::move(iterator), std::move(collection), std::move(block)}};
+    NodePtr loop{new ast::Loop{varname->asVar(), std::move(collection), std::move(block)}};
     return loop;
 }
 

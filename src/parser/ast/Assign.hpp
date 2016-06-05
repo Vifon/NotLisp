@@ -14,11 +14,13 @@ class Assign : public Node
     Assign(const std::string& variable, NodePtr&& value)
         : variable(variable)
         , value(std::move(value))
-    {}
+    {
+        this->value->parent = this;
+    }
 
     ValuePtr evaluate() override
     {
-        lookup(variable) = std::move(value->evaluate());
+        lookup(variable) = value->evaluate();
         return ValuePtr{new VoidValue};
     }
 

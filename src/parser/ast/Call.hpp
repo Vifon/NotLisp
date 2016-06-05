@@ -17,7 +17,9 @@ class Call : public Node
     Call(const std::string& function, NodePtr&& args)
         : function_name(function)
         , arguments_tuple(std::move(args))
-    { }
+    {
+        this->arguments_tuple->parent = this;
+    }
 
     Call(const std::string& function)
         : function_name(function)

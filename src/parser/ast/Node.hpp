@@ -23,17 +23,22 @@ class Node
         throw std::runtime_error("Not castable");
     }
 
-  protected:
-    // Node& parent;
-
     virtual ValuePtr& lookup(const std::string& varname)
     {
-        // return parent.lookup(varname);
+        return parent->lookup(varname);
     }
 
-    virtual void addVar(const std::string& varname) {
-        // parent.addVar(varname);
+    virtual void addVar(const std::string& varname)
+    {
+        parent->addVar(varname);
     }
+
+    Node* parent;
+
+  protected:
+    Node()
+        : parent(nullptr)
+    { }
 };
 
 // shared_ptr needed because ValuePtr must use shared_ptr and might be

@@ -12,7 +12,9 @@ class Return : public Node
   public:
     Return(NodePtr&& expr)
         : expr(std::move(expr))
-    {}
+    {
+        this->expr->parent = this;
+    }
 
     ValuePtr evaluate() override
     {

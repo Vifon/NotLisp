@@ -18,7 +18,11 @@ class Cond : public Node
         : condition(std::move(condition))
         , block(std::move(block))
         , else_block(std::move(else_block))
-    { }
+    {
+        this->condition->parent = this;
+        this->block->parent = this;
+        this->else_block->parent = this;
+    }
 
     Cond(NodePtr&& condition, NodePtr&& block)
         : condition(std::move(condition))

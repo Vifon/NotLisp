@@ -17,8 +17,7 @@ class Variable : public Node
 
     ValuePtr evaluate() override
     {
-        // TODO: shared_ptr?
-        // return lookup(name);
+        return lookup(name);
     }
 
   private:

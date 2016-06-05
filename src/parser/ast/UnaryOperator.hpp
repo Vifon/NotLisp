@@ -16,7 +16,9 @@ class UnaryOperator : public Node
     UnaryOperator(Keyword op, NodePtr&& operand)
         : op(op)
         , operand(std::move(operand))
-    { }
+    {
+        this->operand->parent = this;
+    }
 
     ValuePtr evaluate() override
     {

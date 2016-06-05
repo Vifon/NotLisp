@@ -16,11 +16,12 @@ class Declaration : public Node
     Declaration(std::unique_ptr<Assign>&& assignment)
         : assignment(std::move(assignment))
     {
-        addVar(assignment->variable);
+        this->assignment->parent = this;
     }
 
     ValuePtr evaluate() override
     {
+        addVar(assignment->variable);
         return assignment->evaluate();
     }
 
