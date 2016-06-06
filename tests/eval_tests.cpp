@@ -97,3 +97,24 @@ f(1, 2, 3);
     ast = parser.parse();
     REQUIRE_THROWS_AS(ast->evaluate(), std::runtime_error);
 }
+
+TEST_CASE("Filter a list", "[eval][filter][function][cond]")
+{
+    std::stringstream stream{R"(
+let pred = fun(x) {
+  if (x == 2)
+    return [];
+  else
+    return 1;
+};
+return filter(pred, [1, 2, 3, 4]);
+)"};
+    vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
+
+    vfn::Parser::NodePtr ast;
+    ast = parser.parse();
+
+    std::stringstream output;
+    output << *ast->evaluate();
+    REQUIRE(output.str() == "[1, 3, 4]");
+}

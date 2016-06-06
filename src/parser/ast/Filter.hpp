@@ -13,12 +13,25 @@ class Filter : public Node
     Filter(NodePtr&& fun, NodePtr&& list)
         : fun(std::move(fun))
         , list(std::move(list))
-    { }
+    {
+        this->fun->parent = this;
+        this->list->parent = this;
+    }
 
     ValuePtr evaluate() override
     {
-        // TODO
-        return ValuePtr{new VoidValue};
+        ValuePtr evaluated_list{list->evaluate()};
+
+        std::vector<ValuePtr> filtered;
+        filtered.reserve(evaluated_list->asList().size());
+
+        for (auto& element : evaluated_list->asList()) {
+            if (*fun->evaluate()->asFunction().call({element})) {
+                filtered.push_back(element->evaluate());
+            }
+        }
+
+        return ValuePtr{new ListValue{std::move(filtered)}};
     }
 
   private:

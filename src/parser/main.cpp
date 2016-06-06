@@ -64,6 +64,18 @@ print([1,[2,3,4,
 print(f);
 print(fun(){});
 
+let pred = fun(x) {
+  if (x == 2) {
+    return [];
+  } else {
+    return 1;
+  }
+};
+
+let l = [1, 2, 3, 4];
+print(l);
+print(filter(pred, l));
+
 let pow = fun(x) { return x*x; };
 print(pow(25));
 )";
