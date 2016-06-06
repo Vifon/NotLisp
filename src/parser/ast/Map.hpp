@@ -20,8 +20,16 @@ class Map : public Node
 
     ValuePtr evaluate() override
     {
-        // TODO
-        return ValuePtr{new VoidValue};
+        ValuePtr evaluated_list{list->evaluate()};
+
+        std::vector<ValuePtr> mapped;
+        mapped.reserve(evaluated_list->asList().size());
+
+        for (auto& element : evaluated_list->asList()) {
+            mapped.push_back(fun->evaluate()->asFunction().call({element->evaluate()}));
+        }
+
+        return ValuePtr{new ListValue{std::move(mapped)}};
     }
 
   private:

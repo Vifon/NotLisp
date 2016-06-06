@@ -78,6 +78,8 @@ print(filter(pred, l));
 
 let pow = fun(x) { return x*x; };
 print(pow(25));
+
+print(map(pow, l));
 )";
     //*/
 

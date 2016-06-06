@@ -118,3 +118,19 @@ return filter(pred, [1, 2, 3, 4]);
     output << *ast->evaluate();
     REQUIRE(output.str() == "[1, 3, 4]");
 }
+
+TEST_CASE("Map a function over a list", "[eval][map][function]")
+{
+    std::stringstream stream{R"(
+let pow = fun(x) { return x*x; };
+return map(pow, [1, 2, 3, 4, 5]);
+)"};
+    vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
+
+    vfn::Parser::NodePtr ast;
+    ast = parser.parse();
+
+    std::stringstream output;
+    output << *ast->evaluate();
+    REQUIRE(output.str() == "[1, 4, 9, 16, 25]");
+}
