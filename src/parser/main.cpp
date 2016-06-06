@@ -8,6 +8,7 @@
 
 int main(int argc, char *argv[])
 {
+    /*
     const char* PROGRAM = R"(
 let v = 10;
 let v2 = 6;
@@ -32,6 +33,34 @@ for (i in [1, 2, 3]) {
 
 for (i in [1, 4, 8]) print(i);
 )";
+    /*/
+    const char* PROGRAM = R"(
+let outer = 100;
+
+let f = fun(x) {
+  let a = 10;
+  outer = outer + a;
+  print(outer);     # 110 / 120
+  print(42);        # 42
+  print(x);         # 1 / 3
+  a = x + a;
+  return a;
+};
+f(1);
+print(f(3));        # 13
+
+let f2 = fun(l) {
+  let a = 10;
+  for (i in l) {
+    print(i + a);
+  }
+};
+f2([1, 2, 3]);
+
+let pow = fun(x) { return x*x; };
+print(pow(25));
+)";
+    //*/
 
     std::stringstream stream{PROGRAM};
     vfn::Parser p{std::make_unique<vfn::Lexer>(stream)};

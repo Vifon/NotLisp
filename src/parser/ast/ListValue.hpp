@@ -35,11 +35,6 @@ class ListValue : public Value
         return Value::operator==(rhs) && asList() == rhs.asList();
     }
 
-    ValuePtr evaluate() override
-    {
-        return shared_from_this();
-    }
-
     operator bool() const override
     {
         return !list.empty();

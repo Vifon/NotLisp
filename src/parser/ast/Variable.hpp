@@ -20,7 +20,6 @@ class Variable : public Node
         return lookup(name);
     }
 
-  private:
     const std::string name;
 };
 

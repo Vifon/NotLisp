@@ -11,6 +11,8 @@ namespace vfn {
 
 namespace ast {
 
+class FunctionValue;
+
 class Value
     : public Node
     , public std::enable_shared_from_this<Value>
@@ -35,6 +37,11 @@ class Value
         throw bad_result_cast("Not a list");
     }
 
+    virtual const FunctionValue& asFunction() const
+    {
+        throw bad_result_cast("Not a function");
+    }
+
     virtual bool operator==(const Value& rhs) const
     {
         return type == rhs.type;
@@ -43,6 +50,11 @@ class Value
     operator bool() const override
     {
         return true;
+    }
+
+    ValuePtr evaluate() override
+    {
+        return shared_from_this();
     }
 
     const Type type;

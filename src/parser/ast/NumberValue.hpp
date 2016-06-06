@@ -25,11 +25,6 @@ class NumberValue : public Value
         return Value::operator==(rhs) && asInt() == rhs.asInt();
     }
 
-    ValuePtr evaluate() override
-    {
-        return shared_from_this();
-    }
-
   private:
     int value;
 };

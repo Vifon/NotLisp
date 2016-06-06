@@ -10,6 +10,17 @@ namespace ast {
 class Return : public Node
 {
   public:
+    class UglyHack
+    {
+      public:
+        UglyHack(ValuePtr&& value)
+            : return_value(std::move(value))
+        { }
+
+        ValuePtr return_value;
+    };
+
+
     Return(NodePtr&& expr)
         : expr(std::move(expr))
     {
@@ -24,12 +35,7 @@ class Return : public Node
 
     ValuePtr evaluate() override
     {
-        return expr->evaluate();
-    }
-
-    bool isReturn() const override
-    {
-        return true;
+        throw UglyHack(expr->evaluate());
     }
 
   private:

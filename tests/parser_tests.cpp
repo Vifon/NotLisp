@@ -100,6 +100,22 @@ TEST_CASE("Parse an empty return", "[parser][return]")
     auto ast = parser.parse();
 }
 
+TEST_CASE("Parse an argmentless function", "[parser][function]")
+{
+    std::stringstream stream{"let f = fun() { print(42); };"};
+    vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
+
+    auto ast = parser.parse();
+}
+
+TEST_CASE("Parse a function with arguments", "[parser][function][args]")
+{
+    std::stringstream stream{"let f = fun(x) { print(x); };"};
+    vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
+
+    auto ast = parser.parse();
+}
+
 TEST_CASE("Parse a non-empty return", "[parser][return]")
 {
     std::stringstream stream{"return 10;"};

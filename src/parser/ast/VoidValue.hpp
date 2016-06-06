@@ -13,11 +13,6 @@ class VoidValue : public Value
     VoidValue()
         : Value(Value::Type::Void)
     { }
-
-    ValuePtr evaluate() override
-    {
-        return shared_from_this();
-    }
 };
 
 } // namespace ast

@@ -5,6 +5,7 @@
 #include <initializer_list>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "../lexer/lexer.hpp"
 #include "ast/Node.hpp"
@@ -66,7 +67,7 @@ class Parser
     NodePtr readLiteral();
     NodePtr readFunction();
     NodePtr readTuple();
-    NodePtr readVarTuple();
+    std::vector<std::string> readVarTuple();
 
     TokenPtr checkToken(Token::Type expected);
     TokenPtr checkKeyword(Keyword expected);

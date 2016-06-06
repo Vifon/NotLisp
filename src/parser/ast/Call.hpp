@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "FunctionValue.hpp"
 #include "Node.hpp"
 #include "Tuple.hpp"
 #include "VoidValue.hpp"
@@ -28,8 +29,8 @@ class Call : public Node
 
     ValuePtr evaluate() override
     {
-        // TODO
-        return ValuePtr{new VoidValue};
+        ValuePtr fun = lookup(function_name)->evaluate();
+        return fun->asFunction().call(arguments_tuple->evaluate()->asList());
     }
 
   private:

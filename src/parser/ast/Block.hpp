@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Node.hpp"
+#include "Return.hpp"
 #include "VoidValue.hpp"
 
 namespace vfn {
@@ -29,16 +30,23 @@ class Block : public Node
     {
         ValuePtr ret{new VoidValue};;
 
-        for (auto& subtree : subtrees) {
-            ret = subtree->evaluate();
-            if (subtree->isReturn()) {
-                break;
+        try {
+            for (auto& subtree : subtrees) {
+                ret = subtree->evaluate();
+            }
+
+            scope.clear();
+
+            return ret;
+        } catch (Return::UglyHack& early_return) {
+            scope.clear();
+
+            if (parent == nullptr) {
+                return early_return.return_value;
+            } else {
+                throw early_return;
             }
         }
-
-        scope.clear();
-
-        return ret;
     }
 
     ValuePtr& lookup(const std::string& varname) override

@@ -11,7 +11,7 @@
 #include "ast/Cond.hpp"
 #include "ast/Declaration.hpp"
 #include "ast/Filter.hpp"
-#include "ast/Function.hpp"
+#include "ast/FunctionValue.hpp"
 #include "ast/Loop.hpp"
 #include "ast/Map.hpp"
 #include "ast/Print.hpp"
@@ -265,13 +265,19 @@ Parser::NodePtr Parser::readFunction()
 {
     requireKeyword(Keyword::Fun);
     requireKeyword(Keyword::ParenBegin);
-    NodePtr args = readVarTuple();
-    requireKeyword(Keyword::ParenEnd);
-    requireKeyword(Keyword::BlockBegin);
-    NodePtr body = readLines();
-
-    NodePtr function{new ast::Function{std::move(args), std::move(body)}};
-    return function;
+    if (checkKeyword(Keyword::ParenEnd)) {
+        requireKeyword(Keyword::BlockBegin);
+        NodePtr body = readLines();
+        NodePtr function{new ast::FunctionValue{std::move(body)}};
+        return function;
+    } else {
+        std::vector<std::string> args = readVarTuple();
+        requireKeyword(Keyword::ParenEnd);
+        requireKeyword(Keyword::BlockBegin);
+        NodePtr body = readLines();
+        NodePtr function{new ast::FunctionValue{std::move(args), std::move(body)}};
+        return function;
+    }
 }
 
 Parser::NodePtr Parser::readTuple()
@@ -288,19 +294,17 @@ Parser::NodePtr Parser::readTuple()
     return tuple;
 }
 
-Parser::NodePtr Parser::readVarTuple()
+std::vector<std::string> Parser::readVarTuple()
 {
-    std::vector<NodePtr> expressions;
+    std::vector<std::string> variables;
 
     // Empty tuple is handled by the caller.
     do {
         TokenPtr varname = requireToken(Token::Type::Var);
-        NodePtr var{new ast::Variable{varname->asVar()}};
-        expressions.push_back(std::move(var));
+        variables.push_back(varname->asVar());
     } while (checkKeyword(Keyword::Comma));
 
-    NodePtr tuple{new ast::Tuple{std::move(expressions)}};
-    return tuple;
+    return variables;
 }
 
 Parser::TokenPtr Parser::checkToken(Token::Type expected)
