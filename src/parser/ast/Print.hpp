@@ -21,8 +21,7 @@ class Print : public Node
 
     ValuePtr evaluate() override
     {
-        // TODO: ostream operator<< for all Values
-        std::cout << expr->evaluate()->asInt() << std::endl;
+        std::cout << *expr->evaluate() << std::endl;
         return ValuePtr{new VoidValue};
     }
 

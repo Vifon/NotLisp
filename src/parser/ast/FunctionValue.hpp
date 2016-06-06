@@ -56,6 +56,11 @@ class FunctionValue : public Value
         }
     }
 
+    std::ostream& show(std::ostream& out) const override
+    {
+        return out << "fun(.." << args.size() << "..)";
+    }
+
   private:
     std::vector<std::string> args;
     NodePtr body;

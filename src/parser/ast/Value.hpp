@@ -1,6 +1,7 @@
 // File: Value.hpp
 #pragma once
 
+#include <ostream>
 #include <memory>
 #include <vector>
 
@@ -57,6 +58,11 @@ class Value
         return shared_from_this();
     }
 
+    virtual std::ostream& show(std::ostream& out) const
+    {
+        throw bad_result_cast("Not showable");
+    }
+
     const Type type;
 
   protected:
@@ -64,6 +70,8 @@ class Value
         : type(type)
     { }
 };
+
+std::ostream& operator<<(std::ostream& out, const Value& value);
 
 } // namespace ast
 

@@ -82,3 +82,18 @@ pow(5);
     ast = parser.parse();
     REQUIRE(ast->evaluate()->asInt() == 25);
 }
+
+TEST_CASE("Call a function with conflicting argument names", "[eval][function][args]")
+{
+    std::stringstream stream{R"(
+let f = fun(x, x, z) {
+  return 7;
+};
+f(1, 2, 3);
+)"};
+    vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
+
+    vfn::Parser::NodePtr ast;
+    ast = parser.parse();
+    REQUIRE_THROWS_AS(ast->evaluate(), std::runtime_error);
+}

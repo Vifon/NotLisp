@@ -13,6 +13,11 @@ class VoidValue : public Value
     VoidValue()
         : Value(Value::Type::Void)
     { }
+
+    std::ostream& show(std::ostream& out) const override
+    {
+        return out << "()";
+    }
 };
 
 } // namespace ast

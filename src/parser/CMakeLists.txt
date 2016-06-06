@@ -8,8 +8,11 @@ set(parser_HEADERS
 
 add_library(parser STATIC ${parser_SOURCES})
 target_link_libraries(parser
-  lexer)
+  lexer
+  ast)
 
 add_executable(parser_test main.cpp)
 target_link_libraries(parser_test
   parser)
+
+add_subdirectory(ast)

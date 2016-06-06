@@ -40,6 +40,21 @@ class ListValue : public Value
         return !list.empty();
     }
 
+    std::ostream& show(std::ostream& out) const override
+    {
+        if (list.empty()) {
+            out << "[]";
+        } else {
+            auto it = list.begin();
+            out << "[" << **it++;
+            while (it != list.end()) {
+                out << ", " << **it++;
+            }
+            out << "]";
+        }
+        return out;
+    }
+
   private:
     std::vector<ValuePtr> list;
 };

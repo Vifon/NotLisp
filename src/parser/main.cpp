@@ -57,6 +57,13 @@ let f2 = fun(l) {
 };
 f2([1, 2, 3]);
 
+
+print([1, 2, 3]);
+print([1,[2,3,4,
+5],   6]);
+print(f);
+print(fun(){});
+
 let pow = fun(x) { return x*x; };
 print(pow(25));
 )";

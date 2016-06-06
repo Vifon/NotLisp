@@ -25,6 +25,11 @@ class NumberValue : public Value
         return Value::operator==(rhs) && asInt() == rhs.asInt();
     }
 
+    std::ostream& show(std::ostream& out) const override
+    {
+        return out << value;
+    }
+
   private:
     int value;
 };
