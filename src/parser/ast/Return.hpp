@@ -16,9 +16,14 @@ class Return : public Node
         this->expr->parent = this;
     }
 
+    Return()
+        : expr(new VoidValue)
+    {
+        this->expr->parent = this;
+    }
+
     ValuePtr evaluate() override
     {
-        // TODO
         return expr->evaluate();
     }
 

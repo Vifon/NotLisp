@@ -27,7 +27,7 @@ class Cond : public Node
     Cond(NodePtr&& condition, NodePtr&& block)
         : condition(std::move(condition))
         , block(std::move(block))
-        , else_block(new Block)
+        , else_block(new VoidValue)
     {
         this->condition->parent = this;
         this->block->parent = this;

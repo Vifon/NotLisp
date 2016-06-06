@@ -57,8 +57,12 @@ Parser::NodePtr Parser::readLine(bool is_toplevel)
     } else if (checkKeyword(Keyword::Let)) {
         line = readDeclaration();
     } else if (checkKeyword(Keyword::Return)) {
-        NodePtr value = readExpression();
-        line.reset(new ast::Return{std::move(value)});
+        if (checkKeyword(Keyword::Semicolon)) {
+            return NodePtr{new ast::Return};
+        } else {
+            NodePtr value = readExpression();
+            line.reset(new ast::Return{std::move(value)});
+        }
     } else if (checkKeyword(Keyword::Print)) {
         requireKeyword(Keyword::ParenBegin);
         NodePtr value = readExpression();
