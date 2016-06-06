@@ -3,8 +3,10 @@
 
 #include <sstream>
 
+#include "ListValue.hpp"
 #include "Node.hpp"
 #include "NumberValue.hpp"
+#include "VoidValue.hpp"
 
 namespace vfn {
 
@@ -30,7 +32,11 @@ class BinaryOperator : public Node
 
         switch (op) {
         case Keyword::Equals:
-            result.reset(new NumberValue(*lhs_val == *rhs_val));
+            if (*lhs_val == *rhs_val) {
+                result.reset(new VoidValue);
+            } else {
+                result.reset(new ListValue);
+            }
             break;
         case Keyword::NotEquals:
             result.reset(new NumberValue(!(*lhs_val == *rhs_val)));

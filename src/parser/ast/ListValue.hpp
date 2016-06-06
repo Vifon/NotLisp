@@ -21,6 +21,10 @@ class ListValue : public Value
         }
     }
 
+    ListValue()
+        : Value(Value::Type::List)
+    { }
+
     const std::vector<ValuePtr>& asList() const override
     {
         return list;

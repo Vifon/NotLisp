@@ -28,7 +28,11 @@ class Cond : public Node
         : condition(std::move(condition))
         , block(std::move(block))
         , else_block(new Block)
-    { }
+    {
+        this->condition->parent = this;
+        this->block->parent = this;
+        this->else_block->parent = this;
+    }
 
     ValuePtr evaluate() override
     {
