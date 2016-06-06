@@ -37,6 +37,11 @@ class Node
         return parent->addVar(varname);
     }
 
+    virtual bool isReturn() const
+    {
+        return false;
+    }
+
     Node* parent;
 
   protected:

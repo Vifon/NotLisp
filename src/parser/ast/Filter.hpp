@@ -13,7 +13,7 @@ class Filter : public Node
     Filter(NodePtr&& fun, NodePtr&& list)
         : fun(std::move(fun))
         , list(std::move(list))
-    {}
+    { }
 
     ValuePtr evaluate() override
     {

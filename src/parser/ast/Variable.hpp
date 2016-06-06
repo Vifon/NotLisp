@@ -13,7 +13,7 @@ class Variable : public Node
   public:
     Variable(const std::string& varname)
         : name(varname)
-    {}
+    { }
 
     ValuePtr evaluate() override
     {

@@ -15,12 +15,12 @@ class Function : public Value
         : Value(Type::Function)
         , args(std::move(args))
         , body(std::move(body))
-    {}
+    { }
 
     Function(NodePtr&& body)
         : Value(Type::Function)
         , body(std::move(body))
-    {}
+    { }
 
     ValuePtr evaluate() override
     {

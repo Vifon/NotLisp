@@ -22,6 +22,11 @@ class Return : public Node
         return expr->evaluate();
     }
 
+    bool isReturn() const override
+    {
+        return true;
+    }
+
   private:
     NodePtr expr;
 };

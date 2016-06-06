@@ -31,6 +31,9 @@ class Block : public Node
 
         for (auto& subtree : subtrees) {
             ret = subtree->evaluate();
+            if (subtree->isReturn()) {
+                break;
+            }
         }
 
         scope.clear();
