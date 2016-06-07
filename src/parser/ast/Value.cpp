@@ -8,7 +8,7 @@ namespace ast {
 
 std::ostream& operator<<(std::ostream& out, const Value& value)
 {
-    value.show(out);
+    return value.show(out);
 }
 
 } // namespace ast
