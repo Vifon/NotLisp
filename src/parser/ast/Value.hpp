@@ -6,17 +6,17 @@
 #include <vector>
 
 #include "bad_result_cast.hpp"
-#include "Node.hpp"
 
 namespace vfn {
 
 namespace ast {
 
+class Value;
+using ValuePtr = std::shared_ptr<Value>;
+
 class FunctionValue;
 
-class Value
-    : public Node
-    , public std::enable_shared_from_this<Value>
+class Value : public std::enable_shared_from_this<Value>
 {
   public:
     enum class Type {
@@ -48,12 +48,12 @@ class Value
         return type == rhs.type;
     }
 
-    operator bool() const override
+    virtual operator bool() const
     {
         return true;
     }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate()
     {
         return shared_from_this();
     }

@@ -23,7 +23,7 @@ class Cond : public Node
     Cond(NodePtr&& condition, NodePtr&& block)
         : condition(std::move(condition))
         , block(std::move(block))
-        , else_block(new VoidValue)
+        , else_block(new Void)
     { }
 
     ValuePtr evaluate(Scope& scope) override

@@ -6,7 +6,7 @@
 #include "ListValue.hpp"
 #include "Node.hpp"
 #include "NumberValue.hpp"
-#include "VoidValue.hpp"
+#include "Void.hpp"
 
 namespace vfn {
 
@@ -30,7 +30,7 @@ class BinaryOperator : public Node
         switch (op) {
         case Keyword::Equals:
             if (*lhs_val == *rhs_val) {
-                result.reset(new VoidValue);
+                result.reset(new Void);
             } else {
                 result.reset(new ListValue);
             }

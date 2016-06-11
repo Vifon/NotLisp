@@ -24,7 +24,7 @@ class Filter : public Node
 
         for (auto& element : evaluated_list->asList()) {
             if (*fun->evaluate(scope)->asFunction().call(scope, {element})) {
-                filtered.push_back(element->evaluate(scope));
+                filtered.push_back(element->evaluate());
             }
         }
 

@@ -3,7 +3,7 @@
 
 #include "Node.hpp"
 
-#include "VoidValue.hpp"
+#include "Void.hpp"
 
 namespace vfn {
 
@@ -28,7 +28,7 @@ class Return : public Node
     { }
 
     Return()
-        : expr(new VoidValue)
+        : expr(new Void)
     { }
 
     ValuePtr evaluate(Scope& scope) override

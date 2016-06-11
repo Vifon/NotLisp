@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "Node.hpp"
-#include "VoidValue.hpp"
+#include "Void.hpp"
 
 namespace vfn {
 
@@ -31,7 +31,7 @@ class Loop : public Node
             block->evaluate(new_scope);
         }
 
-        return ValuePtr{new VoidValue};
+        return ValuePtr{new Void};
     }
 
   private:

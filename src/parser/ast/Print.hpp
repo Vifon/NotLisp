@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "Node.hpp"
-#include "VoidValue.hpp"
+#include "Void.hpp"
 
 namespace vfn {
 
@@ -20,7 +20,7 @@ class Print : public Node
     ValuePtr evaluate(Scope& scope) override
     {
         std::cout << *expr->evaluate(scope) << std::endl;
-        return ValuePtr{new VoidValue};
+        return ValuePtr{new Void};
     }
 
   private:

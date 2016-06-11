@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "Node.hpp"
-#include "VoidValue.hpp"
+#include "Void.hpp"
 
 namespace vfn {
 
@@ -23,7 +23,7 @@ class Block : public Node
 
     ValuePtr evaluate(Scope& scope) override
     {
-        ValuePtr ret{new VoidValue};;
+        ValuePtr ret{new Void};;
 
         Scope new_scope{scope};
 

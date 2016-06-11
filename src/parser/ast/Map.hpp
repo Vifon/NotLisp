@@ -23,7 +23,7 @@ class Map : public Node
         mapped.reserve(evaluated_list->asList().size());
 
         for (auto& element : evaluated_list->asList()) {
-            mapped.push_back(fun->evaluate(scope)->asFunction().call(scope, {element->evaluate(scope)}));
+            mapped.push_back(fun->evaluate(scope)->asFunction().call(scope, {element->evaluate()}));
         }
 
         return ValuePtr{new ListValue{std::move(mapped)}};

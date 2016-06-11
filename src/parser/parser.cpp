@@ -12,9 +12,9 @@
 #include "ast/Declaration.hpp"
 #include "ast/Filter.hpp"
 #include "ast/FunctionValue.hpp"
+#include "ast/Literal.hpp"
 #include "ast/Loop.hpp"
 #include "ast/Map.hpp"
-#include "ast/NumberLiteral.hpp"
 #include "ast/Print.hpp"
 #include "ast/Return.hpp"
 #include "ast/Tuple.hpp"
@@ -246,7 +246,7 @@ Parser::NodePtr Parser::readValue()
 Parser::NodePtr Parser::readLiteral()
 {
     if (TokenPtr num = checkToken(Token::Type::Number)) {
-        NodePtr literal{new ast::NumberLiteral{static_cast<signed int>(num->asInt())}};
+        NodePtr literal{new ast::Literal{static_cast<signed int>(num->asInt())}};
         return literal;
     } else if (checkKeyword(Keyword::ListBegin)) {
         if (checkKeyword(Keyword::ListEnd)) {
@@ -269,14 +269,14 @@ Parser::NodePtr Parser::readFunction()
     if (checkKeyword(Keyword::ParenEnd)) {
         requireKeyword(Keyword::BlockBegin);
         NodePtr body = readLines();
-        NodePtr function{new ast::FunctionValue{std::move(body)}};
+        NodePtr function{new ast::Literal{std::make_shared<ast::FunctionValue>(std::move(body))}};
         return function;
     } else {
         std::vector<std::string> args = readVarTuple();
         requireKeyword(Keyword::ParenEnd);
         requireKeyword(Keyword::BlockBegin);
         NodePtr body = readLines();
-        NodePtr function{new ast::FunctionValue{std::move(args), std::move(body)}};
+        NodePtr function{new ast::Literal{std::make_shared<ast::FunctionValue>(std::move(args), std::move(body))}};
         return function;
     }
 }

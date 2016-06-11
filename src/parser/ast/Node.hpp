@@ -4,20 +4,14 @@
 #include <stdexcept>
 #include <memory>
 
-namespace vfn {
-namespace ast {
+#include "Value.hpp"
+#include "Scope.hpp"
 
-class Value;
-using ValuePtr = std::shared_ptr<Value>;
+namespace vfn {
+
+namespace ast {
 
 class Scope;
-
-} // namespace ast
-} // namespace vfn
-
-namespace vfn {
-
-namespace ast {
 
 class Node
 {
@@ -28,24 +22,12 @@ class Node
 
     ValuePtr evaluate();
 
-    virtual operator bool() const
-    {
-        throw std::runtime_error("Not castable");
-    }
-
   protected:
     Node() { }
 };
 
-// shared_ptr needed because ValuePtr must use shared_ptr and might be
-// stored as NodePtr in some places. ValuePtr needs to be a shared_ptr
-// because sometimes it is returned as a new value and sometimes as an
-// owning reference to an existing one.
-using NodePtr = std::shared_ptr<Node>;
+using NodePtr = std::unique_ptr<Node>;
 
 } // namespace ast
 
 } // namespace vfn
-
-#include "Value.hpp"      // Warning: Tricky order-dependent includes!
-#include "Scope.hpp"

@@ -8,7 +8,7 @@
 
 #include "Return.hpp"
 #include "Value.hpp"
-#include "VoidValue.hpp"
+#include "Void.hpp"
 
 namespace vfn {
 

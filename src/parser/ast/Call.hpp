@@ -6,7 +6,7 @@
 #include "FunctionValue.hpp"
 #include "Node.hpp"
 #include "Tuple.hpp"
-#include "VoidValue.hpp"
+#include "Void.hpp"
 
 namespace vfn {
 
@@ -27,8 +27,8 @@ class Call : public Node
 
     ValuePtr evaluate(Scope& scope) override
     {
-        ValuePtr fun = scope.lookup(function_name)->evaluate(scope);
-        return fun->asFunction().call(scope, arguments_tuple->evaluate(scope)->asList());
+        ValuePtr fun = scope.lookup(function_name)->evaluate();
+        return fun->asFunction().call(scope, arguments_tuple->evaluate()->asList());
     }
 
   private:

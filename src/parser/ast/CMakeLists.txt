@@ -23,7 +23,7 @@ set(ast_HEADERS
   UnaryOperator.hpp
   Value.hpp
   Variable.hpp
-  VoidValue.hpp
+  Void.hpp
   bad_result_cast.hpp
   )
 

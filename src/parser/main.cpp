@@ -76,6 +76,9 @@ let l = [1, 2, 3, 4];
 print(l);
 print(filter(pred, l));
 
+let void = fun(){};
+print(void());
+
 let pow = fun(x) { return x*x; };
 print(pow(25));
 
