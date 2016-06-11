@@ -19,10 +19,7 @@ class BinaryOperator : public Node
         : op(op)
         , lhs(std::move(lhs))
         , rhs(std::move(rhs))
-    {
-        this->lhs->parent = this;
-        this->rhs->parent = this;
-    }
+    { }
 
     ValuePtr evaluate(Scope& scope) override
     {

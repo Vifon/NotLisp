@@ -15,9 +15,7 @@ class Declaration : public Node
   public:
     Declaration(std::unique_ptr<Assign>&& assignment)
         : assignment(std::move(assignment))
-    {
-        this->assignment->parent = this;
-    }
+    { }
 
     ValuePtr evaluate(Scope& scope) override
     {

@@ -25,15 +25,11 @@ class Return : public Node
 
     Return(NodePtr&& expr)
         : expr(std::move(expr))
-    {
-        this->expr->parent = this;
-    }
+    { }
 
     Return()
         : expr(new VoidValue)
-    {
-        this->expr->parent = this;
-    }
+    { }
 
     ValuePtr evaluate(Scope& scope) override
     {

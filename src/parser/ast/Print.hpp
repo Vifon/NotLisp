@@ -15,9 +15,7 @@ class Print : public Node
   public:
     Print(NodePtr&& expr)
         : expr(std::move(expr))
-    {
-        this->expr->parent = this;
-    }
+    { }
 
     ValuePtr evaluate(Scope& scope) override
     {

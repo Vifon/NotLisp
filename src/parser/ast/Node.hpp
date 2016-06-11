@@ -33,12 +33,8 @@ class Node
         throw std::runtime_error("Not castable");
     }
 
-    Node* parent;
-
   protected:
-    Node()
-        : parent(nullptr)
-    { }
+    Node() { }
 };
 
 // shared_ptr needed because ValuePtr must use shared_ptr and might be

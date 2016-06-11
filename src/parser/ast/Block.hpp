@@ -17,11 +17,7 @@ class Block : public Node
   public:
     Block(std::vector<NodePtr>&& subtrees)
         : subtrees(std::move(subtrees))
-    {
-        for (auto& node : this->subtrees) {
-            node->parent = this;
-        }
-    }
+    { }
 
     Block() { }
 

@@ -21,9 +21,7 @@ class FunctionValue : public Value
         : Value(Type::Function)
         , args(std::move(args))
         , body(std::move(body))
-    {
-        this->body->parent = this;
-    }
+    { }
 
     FunctionValue(NodePtr&& body)
         : FunctionValue({}, std::move(body))

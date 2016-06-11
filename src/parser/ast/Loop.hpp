@@ -17,10 +17,7 @@ class Loop : public Node
         : iterator_name(std::move(iterator_name))
         , collection(std::move(collection))
         , block(std::move(block))
-    {
-        this->collection->parent = this;
-        this->block->parent = this;
-    }
+    { }
 
     ValuePtr evaluate(Scope& scope) override
     {
