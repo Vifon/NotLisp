@@ -23,13 +23,13 @@ class Tuple : public Node
 
     Tuple() { }
 
-    ValuePtr evaluate() override
+    ValuePtr evaluate(Scope& scope) override
     {
         std::vector<ValuePtr> evaluated;
         evaluated.reserve(subtrees.size());
 
         for (auto& subtree : subtrees) {
-            evaluated.push_back(subtree->evaluate());
+            evaluated.push_back(subtree->evaluate(scope));
         }
 
         return ValuePtr{new ListValue{std::move(evaluated)}};

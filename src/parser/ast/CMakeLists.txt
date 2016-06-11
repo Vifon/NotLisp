@@ -1,5 +1,6 @@
 set(ast_SOURCES
   Value.cpp
+  Node.cpp
   )
 
 set(ast_HEADERS

@@ -24,10 +24,10 @@ class BinaryOperator : public Node
         this->rhs->parent = this;
     }
 
-    ValuePtr evaluate() override
+    ValuePtr evaluate(Scope& scope) override
     {
-        ValuePtr lhs_val = lhs->evaluate();
-        ValuePtr rhs_val = rhs->evaluate();
+        ValuePtr lhs_val = lhs->evaluate(scope);
+        ValuePtr rhs_val = rhs->evaluate(scope);
         ValuePtr result;
 
         switch (op) {

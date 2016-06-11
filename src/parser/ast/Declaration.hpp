@@ -19,10 +19,10 @@ class Declaration : public Node
         this->assignment->parent = this;
     }
 
-    ValuePtr evaluate() override
+    ValuePtr evaluate(Scope& scope) override
     {
-        ValuePtr result = assignment->evalOnlyValue();
-        return addVar(assignment->variable) = std::move(result);
+        ValuePtr result = assignment->evalOnlyValue(scope);
+        return scope.addVar(assignment->variable) = std::move(result);
     }
 
   private:

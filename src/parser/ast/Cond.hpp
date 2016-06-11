@@ -34,12 +34,13 @@ class Cond : public Node
         this->else_block->parent = this;
     }
 
-    ValuePtr evaluate() override
+    ValuePtr evaluate(Scope& scope) override
     {
-        if (*condition->evaluate()) {
-            return block->evaluate();
+        Scope new_scope{scope};
+        if (*condition->evaluate(new_scope)) {
+            return block->evaluate(new_scope);
         } else {
-            return else_block->evaluate();
+            return else_block->evaluate(new_scope);
         }
     }
 

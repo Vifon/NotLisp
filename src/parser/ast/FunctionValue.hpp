@@ -34,7 +34,7 @@ class FunctionValue : public Value
         return *this;
     }
 
-    ValuePtr call(const std::vector<ValuePtr>& arg_values) const
+    ValuePtr call(Scope& scope, const std::vector<ValuePtr>& arg_values) const
     {
         if (arg_values.size() != args.size()) {
             std::stringstream ss;
@@ -42,14 +42,14 @@ class FunctionValue : public Value
                << arg_values.size() << " arguments";
             throw std::runtime_error(ss.str());
         } else {
-            // TODO: Copy the body to preserve the scope in recursive calls.
+            Scope new_scope{scope};
 
             for (size_t i = 0; i < args.size(); ++i) {
-                body->addVar(args[i]) = arg_values[i];
+                new_scope.addVar(args[i]) = arg_values[i];
             }
 
             try {
-                return body->evaluate();
+                return body->evaluate(new_scope);
             } catch (Return::UglyHack& ret) {
                 return std::move(ret.return_value);
             }

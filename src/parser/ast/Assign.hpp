@@ -18,14 +18,14 @@ class Assign : public Node
         this->value->parent = this;
     }
 
-    ValuePtr evaluate() override
+    ValuePtr evaluate(Scope& scope) override
     {
-        return lookup(variable) = evalOnlyValue();
+        return scope.lookup(variable) = evalOnlyValue(scope);
     }
 
-    ValuePtr evalOnlyValue()
+    ValuePtr evalOnlyValue(Scope& scope)
     {
-        return value->evaluate();
+        return value->evaluate(scope);
     }
 
     const std::string variable;

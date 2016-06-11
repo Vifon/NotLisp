@@ -18,16 +18,16 @@ class Filter : public Node
         this->list->parent = this;
     }
 
-    ValuePtr evaluate() override
+    ValuePtr evaluate(Scope& scope) override
     {
-        ValuePtr evaluated_list{list->evaluate()};
+        ValuePtr evaluated_list{list->evaluate(scope)};
 
         std::vector<ValuePtr> filtered;
         filtered.reserve(evaluated_list->asList().size());
 
         for (auto& element : evaluated_list->asList()) {
-            if (*fun->evaluate()->asFunction().call({element})) {
-                filtered.push_back(element->evaluate());
+            if (*fun->evaluate(scope)->asFunction().call(scope, {element})) {
+                filtered.push_back(element->evaluate(scope));
             }
         }
 

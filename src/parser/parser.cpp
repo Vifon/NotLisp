@@ -14,6 +14,7 @@
 #include "ast/FunctionValue.hpp"
 #include "ast/Loop.hpp"
 #include "ast/Map.hpp"
+#include "ast/NumberLiteral.hpp"
 #include "ast/Print.hpp"
 #include "ast/Return.hpp"
 #include "ast/Tuple.hpp"
@@ -245,7 +246,7 @@ Parser::NodePtr Parser::readValue()
 Parser::NodePtr Parser::readLiteral()
 {
     if (TokenPtr num = checkToken(Token::Type::Number)) {
-        NodePtr literal{new ast::NumberValue{static_cast<signed int>(num->asInt())}};
+        NodePtr literal{new ast::NumberLiteral{static_cast<signed int>(num->asInt())}};
         return literal;
     } else if (checkKeyword(Keyword::ListBegin)) {
         if (checkKeyword(Keyword::ListEnd)) {

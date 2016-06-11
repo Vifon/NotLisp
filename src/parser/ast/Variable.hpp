@@ -15,9 +15,9 @@ class Variable : public Node
         : name(varname)
     { }
 
-    ValuePtr evaluate() override
+    ValuePtr evaluate(Scope& scope) override
     {
-        return lookup(name);
+        return scope.lookup(name);
     }
 
     const std::string name;

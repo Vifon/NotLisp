@@ -19,9 +19,9 @@ class Print : public Node
         this->expr->parent = this;
     }
 
-    ValuePtr evaluate() override
+    ValuePtr evaluate(Scope& scope) override
     {
-        std::cout << *expr->evaluate() << std::endl;
+        std::cout << *expr->evaluate(scope) << std::endl;
         return ValuePtr{new VoidValue};
     }
 

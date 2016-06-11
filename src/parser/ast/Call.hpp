@@ -27,10 +27,10 @@ class Call : public Node
         , arguments_tuple(new Tuple)
     { }
 
-    ValuePtr evaluate() override
+    ValuePtr evaluate(Scope& scope) override
     {
-        ValuePtr fun = lookup(function_name)->evaluate();
-        return fun->asFunction().call(arguments_tuple->evaluate()->asList());
+        ValuePtr fun = scope.lookup(function_name)->evaluate(scope);
+        return fun->asFunction().call(scope, arguments_tuple->evaluate(scope)->asList());
     }
 
   private:

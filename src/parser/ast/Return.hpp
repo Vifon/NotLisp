@@ -3,6 +3,8 @@
 
 #include "Node.hpp"
 
+#include "VoidValue.hpp"
+
 namespace vfn {
 
 namespace ast {
@@ -33,9 +35,9 @@ class Return : public Node
         this->expr->parent = this;
     }
 
-    ValuePtr evaluate() override
+    ValuePtr evaluate(Scope& scope) override
     {
-        throw UglyHack(expr->evaluate());
+        throw UglyHack(expr->evaluate(scope));
     }
 
   private:

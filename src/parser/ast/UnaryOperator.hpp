@@ -20,9 +20,9 @@ class UnaryOperator : public Node
         this->operand->parent = this;
     }
 
-    ValuePtr evaluate() override
+    ValuePtr evaluate(Scope& scope) override
     {
-        ValuePtr value = operand->evaluate();
+        ValuePtr value = operand->evaluate(scope);
         ValuePtr result;
 
         switch (op) {

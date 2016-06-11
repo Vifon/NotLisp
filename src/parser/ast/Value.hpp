@@ -53,7 +53,7 @@ class Value
         return true;
     }
 
-    ValuePtr evaluate() override
+    ValuePtr evaluate(Scope& scope) override
     {
         return shared_from_this();
     }

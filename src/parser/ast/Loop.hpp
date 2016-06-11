@@ -22,25 +22,19 @@ class Loop : public Node
         this->block->parent = this;
     }
 
-    ValuePtr evaluate() override
+    ValuePtr evaluate(Scope& scope) override
     {
-        auto list = collection->evaluate();
+        auto list = collection->evaluate(scope);
+
+        Scope new_scope{scope};
+        new_scope.addVar(iterator_name);
 
         for (auto& i : list->asList()) {
-            iterator = i;
-            block->evaluate();
+            new_scope.lookup(iterator_name) = i;
+            block->evaluate(new_scope);
         }
 
         return ValuePtr{new VoidValue};
-    }
-
-    ValuePtr& lookup(const std::string& varname) override
-    {
-        if (varname == iterator_name) {
-            return iterator;
-        } else {
-            return Node::lookup(varname);
-        }
     }
 
   private:

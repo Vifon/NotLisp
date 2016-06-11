@@ -5,36 +5,32 @@
 #include <memory>
 
 namespace vfn {
-
 namespace ast {
 
 class Value;
 using ValuePtr = std::shared_ptr<Value>;
+
+class Scope;
+
+} // namespace ast
+} // namespace vfn
+
+namespace vfn {
+
+namespace ast {
 
 class Node
 {
   public:
     virtual ~Node() { }
 
-    virtual ValuePtr evaluate() = 0;
+    virtual ValuePtr evaluate(Scope& scope) = 0;
+
+    ValuePtr evaluate();
 
     virtual operator bool() const
     {
         throw std::runtime_error("Not castable");
-    }
-
-    virtual ValuePtr& lookup(const std::string& varname)
-    {
-        if (parent) {
-            return parent->lookup(varname);
-        } else {
-            throw std::runtime_error("Undeclared variable: " + varname);
-        }
-    }
-
-    virtual ValuePtr& addVar(const std::string& varname)
-    {
-        return parent->addVar(varname);
     }
 
     Node* parent;
@@ -56,3 +52,4 @@ using NodePtr = std::shared_ptr<Node>;
 } // namespace vfn
 
 #include "Value.hpp"      // Warning: Tricky order-dependent includes!
+#include "Scope.hpp"
