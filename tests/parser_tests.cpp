@@ -15,7 +15,7 @@ TEST_CASE("Parse a sample line", "[parser][assign]")
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
     auto ast = parser.parse();
-    // ast->evaluate();
+    // ast->run();
 }
 
 TEST_CASE("Parse multiple top-level lines", "[parser][assign]")
@@ -24,7 +24,7 @@ TEST_CASE("Parse multiple top-level lines", "[parser][assign]")
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
     auto ast = parser.parse();
-    // ast->evaluate();
+    // ast->run();
 }
 
 
@@ -34,7 +34,7 @@ TEST_CASE("Parse a declaration", "[parser][decl]")
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
     auto ast = parser.parse();
-    // ast->evaluate();
+    // ast->run();
 }
 
 TEST_CASE("Parse a function call", "[parser][call][tuple]")
@@ -43,7 +43,7 @@ TEST_CASE("Parse a function call", "[parser][call][tuple]")
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
     auto ast = parser.parse();
-    // ast->evaluate();
+    // ast->run();
 }
 
 TEST_CASE("Detect an invalid token", "[parser][error]")
@@ -80,7 +80,7 @@ TEST_CASE("Parse a complex expression", "[parser][expr]")
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
     auto ast = parser.parse();
-    REQUIRE(ast->evaluate()->asInt() == 11);
+    REQUIRE(ast->run()->asInt() == 11);
 }
 
 TEST_CASE("Parse an unary minus", "[parser][unary]")
@@ -89,7 +89,7 @@ TEST_CASE("Parse an unary minus", "[parser][unary]")
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
     auto ast = parser.parse();
-    REQUIRE(ast->evaluate()->asInt() == -10);
+    REQUIRE(ast->run()->asInt() == -10);
 }
 
 TEST_CASE("Parse an empty return", "[parser][return]")

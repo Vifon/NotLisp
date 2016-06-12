@@ -9,7 +9,7 @@ namespace vfn {
 
 namespace ast {
 
-ValuePtr Node::evaluate()
+ValuePtr Node::run()
 {
     Scope root_scope;
     try {

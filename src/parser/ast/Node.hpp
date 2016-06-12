@@ -26,7 +26,7 @@ class Node
         return std::make_unique<T>(std::forward<Args>(args)...);
     }
 
-    ValuePtr evaluate();
+    ValuePtr run();
 
   protected:
     Node() { }

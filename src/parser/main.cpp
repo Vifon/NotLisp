@@ -90,7 +90,7 @@ print(map(pow, l));
     vfn::Parser p{std::make_unique<vfn::Lexer>(stream)};
 
     try {
-        p.parse()->evaluate();
+        p.parse()->run();
     } catch (std::exception& e) {
         std::cout << "Error: " << e.what() << std::endl;
     }

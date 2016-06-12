@@ -26,8 +26,8 @@ class Call : public Node
 
     ValuePtr evaluate(Scope& scope) override
     {
-        ValuePtr fun = scope.lookup(function_name)->evaluate();
-        return fun->asFunction().call(scope, arguments_tuple->evaluate()->asList());
+        ValuePtr fun = scope.lookup(function_name);
+        return fun->asFunction().call(scope, arguments_tuple->evaluate(scope)->asList());
     }
 
   private:

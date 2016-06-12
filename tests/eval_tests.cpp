@@ -15,7 +15,7 @@ TEST_CASE("Read the variable value", "[eval][var][decl]")
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
     auto ast = parser.parse();
-    REQUIRE(ast->evaluate()->asInt() == 10);
+    REQUIRE(ast->run()->asInt() == 10);
 }
 
 TEST_CASE("Modify a variable value", "[eval][var][assign]")
@@ -24,7 +24,7 @@ TEST_CASE("Modify a variable value", "[eval][var][assign]")
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
     auto ast = parser.parse();
-    auto result = ast->evaluate()->asInt();
+    auto result = ast->run()->asInt();
     REQUIRE(result != 10);
     REQUIRE(result == 20);
 }
@@ -36,7 +36,7 @@ TEST_CASE("Modify an outer variable in a nested scope", "[eval][var][assign][sco
 
     vfn::Parser::NodePtr ast;
     ast = parser.parse();
-    auto result = ast->evaluate()->asInt();
+    auto result = ast->run()->asInt();
     REQUIRE(result != 10);
     REQUIRE(result == 20);
 }
@@ -48,7 +48,7 @@ TEST_CASE("Modify an inner variable in a nested scope", "[eval][var][assign][sco
 
     vfn::Parser::NodePtr ast;
     ast = parser.parse();
-    auto result = ast->evaluate()->asInt();
+    auto result = ast->run()->asInt();
     REQUIRE(result != 20);
     REQUIRE(result == 10);
 }
@@ -65,7 +65,7 @@ f(5);
 
     vfn::Parser::NodePtr ast;
     ast = parser.parse();
-    REQUIRE_THROWS_AS(ast->evaluate(), std::runtime_error);
+    REQUIRE_THROWS_AS(ast->run(), std::runtime_error);
 }
 
 TEST_CASE("Call a function", "[eval][function]")
@@ -80,7 +80,7 @@ pow(5);
 
     vfn::Parser::NodePtr ast;
     ast = parser.parse();
-    REQUIRE(ast->evaluate()->asInt() == 25);
+    REQUIRE(ast->run()->asInt() == 25);
 }
 
 TEST_CASE("Call a function with conflicting argument names", "[eval][function][args]")
@@ -95,7 +95,24 @@ f(1, 2, 3);
 
     vfn::Parser::NodePtr ast;
     ast = parser.parse();
-    REQUIRE_THROWS_AS(ast->evaluate(), std::runtime_error);
+    REQUIRE_THROWS_AS(ast->run(), std::runtime_error);
+}
+
+TEST_CASE("Pass a variable to a function", "[eval][function][args][var]")
+{
+    std::stringstream stream{R"(
+let f = fun(a) {
+  a = a + 1;
+  return a;
+};
+let x = 5;
+return f(x);
+)"};
+    vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
+
+    vfn::Parser::NodePtr ast;
+    ast = parser.parse();
+    REQUIRE(ast->run()->asInt() == 6);
 }
 
 TEST_CASE("Filter a list", "[eval][filter][function][cond]")
@@ -115,7 +132,7 @@ return filter(pred, [1, 2, 3, 4]);
     ast = parser.parse();
 
     std::stringstream output;
-    output << *ast->evaluate();
+    output << *ast->run();
     REQUIRE(output.str() == "[1, 3, 4]");
 }
 
@@ -131,6 +148,6 @@ return map(pow, [1, 2, 3, 4, 5]);
     ast = parser.parse();
 
     std::stringstream output;
-    output << *ast->evaluate();
+    output << *ast->run();
     REQUIRE(output.str() == "[1, 4, 9, 16, 25]");
 }
