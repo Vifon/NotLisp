@@ -5,8 +5,6 @@
 #include <memory>
 #include <vector>
 
-#include "bad_result_cast.hpp"
-
 namespace vfn {
 
 namespace ast {
@@ -34,40 +32,16 @@ class Value : public std::enable_shared_from_this<Value>
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
 
-    virtual int asInt() const
-    {
-        throw bad_result_cast("Not an integer");
-    }
+    virtual int asInt() const;
+    virtual const std::vector<ValuePtr>& asList() const;
+    virtual const FunctionValue& asFunction() const;
 
-    virtual const std::vector<ValuePtr>& asList() const
-    {
-        throw bad_result_cast("Not a list");
-    }
+    virtual bool operator==(const Value& rhs) const;
+    virtual operator bool() const;
 
-    virtual const FunctionValue& asFunction() const
-    {
-        throw bad_result_cast("Not a function");
-    }
+    ValuePtr evaluate() const { return shared_from_this(); }
 
-    virtual bool operator==(const Value& rhs) const
-    {
-        return type == rhs.type;
-    }
-
-    virtual operator bool() const
-    {
-        return true;
-    }
-
-    ValuePtr evaluate() const
-    {
-        return shared_from_this();
-    }
-
-    virtual std::ostream& show(std::ostream& out) const
-    {
-        throw bad_result_cast("Not showable");
-    }
+    virtual std::ostream& show(std::ostream& out) const;
 
     const Type type;
 

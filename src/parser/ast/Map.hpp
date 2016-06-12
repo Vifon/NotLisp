@@ -15,19 +15,7 @@ class Map : public Node
         , list(std::move(list))
     { }
 
-    ValuePtr evaluate(Scope& scope) const override
-    {
-        ValuePtr evaluated_list{list->evaluate(scope)};
-
-        std::vector<ValuePtr> mapped;
-        mapped.reserve(evaluated_list->asList().size());
-
-        for (auto& element : evaluated_list->asList()) {
-            mapped.push_back(fun->evaluate(scope)->asFunction().call(scope, {element->evaluate()}));
-        }
-
-        return Value::make<ListValue>(std::move(mapped));
-    }
+    ValuePtr evaluate(Scope& scope) const override;
 
   private:
     const NodePtr fun;

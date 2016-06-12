@@ -1,7 +1,6 @@
 // File: Filter.hpp
 #pragma once
 
-#include "ListValue.hpp"
 #include "Node.hpp"
 
 namespace vfn {
@@ -16,21 +15,7 @@ class Filter : public Node
         , list(std::move(list))
     { }
 
-    ValuePtr evaluate(Scope& scope) const override
-    {
-        ValuePtr evaluated_list{list->evaluate(scope)};
-
-        std::vector<ValuePtr> filtered;
-        filtered.reserve(evaluated_list->asList().size());
-
-        for (auto& element : evaluated_list->asList()) {
-            if (*fun->evaluate(scope)->asFunction().call(scope, {element})) {
-                filtered.push_back(element->evaluate());
-            }
-        }
-
-        return Value::make<ListValue>(std::move(filtered));
-    }
+    ValuePtr evaluate(Scope& scope) const override;
 
   private:
     const NodePtr fun;

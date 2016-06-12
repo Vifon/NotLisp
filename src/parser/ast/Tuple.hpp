@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "Node.hpp"
-#include "ListValue.hpp"
 
 namespace vfn {
 
@@ -19,17 +18,7 @@ class Tuple : public Node
 
     Tuple() { }
 
-    ValuePtr evaluate(Scope& scope) const override
-    {
-        std::vector<ValuePtr> evaluated;
-        evaluated.reserve(subtrees.size());
-
-        for (auto& subtree : subtrees) {
-            evaluated.push_back(subtree->evaluate(scope));
-        }
-
-        return Value::make<ListValue>(std::move(evaluated));
-    }
+    ValuePtr evaluate(Scope& scope) const override;
 
   private:
     const std::vector<NodePtr> subtrees;

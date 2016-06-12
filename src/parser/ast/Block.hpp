@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "Node.hpp"
-#include "Void.hpp"
 
 namespace vfn {
 
@@ -19,18 +18,7 @@ class Block : public Node
 
     Block() { }
 
-    ValuePtr evaluate(Scope& scope) const override
-    {
-        ValuePtr ret = Value::make<Void>();
-
-        Scope new_scope{scope};
-
-        for (auto& subtree : subtrees) {
-            ret = subtree->evaluate(new_scope);
-        }
-
-        return ret;
-    }
+    ValuePtr evaluate(Scope& scope) const override;
 
   private:
     const std::vector<NodePtr> subtrees;

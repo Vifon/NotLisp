@@ -2,8 +2,7 @@
 #pragma once
 
 #include <map>
-#include <memory>
-#include <stdexcept>
+#include <string>
 
 #include "Value.hpp"
 
@@ -22,26 +21,8 @@ class Scope
         : parent(&parent)
     { }
 
-    ValuePtr& lookup(const std::string& varname)
-    {
-        auto it = scope.find(varname);
-        if (it != scope.end()) {
-            return it->second;
-        } else if (parent) {
-            return parent->lookup(varname);
-        } else {
-            throw std::runtime_error("Undeclared variable: " + varname);
-        }
-    }
-
-    ValuePtr& addVar(const std::string& varname)
-    {
-        if (scope.count(varname)) {
-            throw std::runtime_error("Variable already declared: " + varname);
-        } else {
-            return scope[varname];
-        }
-    }
+    ValuePtr& lookup(const std::string& varname);
+    ValuePtr& addVar(const std::string& varname);
 
   private:
     Scope* const parent;

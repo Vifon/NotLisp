@@ -21,35 +21,12 @@ class ListValue : public Value
         : Value(Value::Type::List)
     { }
 
-    const std::vector<ValuePtr>& asList() const override
-    {
-        return list;
-    }
+    const std::vector<ValuePtr>& asList() const override { return list; }
 
-    bool operator==(const Value& rhs) const override
-    {
-        return Value::operator==(rhs) && asList() == rhs.asList();
-    }
+    bool operator==(const Value& rhs) const override;
+    operator bool() const override { return !list.empty(); }
 
-    operator bool() const override
-    {
-        return !list.empty();
-    }
-
-    std::ostream& show(std::ostream& out) const override
-    {
-        if (list.empty()) {
-            out << "[]";
-        } else {
-            auto it = list.begin();
-            out << "[" << **it++;
-            while (it != list.end()) {
-                out << ", " << **it++;
-            }
-            out << "]";
-        }
-        return out;
-    }
+    std::ostream& show(std::ostream& out) const override;
 
   private:
     const std::vector<ValuePtr> list;

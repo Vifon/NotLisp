@@ -3,9 +3,7 @@
 
 #include <string>
 
-#include "FunctionValue.hpp"
 #include "Node.hpp"
-#include "Tuple.hpp"
 
 namespace vfn {
 
@@ -19,16 +17,9 @@ class Call : public Node
         , arguments_tuple(std::move(args))
     { }
 
-    Call(const std::string& function)
-        : function_name(function)
-        , arguments_tuple(Node::make<Tuple>())
-    { }
+    Call(const std::string& function);
 
-    ValuePtr evaluate(Scope& scope) const override
-    {
-        ValuePtr fun = scope.lookup(function_name);
-        return fun->asFunction().call(scope, arguments_tuple->evaluate(scope)->asList());
-    }
+    ValuePtr evaluate(Scope& scope) const override;
 
   private:
     const std::string function_name;

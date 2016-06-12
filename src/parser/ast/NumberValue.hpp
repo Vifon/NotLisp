@@ -15,20 +15,11 @@ class NumberValue : public Value
         , value(n)
     { }
 
-    int asInt() const override
-    {
-        return value;
-    }
+    int asInt() const override { return value; }
 
-    bool operator==(const Value& rhs) const override
-    {
-        return Value::operator==(rhs) && asInt() == rhs.asInt();
-    }
+    bool operator==(const Value& rhs) const override;
 
-    std::ostream& show(std::ostream& out) const override
-    {
-        return out << value;
-    }
+    std::ostream& show(std::ostream& out) const override;
 
   private:
     const int value;

@@ -1,6 +1,25 @@
 set(ast_SOURCES
-  Value.cpp
+  Assign.cpp
+  BinaryOperator.cpp
+  Block.cpp
+  Call.cpp
+  Cond.cpp
+  Declaration.cpp
+  Filter.cpp
+  FunctionValue.cpp
+  ListValue.cpp
+  Loop.cpp
+  Map.cpp
   Node.cpp
+  NumberValue.cpp
+  Print.cpp
+  Return.cpp
+  Scope.cpp
+  Tuple.cpp
+  UnaryOperator.cpp
+  Value.cpp
+  Variable.cpp
+  Void.cpp
   )
 
 set(ast_HEADERS
@@ -13,12 +32,14 @@ set(ast_HEADERS
   Filter.hpp
   FunctionValue.hpp
   ListValue.hpp
+  Literal.hpp
   Loop.hpp
   Map.hpp
   Node.hpp
   NumberValue.hpp
   Print.hpp
   Return.hpp
+  Scope.hpp
   Tuple.hpp
   UnaryOperator.hpp
   Value.hpp

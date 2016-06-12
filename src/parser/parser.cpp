@@ -15,6 +15,7 @@
 #include "ast/Literal.hpp"
 #include "ast/Loop.hpp"
 #include "ast/Map.hpp"
+#include "ast/NumberValue.hpp"
 #include "ast/Print.hpp"
 #include "ast/Return.hpp"
 #include "ast/Tuple.hpp"

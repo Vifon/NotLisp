@@ -3,8 +3,8 @@
 
 #include <sstream>
 
+#include "../../lexer/tokens/keyword.hpp"
 #include "Node.hpp"
-#include "NumberValue.hpp"
 
 namespace vfn {
 
@@ -18,23 +18,7 @@ class UnaryOperator : public Node
         , operand(std::move(operand))
     { }
 
-    ValuePtr evaluate(Scope& scope) const override
-    {
-        ValuePtr value = operand->evaluate(scope);
-        ValuePtr result;
-
-        switch (op) {
-        case Keyword::Minus:
-            result = Value::make<NumberValue>(-value->asInt());
-            break;
-        default:
-            std::stringstream ss{"Invalid operator: "};
-            ss << op;
-            throw std::runtime_error(ss.str());
-        }
-
-        return result;
-    }
+    ValuePtr evaluate(Scope& scope) const override;
 
   private:
     const Keyword op;

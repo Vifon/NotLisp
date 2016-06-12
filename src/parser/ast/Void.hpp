@@ -17,15 +17,9 @@ class Void
         : Value(Value::Type::Void)
     { }
 
-    ValuePtr evaluate(Scope& scope) const override
-    {
-        return Value::evaluate();
-    }
+    ValuePtr evaluate(Scope& scope) const override;
 
-    std::ostream& show(std::ostream& out) const override
-    {
-        return out << "()";
-    }
+    std::ostream& show(std::ostream& out) const override;
 };
 
 } // namespace ast

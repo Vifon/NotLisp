@@ -18,22 +18,9 @@ class Cond : public Node
         , else_block(std::move(else_block))
     { }
 
-    Cond(NodePtr&& condition, NodePtr&& block)
-        : Cond(
-            std::move(condition),
-            std::move(block),
-            Node::make<Void>())
-    { }
+    Cond(NodePtr&& condition, NodePtr&& block);
 
-    ValuePtr evaluate(Scope& scope) const override
-    {
-        Scope new_scope{scope};
-        if (*condition->evaluate(new_scope)) {
-            return block->evaluate(new_scope);
-        } else {
-            return else_block->evaluate(new_scope);
-        }
-    }
+    ValuePtr evaluate(Scope& scope) const override;
 
   private:
     const NodePtr condition;

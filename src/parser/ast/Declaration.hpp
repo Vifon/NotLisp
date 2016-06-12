@@ -17,11 +17,7 @@ class Declaration : public Node
         : assignment(std::move(assignment))
     { }
 
-    ValuePtr evaluate(Scope& scope) const override
-    {
-        ValuePtr result = assignment->evalOnlyValue(scope);
-        return scope.addVar(assignment->variable) = std::move(result);
-    }
+    ValuePtr evaluate(Scope& scope) const override;
 
   private:
     const std::unique_ptr<const Assign> assignment;

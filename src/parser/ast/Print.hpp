@@ -1,10 +1,7 @@
 // File: Print.hpp
 #pragma once
 
-#include <iostream>
-
 #include "Node.hpp"
-#include "Void.hpp"
 
 namespace vfn {
 
@@ -17,11 +14,7 @@ class Print : public Node
         : expr(std::move(expr))
     { }
 
-    ValuePtr evaluate(Scope& scope) const override
-    {
-        std::cout << *expr->evaluate(scope) << std::endl;
-        return Value::make<Void>();
-    }
+    ValuePtr evaluate(Scope& scope) const override;
 
   private:
     const NodePtr expr;

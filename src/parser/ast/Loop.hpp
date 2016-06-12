@@ -2,7 +2,6 @@
 #pragma once
 
 #include "Node.hpp"
-#include "Void.hpp"
 
 namespace vfn {
 
@@ -17,20 +16,7 @@ class Loop : public Node
         , block(std::move(block))
     { }
 
-    ValuePtr evaluate(Scope& scope) const override
-    {
-        auto list = collection->evaluate(scope);
-
-        Scope new_scope{scope};
-        new_scope.addVar(iterator_name);
-
-        for (auto& i : list->asList()) {
-            new_scope.lookup(iterator_name) = i;
-            block->evaluate(new_scope);
-        }
-
-        return Value::make<Void>();
-    }
+    ValuePtr evaluate(Scope& scope) const override;
 
   private:
     const std::string iterator_name;

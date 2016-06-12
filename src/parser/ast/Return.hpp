@@ -2,7 +2,6 @@
 #pragma once
 
 #include "Node.hpp"
-#include "Void.hpp"
 
 namespace vfn {
 
@@ -26,14 +25,9 @@ class Return : public Node
         : expr(std::move(expr))
     { }
 
-    Return()
-        : expr(Node::make<Void>())
-    { }
+    Return();
 
-    ValuePtr evaluate(Scope& scope) const override
-    {
-        throw UglyHack(expr->evaluate(scope));
-    }
+    ValuePtr evaluate(Scope& scope) const override;
 
   private:
     const NodePtr expr;

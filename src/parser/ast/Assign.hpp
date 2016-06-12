@@ -17,15 +17,8 @@ class Assign : public Node
         , value(std::move(value))
     { }
 
-    ValuePtr evaluate(Scope& scope) const override
-    {
-        return scope.lookup(variable) = evalOnlyValue(scope);
-    }
-
-    ValuePtr evalOnlyValue(Scope& scope) const
-    {
-        return value->evaluate(scope);
-    }
+    ValuePtr evaluate(Scope& scope) const override;
+    ValuePtr evalOnlyValue(Scope& scope) const;
 
     const std::string variable;
 
