@@ -162,7 +162,7 @@ bool Lexer::tryPattern(const char* pattern)
         }
     }
 
-    if (checkWordBoundary(nextChar)) {
+    if (checkWordBoundary()) {
         try {
             token.reset(new KeywordToken{buffer.str()});
         } catch (std::out_of_range& e) {
@@ -209,7 +209,7 @@ bool Lexer::isWordChar(char c)
  * Check if either the given character or the next one is a non-word
  * character.
  */
-bool Lexer::checkWordBoundary(char c) const
+bool Lexer::checkWordBoundary() const
 {
     return !(isWordChar(buffer.str().back()) && isWordChar(nextChar));
 }

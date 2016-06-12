@@ -38,7 +38,7 @@ Value::operator bool() const
     return true;
 }
 
-std::ostream& Value::show(std::ostream& out) const
+std::ostream& Value::show(std::ostream&) const
 {
     throw BadResultCast("Not showable");
 }

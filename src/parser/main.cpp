@@ -6,7 +6,7 @@
 
 #include "parser.hpp"
 
-int main(int argc, char *argv[])
+int main()
 {
     const char* PROGRAM = R"(
 let outer = 100;

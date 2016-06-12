@@ -14,7 +14,7 @@ class Literal : public Node
         : value(value)
     { }
 
-    ValuePtr evaluate(Scope& scope) const override { return value; }
+    ValuePtr evaluate(Scope&) const override { return value; }
 
   private:
     const ValuePtr value;

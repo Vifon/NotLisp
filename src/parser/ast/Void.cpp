@@ -6,7 +6,7 @@ namespace vfn {
 
 namespace ast {
 
-ValuePtr Void::evaluate(Scope& scope) const
+ValuePtr Void::evaluate(Scope&) const
 {
     return Value::evaluate();
 }

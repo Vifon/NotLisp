@@ -32,7 +32,7 @@ class Lexer
     char acceptChar();
     void skipWhitespace();
     void skipComment();
-    bool checkWordBoundary(char c) const;
+    bool checkWordBoundary() const;
     static bool isWordChar(char c);
 
     void clearToken();

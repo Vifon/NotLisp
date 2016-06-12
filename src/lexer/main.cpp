@@ -5,7 +5,7 @@
 
 #include "lexer.hpp"
 
-int main(int argc, char *argv[])
+int main()
 {
     const char* PROGRAM = R"(
 map(fun(x) { return x+42; },

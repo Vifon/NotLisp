@@ -65,22 +65,22 @@ class Token
     /**
      * Compare a numeric constant with a number.
      */
-    virtual bool operator==(unsigned int n) const { return false; }
+    virtual bool operator==(unsigned int) const { return false; }
 
     /**
      * Compare a variable with a string.
      */
-    virtual bool operator==(const std::string& str) const { return false; }
+    virtual bool operator==(const std::string&) const { return false; }
 
     /**
      * Compare a keyword with a keyword symbol.
      */
-    virtual bool operator==(Keyword keyword) const { return false; }
+    virtual bool operator==(Keyword) const { return false; }
 
     /**
      * Print a token to a stream.
      */
-    virtual std::ostream& show(std::ostream& out) const
+    virtual std::ostream& show(std::ostream&) const
     {
         throw bad_token_cast("Not showable");
     }
