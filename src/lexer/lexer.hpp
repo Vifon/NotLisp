@@ -25,6 +25,7 @@ class Lexer
 
     bool eof() const;
 
+    unsigned int lineNumber() const { return lineCounter; }
     unsigned int tokensRead() const { return tokenCounter; }
 
   private:
@@ -63,6 +64,11 @@ class Lexer
      * Number of the tokens already read.
      */
     unsigned int tokenCounter;
+
+    /**
+     * Current line number.
+     */
+    unsigned int lineCounter;
 
     /**
      * The first character of the next token.

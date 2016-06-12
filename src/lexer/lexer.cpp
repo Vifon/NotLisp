@@ -18,6 +18,7 @@ namespace vfn {
 Lexer::Lexer(std::istream& stream)
     : in(stream)
     , tokenCounter(0)
+    , lineCounter(1)
     , nextChar(in.get())
 {
     clearToken();
@@ -41,6 +42,9 @@ char Lexer::acceptChar()
 void Lexer::skipWhitespace()
 {
     while (in && std::isspace(nextChar)) {
+        if (nextChar == '\n') {
+            ++lineCounter;
+        }
         nextChar = in.get();
     }
 }
@@ -51,6 +55,7 @@ void Lexer::skipWhitespace()
 void Lexer::skipComment()
 {
     while (in && in.get() != '\n') { }
+    ++lineCounter;
     nextChar = in.get();
 }
 

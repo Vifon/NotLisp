@@ -15,10 +15,11 @@ namespace vfn {
 class unexpected_input : public std::exception
 {
   public:
-    unexpected_input(const Token& token)
-        : message("Unexpected token: ")
+    unexpected_input(unsigned int line, const Token& token)
+        : message("Unexpected token at line ")
     {
         std::stringstream ss;
+        ss << line << ": ";
         ss << token;
         message += ss.str();
     }
