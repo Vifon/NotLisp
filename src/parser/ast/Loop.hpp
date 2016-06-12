@@ -1,8 +1,6 @@
 // File: Loop.hpp
 #pragma once
 
-#include <memory>
-
 #include "Node.hpp"
 #include "Void.hpp"
 

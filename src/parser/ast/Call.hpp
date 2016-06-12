@@ -6,7 +6,6 @@
 #include "FunctionValue.hpp"
 #include "Node.hpp"
 #include "Tuple.hpp"
-#include "Void.hpp"
 
 namespace vfn {
 

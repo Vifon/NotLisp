@@ -2,7 +2,6 @@
 #pragma once
 
 #include "Node.hpp"
-
 #include "Void.hpp"
 
 namespace vfn {

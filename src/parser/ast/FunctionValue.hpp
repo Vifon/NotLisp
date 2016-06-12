@@ -7,7 +7,6 @@
 #include <vector>
 
 #include "Return.hpp"
-#include "Value.hpp"
 #include "Void.hpp"
 
 namespace vfn {

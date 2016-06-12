@@ -1,17 +1,14 @@
 // File: Node.hpp
 #pragma once
 
-#include <stdexcept>
 #include <memory>
 
-#include "Value.hpp"
 #include "Scope.hpp"
+#include "Value.hpp"
 
 namespace vfn {
 
 namespace ast {
-
-class Scope;
 
 class Node
 {

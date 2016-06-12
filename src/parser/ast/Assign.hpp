@@ -1,6 +1,8 @@
 // File: Assign.hpp
 #pragma once
 
+#include <string>
+
 #include "Node.hpp"
 
 namespace vfn {

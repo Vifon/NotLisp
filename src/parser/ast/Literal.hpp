@@ -2,8 +2,6 @@
 #pragma once
 
 #include "Node.hpp"
-#include "NumberValue.hpp"
-#include "Value.hpp"
 
 namespace vfn {
 
@@ -14,10 +12,6 @@ class Literal : public Node
   public:
     Literal(ValuePtr&& value)
         : value(value)
-    { }
-
-    Literal(int number)
-        : Literal(std::make_shared<NumberValue>(number))
     { }
 
     ValuePtr evaluate(Scope& scope) override

@@ -1,6 +1,7 @@
 // File: Filter.hpp
 #pragma once
 
+#include "ListValue.hpp"
 #include "Node.hpp"
 
 namespace vfn {

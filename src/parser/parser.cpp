@@ -246,7 +246,10 @@ Parser::NodePtr Parser::readValue()
 Parser::NodePtr Parser::readLiteral()
 {
     if (TokenPtr num = checkToken(Token::Type::Number)) {
-        NodePtr literal{new ast::Literal{static_cast<signed int>(num->asInt())}};
+        NodePtr literal =
+            std::make_unique<ast::Literal>(
+                std::make_shared<ast::NumberValue>(
+                    static_cast<signed int>(num->asInt())));
         return literal;
     } else if (checkKeyword(Keyword::ListBegin)) {
         if (checkKeyword(Keyword::ListEnd)) {
