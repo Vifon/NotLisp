@@ -20,7 +20,7 @@ class Print : public Node
     ValuePtr evaluate(Scope& scope) override
     {
         std::cout << *expr->evaluate(scope) << std::endl;
-        return ValuePtr{new Void};
+        return Value::make<Void>();
     }
 
   private:

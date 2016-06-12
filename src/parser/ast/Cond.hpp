@@ -19,9 +19,10 @@ class Cond : public Node
     { }
 
     Cond(NodePtr&& condition, NodePtr&& block)
-        : condition(std::move(condition))
-        , block(std::move(block))
-        , else_block(new Void)
+        : Cond(
+            std::move(condition),
+            std::move(block),
+            Node::make<Void>())
     { }
 
     ValuePtr evaluate(Scope& scope) override

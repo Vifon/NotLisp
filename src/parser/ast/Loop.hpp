@@ -29,7 +29,7 @@ class Loop : public Node
             block->evaluate(new_scope);
         }
 
-        return ValuePtr{new Void};
+        return Value::make<Void>();
     }
 
   private:

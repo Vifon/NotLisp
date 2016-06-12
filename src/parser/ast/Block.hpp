@@ -21,7 +21,7 @@ class Block : public Node
 
     ValuePtr evaluate(Scope& scope) override
     {
-        ValuePtr ret{new Void};;
+        ValuePtr ret = Value::make<Void>();
 
         Scope new_scope{scope};
 

@@ -26,7 +26,7 @@ class Map : public Node
             mapped.push_back(fun->evaluate(scope)->asFunction().call(scope, {element->evaluate()}));
         }
 
-        return ValuePtr{new ListValue{std::move(mapped)}};
+        return Value::make<ListValue>(std::move(mapped));
     }
 
   private:

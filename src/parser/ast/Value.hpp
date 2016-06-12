@@ -28,6 +28,12 @@ class Value : public std::enable_shared_from_this<Value>
 
     virtual ~Value() { }
 
+    template <typename T, typename ...Args>
+    static ValuePtr make(Args&&... args)
+    {
+        return std::make_shared<T>(std::forward<Args>(args)...);
+    }
+
     virtual int asInt() const
     {
         throw bad_result_cast("Not an integer");

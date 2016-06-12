@@ -21,7 +21,7 @@ class Call : public Node
 
     Call(const std::string& function)
         : function_name(function)
-        , arguments_tuple(new Tuple)
+        , arguments_tuple(Node::make<Tuple>())
     { }
 
     ValuePtr evaluate(Scope& scope) override

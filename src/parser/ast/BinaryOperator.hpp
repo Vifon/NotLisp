@@ -30,25 +30,25 @@ class BinaryOperator : public Node
         switch (op) {
         case Keyword::Equals:
             if (*lhs_val == *rhs_val) {
-                result.reset(new Void);
+                result = Value::make<Void>();
             } else {
-                result.reset(new ListValue);
+                result = Value::make<ListValue>();
             }
             break;
         case Keyword::NotEquals:
-            result.reset(new NumberValue(!(*lhs_val == *rhs_val)));
+            result = Value::make<NumberValue>(!(*lhs_val == *rhs_val));
             break;
         case Keyword::Plus:
-            result.reset(new NumberValue(lhs_val->asInt() + rhs_val->asInt()));
+            result = Value::make<NumberValue>(lhs_val->asInt() + rhs_val->asInt());
             break;
         case Keyword::Minus:
-            result.reset(new NumberValue(lhs_val->asInt() - rhs_val->asInt()));
+            result = Value::make<NumberValue>(lhs_val->asInt() - rhs_val->asInt());
             break;
         case Keyword::Mult:
-            result.reset(new NumberValue(lhs_val->asInt() * rhs_val->asInt()));
+            result = Value::make<NumberValue>(lhs_val->asInt() * rhs_val->asInt());
             break;
         case Keyword::Div:
-            result.reset(new NumberValue(lhs_val->asInt() / rhs_val->asInt()));
+            result = Value::make<NumberValue>(lhs_val->asInt() / rhs_val->asInt());
             break;
         default:
             std::stringstream ss{"Invalid operator: "};

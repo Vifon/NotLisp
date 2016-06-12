@@ -28,7 +28,7 @@ class Tuple : public Node
             evaluated.push_back(subtree->evaluate(scope));
         }
 
-        return ValuePtr{new ListValue{std::move(evaluated)}};
+        return Value::make<ListValue>(std::move(evaluated));
     }
 
   private:

@@ -25,7 +25,7 @@ class UnaryOperator : public Node
 
         switch (op) {
         case Keyword::Minus:
-            result.reset(new NumberValue(-value->asInt()));
+            result = Value::make<NumberValue>(-value->asInt());
             break;
         default:
             std::stringstream ss{"Invalid operator: "};

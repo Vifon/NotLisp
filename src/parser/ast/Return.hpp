@@ -27,7 +27,7 @@ class Return : public Node
     { }
 
     Return()
-        : expr(new Void)
+        : expr(Node::make<Void>())
     { }
 
     ValuePtr evaluate(Scope& scope) override

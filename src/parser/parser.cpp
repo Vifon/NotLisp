@@ -50,7 +50,7 @@ Parser::NodePtr Parser::readLine(bool is_toplevel)
     if (TokenPtr varname = checkToken(Token::Type::Var)) {
         if (checkKeyword(Keyword::Assignment)) {
             NodePtr value = readExpression();
-            line.reset(new ast::Assign{varname->asVar(), std::move(value)});
+            line = ast::Node::make<ast::Assign>(varname->asVar(), std::move(value));
         } else {
             requireKeyword(Keyword::ParenBegin);
             line = readCall(varname->asVar());
@@ -59,16 +59,16 @@ Parser::NodePtr Parser::readLine(bool is_toplevel)
         line = readDeclaration();
     } else if (checkKeyword(Keyword::Return)) {
         if (checkKeyword(Keyword::Semicolon)) {
-            return NodePtr{new ast::Return};
+            return ast::Node::make<ast::Return>();
         } else {
             NodePtr value = readExpression();
-            line.reset(new ast::Return{std::move(value)});
+            line = ast::Node::make<ast::Return>(std::move(value));
         }
     } else if (checkKeyword(Keyword::Print)) {
         requireKeyword(Keyword::ParenBegin);
         NodePtr value = readExpression();
         requireKeyword(Keyword::ParenEnd);
-        line.reset(new ast::Print{std::move(value)});
+        line = ast::Node::make<ast::Print>(std::move(value));
     } else if (checkKeyword(Keyword::Map)) {
         line = readMap();
     } else if (checkKeyword(Keyword::Filter)) {
@@ -96,7 +96,7 @@ Parser::NodePtr Parser::readLines(bool is_toplevel)
     while ((line = readBlockOrLine(is_toplevel)) != nullptr) {
         subtrees.push_back(std::move(line));
     }
-    NodePtr block{new ast::Block{std::move(subtrees)}};
+    NodePtr block = ast::Node::make<ast::Block>(std::move(subtrees));
     return block;
 }
 
@@ -105,20 +105,22 @@ Parser::NodePtr Parser::readDeclaration()
     TokenPtr varname = requireToken(Token::Type::Var);
     requireKeyword(Keyword::Assignment);
     NodePtr value = readExpression();
-    std::unique_ptr<ast::Assign> assignment{new ast::Assign{varname->asVar(), std::move(value)}};
-    NodePtr declaration{new ast::Declaration{std::move(assignment)}};
+    std::unique_ptr<ast::Assign> assignment =
+        std::make_unique<ast::Assign>(varname->asVar(), std::move(value));
+    NodePtr declaration =
+        ast::Node::make<ast::Declaration>(std::move(assignment));
     return declaration;
 }
 
 Parser::NodePtr Parser::readCall(const std::string& varname)
 {
     if (checkKeyword(Keyword::ParenEnd)) {
-        NodePtr call{new ast::Call{varname}};
+        NodePtr call = ast::Node::make<ast::Call>(varname);
         return call;
     } else {
         NodePtr tuple = readTuple();
         requireKeyword(Keyword::ParenEnd);
-        NodePtr call{new ast::Call{varname, std::move(tuple)}};
+        NodePtr call = ast::Node::make<ast::Call>(varname, std::move(tuple));
         return call;
     }
 }
@@ -132,10 +134,10 @@ Parser::NodePtr Parser::readCond()
 
     if (checkKeyword(Keyword::Else)) {
         NodePtr else_block = readBlockOrLine();
-        NodePtr cond{new ast::Cond{std::move(condition), std::move(block), std::move(else_block)}};
+        NodePtr cond = ast::Node::make<ast::Cond>(std::move(condition), std::move(block), std::move(else_block));
         return cond;
     } else {
-        NodePtr cond{new ast::Cond{std::move(condition), std::move(block)}};
+        NodePtr cond = ast::Node::make<ast::Cond>(std::move(condition), std::move(block));
         return cond;
     }
 }
@@ -149,7 +151,7 @@ Parser::NodePtr Parser::readLoop()
     requireKeyword(Keyword::ParenEnd);
     NodePtr block = readBlockOrLine();
 
-    NodePtr loop{new ast::Loop{varname->asVar(), std::move(collection), std::move(block)}};
+    NodePtr loop = ast::Node::make<ast::Loop>(varname->asVar(), std::move(collection), std::move(block));
     return loop;
 }
 
@@ -161,7 +163,7 @@ Parser::NodePtr Parser::readMap()
     NodePtr list = readExpression();
     requireKeyword(Keyword::ParenEnd);
 
-    NodePtr map{new ast::Map{std::move(fun), std::move(list)}};
+    NodePtr map = ast::Node::make<ast::Map>(std::move(fun), std::move(list));
     return map;
 }
 
@@ -173,7 +175,7 @@ Parser::NodePtr Parser::readFilter()
     NodePtr list = readExpression();
     requireKeyword(Keyword::ParenEnd);
 
-    NodePtr filter{new ast::Filter{std::move(fun), std::move(list)}};
+    NodePtr filter = ast::Node::make<ast::Filter>(std::move(fun), std::move(list));
     return filter;
 }
 
@@ -190,7 +192,7 @@ Parser::NodePtr Parser::readOperator(
     while (TokenPtr token{checkKeywords(operators)}) {
         Keyword op = token->asKeyword();
         NodePtr rhs = (this->*readNextExpression)();
-        lhs.reset(new ast::BinaryOperator{op, std::move(lhs), std::move(rhs)});
+        lhs = ast::Node::make<ast::BinaryOperator>(op, std::move(lhs), std::move(rhs));
     }
 
     return lhs;
@@ -223,7 +225,7 @@ Parser::NodePtr Parser::readValue()
         if (checkKeyword(Keyword::ParenBegin)) {
             return readCall(varname->asVar());
         } else {
-            NodePtr var{new ast::Variable{varname->asVar()}};
+            NodePtr var = ast::Node::make<ast::Variable>(varname->asVar());
             return var;
         }
     } else if (checkKeyword(Keyword::Map)) {
@@ -236,7 +238,7 @@ Parser::NodePtr Parser::readValue()
         return expr;
     } else if (checkKeyword(Keyword::Minus)) {
         NodePtr expr = readExpression();
-        NodePtr unary{new ast::UnaryOperator{Keyword::Minus, std::move(expr)}};
+        NodePtr unary = ast::Node::make<ast::UnaryOperator>(Keyword::Minus, std::move(expr));
         return unary;
     } else {
         return readLiteral();
@@ -247,13 +249,13 @@ Parser::NodePtr Parser::readLiteral()
 {
     if (TokenPtr num = checkToken(Token::Type::Number)) {
         NodePtr literal =
-            std::make_unique<ast::Literal>(
-                std::make_shared<ast::NumberValue>(
+            ast::Node::make<ast::Literal>(
+                ast::Value::make<ast::NumberValue>(
                     static_cast<signed int>(num->asInt())));
         return literal;
     } else if (checkKeyword(Keyword::ListBegin)) {
         if (checkKeyword(Keyword::ListEnd)) {
-            NodePtr empty_list{new ast::Tuple};
+            NodePtr empty_list = ast::Node::make<ast::Tuple>();
             return empty_list;
         } else {
             NodePtr list = readTuple();
@@ -272,14 +274,21 @@ Parser::NodePtr Parser::readFunction()
     if (checkKeyword(Keyword::ParenEnd)) {
         requireKeyword(Keyword::BlockBegin);
         NodePtr body = readLines();
-        NodePtr function{new ast::Literal{std::make_shared<ast::FunctionValue>(std::move(body))}};
+        NodePtr function =
+            ast::Node::make<ast::Literal>(
+                ast::Value::make<ast::FunctionValue>(
+                    std::move(body)));
         return function;
     } else {
         std::vector<std::string> args = readVarTuple();
         requireKeyword(Keyword::ParenEnd);
         requireKeyword(Keyword::BlockBegin);
         NodePtr body = readLines();
-        NodePtr function{new ast::Literal{std::make_shared<ast::FunctionValue>(std::move(args), std::move(body))}};
+        NodePtr function =
+            ast::Node::make<ast::Literal>(
+                ast::Value::make<ast::FunctionValue>(
+                    std::move(args),
+                    std::move(body)));
         return function;
     }
 }
@@ -294,7 +303,7 @@ Parser::NodePtr Parser::readTuple()
         expressions.push_back(std::move(expr));
     } while (checkKeyword(Keyword::Comma));
 
-    NodePtr tuple{new ast::Tuple{std::move(expressions)}};
+    NodePtr tuple = ast::Node::make<ast::Tuple>(std::move(expressions));
     return tuple;
 }
 

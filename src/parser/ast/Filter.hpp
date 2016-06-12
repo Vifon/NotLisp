@@ -29,7 +29,7 @@ class Filter : public Node
             }
         }
 
-        return ValuePtr{new ListValue{std::move(filtered)}};
+        return Value::make<ListValue>(std::move(filtered));
     }
 
   private:
