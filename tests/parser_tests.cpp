@@ -15,8 +15,7 @@ TEST_CASE("Parse a sample line", "[parser][assign]")
     std::stringstream stream{"var = value;"};
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
-    auto ast = parser.parse();
-    // ast->run();
+    REQUIRE_NOTHROW(parser.parse());
 }
 
 TEST_CASE("Parse multiple top-level lines", "[parser][assign]")
@@ -24,8 +23,7 @@ TEST_CASE("Parse multiple top-level lines", "[parser][assign]")
     std::stringstream stream{"var = value; var2 = 42;"};
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
-    auto ast = parser.parse();
-    // ast->run();
+    REQUIRE_NOTHROW(parser.parse());
 }
 
 
@@ -34,8 +32,7 @@ TEST_CASE("Parse a declaration", "[parser][decl]")
     std::stringstream stream{"let var = value;"};
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
-    auto ast = parser.parse();
-    // ast->run();
+    REQUIRE_NOTHROW(parser.parse());
 }
 
 TEST_CASE("Parse a function call", "[parser][call][tuple]")
@@ -43,8 +40,7 @@ TEST_CASE("Parse a function call", "[parser][call][tuple]")
     std::stringstream stream{"myfun(arg); myfun2(arg1, arg2);"};
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
-    auto ast = parser.parse();
-    // ast->run();
+    REQUIRE_NOTHROW(parser.parse());
 }
 
 TEST_CASE("Detect an invalid token", "[parser][error]")
@@ -72,7 +68,7 @@ TEST_CASE("Parse a return statement", "[parser][return]")
     std::stringstream stream{"return 42;"};
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
-    auto ast = parser.parse();
+    REQUIRE_NOTHROW(parser.parse());
 }
 
 TEST_CASE("Parse a complex expression", "[parser][expr]")
@@ -98,7 +94,7 @@ TEST_CASE("Parse an empty return", "[parser][return]")
     std::stringstream stream{"return;"};
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
-    auto ast = parser.parse();
+    REQUIRE_NOTHROW(parser.parse());
 }
 
 TEST_CASE("Parse an argmentless function", "[parser][function]")
@@ -106,7 +102,7 @@ TEST_CASE("Parse an argmentless function", "[parser][function]")
     std::stringstream stream{"let f = fun() { print(42); };"};
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
-    auto ast = parser.parse();
+    REQUIRE_NOTHROW(parser.parse());
 }
 
 TEST_CASE("Parse a function with arguments", "[parser][function][args]")
@@ -114,7 +110,7 @@ TEST_CASE("Parse a function with arguments", "[parser][function][args]")
     std::stringstream stream{"let f = fun(x) { print(x); };"};
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
-    auto ast = parser.parse();
+    REQUIRE_NOTHROW(parser.parse());
 }
 
 TEST_CASE("Parse a non-empty return", "[parser][return]")
@@ -122,7 +118,7 @@ TEST_CASE("Parse a non-empty return", "[parser][return]")
     std::stringstream stream{"return 10;"};
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
-    auto ast = parser.parse();
+    REQUIRE_NOTHROW(parser.parse());
 }
 
 TEST_CASE("Parse an example program", "[parser][example]")
