@@ -17,7 +17,7 @@ class Loop : public Node
         , block(std::move(block))
     { }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate(Scope& scope) const override
     {
         auto list = collection->evaluate(scope);
 
@@ -33,10 +33,10 @@ class Loop : public Node
     }
 
   private:
-    std::string iterator_name;
-    ValuePtr iterator;
-    NodePtr collection;
-    NodePtr block;
+    const std::string iterator_name;
+    const ValuePtr iterator;
+    const NodePtr collection;
+    const NodePtr block;
 };
 
 } // namespace ast

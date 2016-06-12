@@ -17,7 +17,7 @@ class Void
         : Value(Value::Type::Void)
     { }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate(Scope& scope) const override
     {
         return Value::evaluate();
     }

@@ -52,7 +52,7 @@ class ListValue : public Value
     }
 
   private:
-    std::vector<ValuePtr> list;
+    const std::vector<ValuePtr> list;
 };
 
 } // namespace ast

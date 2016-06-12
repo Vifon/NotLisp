@@ -15,7 +15,7 @@ class Map : public Node
         , list(std::move(list))
     { }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate(Scope& scope) const override
     {
         ValuePtr evaluated_list{list->evaluate(scope)};
 
@@ -30,8 +30,8 @@ class Map : public Node
     }
 
   private:
-    NodePtr fun;
-    NodePtr list;
+    const NodePtr fun;
+    const NodePtr list;
 };
 
 } // namespace ast

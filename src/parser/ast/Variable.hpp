@@ -14,7 +14,7 @@ class Variable : public Node
         : name(varname)
     { }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate(Scope& scope) const override
     {
         return scope.lookup(name);
     }

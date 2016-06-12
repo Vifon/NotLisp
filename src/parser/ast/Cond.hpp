@@ -25,7 +25,7 @@ class Cond : public Node
             Node::make<Void>())
     { }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate(Scope& scope) const override
     {
         Scope new_scope{scope};
         if (*condition->evaluate(new_scope)) {
@@ -36,9 +36,9 @@ class Cond : public Node
     }
 
   private:
-    NodePtr condition;
-    NodePtr block;
-    NodePtr else_block;
+    const NodePtr condition;
+    const NodePtr block;
+    const NodePtr else_block;
 };
 
 } // namespace ast

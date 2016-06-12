@@ -18,7 +18,7 @@ class UnaryOperator : public Node
         , operand(std::move(operand))
     { }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate(Scope& scope) const override
     {
         ValuePtr value = operand->evaluate(scope);
         ValuePtr result;
@@ -38,7 +38,7 @@ class UnaryOperator : public Node
 
   private:
     const Keyword op;
-    NodePtr operand;
+    const NodePtr operand;
 };
 
 } // namespace ast

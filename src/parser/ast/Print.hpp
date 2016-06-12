@@ -17,14 +17,14 @@ class Print : public Node
         : expr(std::move(expr))
     { }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate(Scope& scope) const override
     {
         std::cout << *expr->evaluate(scope) << std::endl;
         return Value::make<Void>();
     }
 
   private:
-    NodePtr expr;
+    const NodePtr expr;
 };
 
 } // namespace ast

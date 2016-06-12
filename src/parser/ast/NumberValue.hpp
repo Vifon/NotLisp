@@ -31,7 +31,7 @@ class NumberValue : public Value
     }
 
   private:
-    int value;
+    const int value;
 };
 
 } // namespace ast

@@ -24,7 +24,7 @@ class Call : public Node
         , arguments_tuple(Node::make<Tuple>())
     { }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate(Scope& scope) const override
     {
         ValuePtr fun = scope.lookup(function_name);
         return fun->asFunction().call(scope, arguments_tuple->evaluate(scope)->asList());
@@ -32,7 +32,7 @@ class Call : public Node
 
   private:
     const std::string function_name;
-    NodePtr arguments_tuple;
+    const NodePtr arguments_tuple;
 };
 
 } // namespace ast

@@ -30,13 +30,13 @@ class Return : public Node
         : expr(Node::make<Void>())
     { }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate(Scope& scope) const override
     {
         throw UglyHack(expr->evaluate(scope));
     }
 
   private:
-    NodePtr expr;
+    const NodePtr expr;
 };
 
 } // namespace ast

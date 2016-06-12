@@ -59,8 +59,8 @@ class FunctionValue : public Value
     }
 
   private:
-    std::vector<std::string> args;
-    NodePtr body;
+    const std::vector<std::string> args;
+    const NodePtr body;
 };
 
 } // namespace ast

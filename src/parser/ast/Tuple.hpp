@@ -19,7 +19,7 @@ class Tuple : public Node
 
     Tuple() { }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate(Scope& scope) const override
     {
         std::vector<ValuePtr> evaluated;
         evaluated.reserve(subtrees.size());
@@ -32,7 +32,7 @@ class Tuple : public Node
     }
 
   private:
-    std::vector<NodePtr> subtrees;
+    const std::vector<NodePtr> subtrees;
 };
 
 } // namespace ast

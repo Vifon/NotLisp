@@ -17,12 +17,12 @@ class Assign : public Node
         , value(std::move(value))
     { }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate(Scope& scope) const override
     {
         return scope.lookup(variable) = evalOnlyValue(scope);
     }
 
-    ValuePtr evalOnlyValue(Scope& scope)
+    ValuePtr evalOnlyValue(Scope& scope) const
     {
         return value->evaluate(scope);
     }
@@ -30,7 +30,7 @@ class Assign : public Node
     const std::string variable;
 
   private:
-    NodePtr value;
+    const NodePtr value;
 };
 
 } // namespace ast

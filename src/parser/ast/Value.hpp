@@ -12,7 +12,7 @@ namespace vfn {
 namespace ast {
 
 class Value;
-using ValuePtr = std::shared_ptr<Value>;
+using ValuePtr = std::shared_ptr<const Value>;
 
 class FunctionValue;
 
@@ -59,7 +59,7 @@ class Value : public std::enable_shared_from_this<Value>
         return true;
     }
 
-    ValuePtr evaluate()
+    ValuePtr evaluate() const
     {
         return shared_from_this();
     }

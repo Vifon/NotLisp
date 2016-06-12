@@ -14,13 +14,13 @@ class Literal : public Node
         : value(value)
     { }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate(Scope& scope) const override
     {
         return value;
     }
 
   private:
-    ValuePtr value;
+    const ValuePtr value;
 };
 
 } // namespace ast

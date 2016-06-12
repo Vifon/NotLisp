@@ -21,7 +21,7 @@ class BinaryOperator : public Node
         , rhs(std::move(rhs))
     { }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate(Scope& scope) const override
     {
         ValuePtr lhs_val = lhs->evaluate(scope);
         ValuePtr rhs_val = rhs->evaluate(scope);
@@ -61,8 +61,8 @@ class BinaryOperator : public Node
 
   private:
     const Keyword op;
-    NodePtr lhs;
-    NodePtr rhs;
+    const NodePtr lhs;
+    const NodePtr rhs;
 };
 
 } // namespace ast

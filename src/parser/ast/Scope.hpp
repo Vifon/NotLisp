@@ -44,7 +44,7 @@ class Scope
     }
 
   private:
-    Scope* parent;
+    Scope* const parent;
 
     std::map<std::string, ValuePtr> scope;
 };

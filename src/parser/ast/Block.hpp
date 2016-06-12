@@ -19,7 +19,7 @@ class Block : public Node
 
     Block() { }
 
-    ValuePtr evaluate(Scope& scope) override
+    ValuePtr evaluate(Scope& scope) const override
     {
         ValuePtr ret = Value::make<Void>();
 
@@ -33,7 +33,7 @@ class Block : public Node
     }
 
   private:
-    std::vector<NodePtr> subtrees;
+    const std::vector<NodePtr> subtrees;
 };
 
 } // namespace ast
