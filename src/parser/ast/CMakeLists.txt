@@ -45,7 +45,7 @@ set(ast_HEADERS
   Value.hpp
   Variable.hpp
   Void.hpp
-  bad_result_cast.hpp
+  BadResultCast.hpp
   )
 
 add_library(ast STATIC ${ast_SOURCES})

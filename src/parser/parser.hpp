@@ -1,7 +1,6 @@
 // File: parser.hpp
 #pragma once
 
-#include <exception>
 #include <initializer_list>
 #include <memory>
 #include <string>
@@ -11,31 +10,6 @@
 #include "ast/Node.hpp"
 
 namespace vfn {
-
-class unexpected_input : public std::exception
-{
-  public:
-    unexpected_input(unsigned int line, const Token& token)
-        : message("Unexpected token at line ")
-    {
-        std::stringstream ss;
-        ss << line << ": ";
-        ss << token;
-        message += ss.str();
-    }
-
-    unexpected_input()
-        : message("Unexpected token")
-    { }
-
-    const char* what() const noexcept override
-    {
-        return message.c_str();
-    }
-
-  private:
-    std::string message;
-};
 
 class Parser
 {

@@ -4,6 +4,7 @@ set(parser_SOURCES
 
 set(parser_HEADERS
   parser.hpp
+  UnexpectedInput.hpp
   )
 
 add_library(parser STATIC ${parser_SOURCES})

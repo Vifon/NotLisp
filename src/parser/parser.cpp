@@ -22,6 +22,7 @@
 #include "ast/UnaryOperator.hpp"
 #include "ast/Value.hpp"
 #include "ast/Variable.hpp"
+#include "UnexpectedInput.hpp"
 
 namespace vfn {
 
@@ -83,7 +84,7 @@ Parser::NodePtr Parser::readLine(bool is_toplevel)
     } else if (is_toplevel && lexer->eof()){
         return nullptr;
     } else {
-        throw unexpected_input(lexer->lineNumber(), getToken());
+        throw UnexpectedInput(lexer->lineNumber(), getToken());
     }
 
     requireKeyword(Keyword::Semicolon);
@@ -363,7 +364,7 @@ Parser::TokenPtr Parser::requireToken(Token::Type expected)
     if (token) {
         return token;
     } else {
-        throw unexpected_input(lexer->lineNumber(), getToken());
+        throw UnexpectedInput(lexer->lineNumber(), getToken());
     }
 }
 
@@ -373,7 +374,7 @@ Parser::TokenPtr Parser::requireKeyword(Keyword expected)
     if (token) {
         return token;
     } else {
-        throw unexpected_input(lexer->lineNumber(), getToken());
+        throw UnexpectedInput(lexer->lineNumber(), getToken());
     }
 }
 

@@ -6,6 +6,7 @@
 #include <sstream>
 
 #include "../src/lexer/lexer.hpp"
+#include "../src/parser/UnexpectedInput.hpp"
 #include "../src/parser/parser.hpp"
 #include "constants.hpp"
 
@@ -52,7 +53,7 @@ TEST_CASE("Detect an invalid token", "[parser][error]")
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
     vfn::Parser::NodePtr ast;
-    REQUIRE_THROWS_AS(ast = parser.parse(), vfn::unexpected_input);
+    REQUIRE_THROWS_AS(ast = parser.parse(), vfn::UnexpectedInput);
     REQUIRE(ast == nullptr);
 }
 
@@ -62,7 +63,7 @@ TEST_CASE("Detect an unexpected EOF", "[parser][error]")
     vfn::Parser parser{std::make_unique<vfn::Lexer>(stream)};
 
     vfn::Parser::NodePtr ast;
-    REQUIRE_THROWS_AS(ast = parser.parse(), vfn::unexpected_input);
+    REQUIRE_THROWS_AS(ast = parser.parse(), vfn::UnexpectedInput);
     REQUIRE(ast == nullptr);
 }
 

@@ -1,4 +1,4 @@
-// File: bad_result_cast.hpp
+// File: BadResultCast.hpp
 #pragma once
 
 #include <exception>
@@ -7,14 +7,14 @@ namespace vfn {
 
 namespace ast {
 
-class bad_result_cast : public std::exception
+class BadResultCast : public std::exception
 {
   public:
-    bad_result_cast(const char* msg)
+    BadResultCast(const char* msg)
         : message(msg)
     { }
 
-    bad_result_cast()
+    BadResultCast()
         : message("")
     { }
 
