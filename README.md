@@ -4,6 +4,8 @@ NotLisp
 An interpreter/compiler of a list-focused language that definitely is
 not a Lisp.
 
+It was written for an academic assignment.
+
 BUILDING
 --------
 

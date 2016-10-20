@@ -1,0 +1,213 @@
+#+TITLE: TKOM: przetwarzanie list @@latex:\\@@ @@html:<br />@@ /Dokumentacja końcowa/
+#+OPTIONS: toc:nil
+#+LATEX_HEADER: \usepackage{indentfirst}
+#+LATEX: \linespread{1.3}
+#+LATEX: \maketitle\newpage\tableofcontents\newpage
+
+* Zadanie
+
+  Język zorientowany wokół struktur listowych i operacjach na nich,
+  takich jak filtrowanie, złączenia, dostęp do podlist etc.
+
+* Przykładowy kod
+
+  #+BEGIN_EXAMPLE
+    let outer = 100;
+
+    let f = fun(x) {
+      let a = 10;
+      outer = outer + a;
+      print(outer);     # 110 / 120
+      print(42);        # 42
+      print(x);         # 1 / 3
+      a = x + a;
+      return a;
+    };
+    f(1);
+    print(f(3));        # 13
+
+    let f2 = fun(l) {
+      let a = 10;
+      for (i in l) {
+        print(i + a);
+      }
+    };
+    f2([1, 2, 3]);
+
+
+    print([1, 2, 3]);
+    print([1,[2,3,4,
+    5],   6]);
+    print(f);
+    print(fun(){});
+
+    let pred = fun(x) {
+      if (x == 2) {
+        return [];
+      } else {
+        return 1;
+      }
+    };
+
+    let l = [1, 2, 3, 4];
+    print(l);
+    print(filter(pred, l));
+
+    let void = fun(){};
+    print(void());
+
+    let pow = fun(x) { return x*x; };
+    print(pow(25));
+
+    print(map(pow, l));
+  #+END_EXAMPLE
+
+* Budowanie i uruchamianie
+
+  #+BEGIN_SRC sh :dir ../ :results none
+    set -e
+    mkdir -p build
+    cd build
+    cmake ..
+    make
+    ./tests/test_all
+    ./src/parser/parser_test
+  #+END_SRC
+
+* Funkcjonalność
+
+  Język umożliwia podstawowe operacje na heterogenicznych listach, w
+  szczególności listach zagnieżdżonych. Pozostałe struktury danych
+  zostały ograniczone do minimum: jedynie liczby całkowite.
+
+  Dostępne są podstawowe operacje arytmetyczne na liczbach.
+
+  Język wspiera podstawy programowania funkcyjnego. Funkcja jest
+  obiektem języka równoważnym każdej innej wartości: można ją zapisać
+  do zmiennej albo przekazać jaka parametr do innej funkcji (pozwala
+  to tworzyć funkcje wyższego rzędu).
+
+  Nie ma oddzielnej składni dla funkcji nazwanych. Zamiast tego
+  dostępne są funkcje anonimowe, które można przypisywać do zmiennych.
+
+* Elementy języka
+
+** Zmienna
+
+   Zmienna to symbol niezastrzeżony zaczynający się literą. Deklaracja
+   zmiennej wykonywana jest słowem kluczowym =let=.
+
+   #+BEGIN_EXAMPLE
+     let var = 42;
+   #+END_EXAMPLE
+
+** Linie i bloki
+
+   Każda linia prosta kończy się średnikiem (nie dotyczy konstrukcji
+   sterujących takich jak =if= czy =for=). Blok jest zdefiniowany
+   przez nawiasy klamrowe. Każdy blok można zastąpić pojedynczą linią.
+   Pusty blok również jest dopuszczalny.
+
+** Instrukcje sterujące
+
+   - =if (CONDITION) TRUE_BLOCK=
+   - =if (CONDITION) TRUE_BLOCK else FALSE_BLOCK=
+   - =for (ITERATOR in LIST) BLOCK=
+
+** Wbudowane funkcje wyższego rzędu
+
+   - =filter(PREDICATE, LIST)=
+   - =map(FUNCTION, LIST)=
+
+** Wbudowane typy danych
+
+   Język jest unitypowany, nie ma statycznego systemu typów.
+
+*** Liczba całkowita
+
+    #+BEGIN_EXAMPLE
+      10
+      -25
+    #+END_EXAMPLE
+
+*** Lista
+
+    #+BEGIN_EXAMPLE
+      [1, 2, 3, [4, 5], 6]
+    #+END_EXAMPLE
+
+*** Funkcja anonimowa
+
+    #+BEGIN_EXAMPLE
+      fun(arg) {
+          return ...;
+      }
+    #+END_EXAMPLE
+
+    Funkcje nazwane otrzymuje się poprzez przypisanie funkcji
+    anonimowej do zmiennej.
+
+    Wartość do funkcji przekazywana jest przez referencję, ale w
+    przypadku modyfikacji zmienia się referencja, nie zaś sama
+    zmienna.
+
+    Funkcja ma dostęp do zmiennych dostępnych z miejsca wywołania, nie
+    zaś z miejsca definicji. Idąc dalej, funkcja nie jest pełnoprawnym
+    domknięciem.
+
+*** Wartość pusta
+
+    Wartość zwracana między innymi przez funkcje pozbawione instrukcji
+    =return=.
+
+** Wartość logiczna
+
+   Jedyną "fałszywą" wartością jest lista pusta. Wszystko inne jest
+   traktowane jak prawda, włącznie z liczbą 0 czy wartością pustą.
+
+   Z punktu widzenia semantyki wartości =[]= oraz =1= są traktowane
+   jako kanoniczne wartości /false/ oraz /true/. Z punktu widzenia
+   składni nie ma to większego znaczenia.
+
+** Komentarz
+
+   Komentarze zaczynają się znakiem =#=.
+
+** Symbole zastrzeżone
+
+   Nazwy =map=, =filter=, =print=, =if=, =for= oraz =fun= nie mogą być
+   wykorzystywane w identyfikatorach ze względu na ich specjalne
+   znaczenie.
+
+* Braki w funkcjonalności języka
+
+  Powstały język posiada zauważalne braki w funkcjonalności z punktu
+  widzenia użytkownika/programisty. Ze względu na nikłe walory
+  praktyczne języka, a także mocno ograniczony czas, nie została
+  zaimplementowana funkcjonalność uznana za trywialną, w tym
+  wyłuskanie n-tego elementu listy.
+
+  Oto lista operacji, które byłyby mile widziane w praktyce, ale nie
+  zostały zaimplementowane:
+  - wyłuskanie elementu listy,
+  - wyłuskanie zakresu listy,
+  - złączenie list,
+  - obsługa stringów.
+
+  Większość z tych operacji sprowadza się do prostych operacji na
+  wektorze, na bazie którego zaimplementowana jest lista. Z tego
+  powodu wolałem poświęcić czas na dopracowanie kwestii bardziej
+  technicznych, takich jak poprawiony scoping czy raportowanie błędów.
+
+* Testy i poprawność
+
+  Testy zostały wykonane we frameworku /Catch/. Ponadto projekt został
+  sprawdzony narzędziami /Valgrind/ oraz /ASan/ (Clang Address
+  Sanitizer) w poszukiwaniu naruszeń oraz wycieków pamięci.
+
+  Projekt był budowany z flagami =-Wall -Wextra= na kompilatorze =gcc=
+  w wersji =5.2.1=. Flaga =-Weffc++= została świadomie pominięta.
+
+* Gramatyka
+
+#+INCLUDE: syntax.txt example

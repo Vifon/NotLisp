@@ -1,0 +1,29 @@
+VAR        ::= [a-zA-Z][a-zA-Z0-9_]*
+NUMBER     ::= 0 | [1-9][0-9]*
+EQUAL_SIGN ::= '==' | '!='
+SUM_SIGN   ::= '+' | '-'
+MULT_SIGN  ::= '*' | '/'
+
+
+ASSIGN   ::= VAR '=' EXPR
+VARDECL  ::= let ASSIGN
+LITERAL  ::= NUMBER | LIST | FUN
+LIST     ::= '[' ']' | '[' TUPLE ']'
+TUPLE    ::= EXPR {',' TUPLE}
+VARTUPLE ::= VAR {',' VARTUPLE}
+
+EXPR  ::= SUM {EQUAL_SIGN SUM}
+SUM   ::= MULT {MULT_SIGN MULT}
+MULT  ::= VALUE {SUM_SIGN VALUE}
+VALUE ::= VAR | LITERAL | CALL | '(' EXPR ')' | '-' VALUE | SPECIAL
+
+LINE    ::= ASSIGN ';' | VARDECL ';' | CALL ';' | RETURN ';' | COND
+          | LOOP | BLOCK | PRINT ';' | SPECIAL ';'
+BLOCK   ::= LINE | '{' LINE {LINE} '}'
+COND    ::= if '(' EXPR ')' BLOCK | if '(' EXPR ')' BLOCK else BLOCK
+LOOP    ::= for '(' VAR in EXPR ')' BLOCK
+CALL    ::= VAR '(' ')' | VAR '(' TUPLE ')'
+SPECIAL ::= filter '(' EXPR ',' EXPR ')' | map '(' EXPR ',' EXPR ')'
+FUN     ::= fun '(' ')' BLOCK | fun '(' VARTUPLE ')' BLOCK
+RETURN  ::= return EXPR
+PRINT   ::= print '(' EXPR ')'
