@@ -12,8 +12,12 @@ target_link_libraries(parser
   lexer
   ast)
 
-add_executable(parser_test main.cpp)
+add_executable(parser_test test.cpp)
 target_link_libraries(parser_test
+  parser)
+
+add_executable(notlisp notlisp.cpp)
+target_link_libraries(notlisp
   parser)
 
 add_subdirectory(ast)
