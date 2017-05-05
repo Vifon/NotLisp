@@ -12,10 +12,7 @@ namespace ast {
 class Tuple : public Node
 {
   public:
-    Tuple(std::vector<NodePtr>&& subtrees)
-        : subtrees(std::move(subtrees))
-    { }
-
+    Tuple(std::vector<NodePtr>&& subtrees);
     Tuple() { }
 
     ValuePtr evaluate(Scope& scope) const override;

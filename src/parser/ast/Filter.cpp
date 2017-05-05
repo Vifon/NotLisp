@@ -11,6 +11,11 @@ namespace vfn {
 
 namespace ast {
 
+Filter::Filter(NodePtr&& fun, NodePtr&& list)
+    : fun(std::move(fun))
+    , list(std::move(list))
+{ }
+
 ValuePtr Filter::evaluate(Scope& scope) const
 {
     ValuePtr evaluated_list{list->evaluate(scope)};

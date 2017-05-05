@@ -13,9 +13,7 @@ namespace ast {
 class Declaration : public Node
 {
   public:
-    Declaration(std::unique_ptr<Assign>&& assignment)
-        : assignment(std::move(assignment))
-    { }
+    Declaration(std::unique_ptr<Assign>&& assignment);
 
     ValuePtr evaluate(Scope& scope) const override;
 

@@ -8,6 +8,11 @@ namespace vfn {
 
 namespace ast {
 
+UnaryOperator::UnaryOperator(Keyword op, NodePtr&& operand)
+    : op(op)
+    , operand(std::move(operand))
+{ }
+
 ValuePtr UnaryOperator::evaluate(Scope& scope) const
 {
     ValuePtr value = operand->evaluate(scope);

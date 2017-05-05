@@ -11,6 +11,11 @@ namespace vfn {
 
 namespace ast {
 
+Map::Map(NodePtr&& fun, NodePtr&& list)
+    : fun(std::move(fun))
+    , list(std::move(list))
+{ }
+
 ValuePtr Map::evaluate(Scope& scope) const
 {
     ValuePtr evaluated_list{list->evaluate(scope)};

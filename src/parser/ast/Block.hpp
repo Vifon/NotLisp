@@ -12,10 +12,7 @@ namespace ast {
 class Block : public Node
 {
   public:
-    Block(std::vector<NodePtr>&& subtrees)
-        : subtrees(std::move(subtrees))
-    { }
-
+    Block(std::vector<NodePtr>&& subtrees);
     Block() { }
 
     ValuePtr evaluate(Scope& scope) const override;

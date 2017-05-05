@@ -14,15 +14,8 @@ namespace ast {
 class FunctionValue : public Value
 {
   public:
-    FunctionValue(std::vector<std::string>&& args, NodePtr&& body)
-        : Value(Type::Function)
-        , args(std::move(args))
-        , body(std::move(body))
-    { }
-
-    FunctionValue(NodePtr&& body)
-        : FunctionValue({}, std::move(body))
-    { }
+    FunctionValue(std::vector<std::string>&& args, NodePtr&& body);
+    FunctionValue(NodePtr&& body);
 
     const FunctionValue& asFunction() const override { return *this; }
 

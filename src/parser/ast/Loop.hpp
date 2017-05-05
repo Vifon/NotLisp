@@ -10,11 +10,7 @@ namespace ast {
 class Loop : public Node
 {
   public:
-    Loop(const std::string& iterator_name, NodePtr&& collection, NodePtr&& block)
-        : iterator_name(std::move(iterator_name))
-        , collection(std::move(collection))
-        , block(std::move(block))
-    { }
+    Loop(const std::string& iterator_name, NodePtr&& collection, NodePtr&& block);
 
     ValuePtr evaluate(Scope& scope) const override;
 

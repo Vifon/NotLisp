@@ -13,10 +13,7 @@ namespace ast {
 class UnaryOperator : public Node
 {
   public:
-    UnaryOperator(Keyword op, NodePtr&& operand)
-        : op(op)
-        , operand(std::move(operand))
-    { }
+    UnaryOperator(Keyword op, NodePtr&& operand);
 
     ValuePtr evaluate(Scope& scope) const override;
 

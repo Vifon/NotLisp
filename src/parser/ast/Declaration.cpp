@@ -6,6 +6,10 @@ namespace vfn {
 
 namespace ast {
 
+Declaration::Declaration(std::unique_ptr<Assign>&& assignment)
+    : assignment(std::move(assignment))
+{ }
+
 ValuePtr Declaration::evaluate(Scope& scope) const
 {
     ValuePtr result = assignment->evalOnlyValue(scope);

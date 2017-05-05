@@ -10,10 +10,7 @@ namespace ast {
 class NumberValue : public Value
 {
   public:
-    NumberValue(int n)
-        : Value(Value::Type::Int)
-        , value(n)
-    { }
+    NumberValue(int n);
 
     int asInt() const override { return value; }
 

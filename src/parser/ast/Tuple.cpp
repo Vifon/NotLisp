@@ -8,6 +8,10 @@ namespace vfn {
 
 namespace ast {
 
+Tuple::Tuple(std::vector<NodePtr>&& subtrees)
+    : subtrees(std::move(subtrees))
+{ }
+
 ValuePtr Tuple::evaluate(Scope& scope) const
 {
     std::vector<ValuePtr> evaluated;

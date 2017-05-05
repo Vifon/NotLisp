@@ -8,6 +8,12 @@ namespace vfn {
 
 namespace ast {
 
+Cond::Cond(NodePtr&& condition, NodePtr&& block, NodePtr&& else_block)
+    : condition(std::move(condition))
+    , block(std::move(block))
+    , else_block(std::move(else_block))
+{ }
+
 Cond::Cond(NodePtr&& condition, NodePtr&& block)
     : Cond(
         std::move(condition),

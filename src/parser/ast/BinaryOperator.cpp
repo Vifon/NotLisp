@@ -10,6 +10,12 @@ namespace vfn {
 
 namespace ast {
 
+BinaryOperator::BinaryOperator(Keyword op, NodePtr&& lhs, NodePtr&& rhs)
+    : op(op)
+    , lhs(std::move(lhs))
+    , rhs(std::move(rhs))
+{ }
+
 ValuePtr BinaryOperator::evaluate(Scope& scope) const
 {
     ValuePtr lhs_val = lhs->evaluate(scope);

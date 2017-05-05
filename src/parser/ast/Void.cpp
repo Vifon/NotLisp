@@ -6,6 +6,10 @@ namespace vfn {
 
 namespace ast {
 
+Void::Void()
+    : Value(Value::Type::Void)
+{ }
+
 ValuePtr Void::evaluate(Scope&) const
 {
     return Value::evaluate();

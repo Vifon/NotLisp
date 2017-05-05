@@ -13,11 +13,7 @@ namespace ast {
 class BinaryOperator : public Node
 {
   public:
-    BinaryOperator(Keyword op, NodePtr&& lhs, NodePtr&& rhs)
-        : op(op)
-        , lhs(std::move(lhs))
-        , rhs(std::move(rhs))
-    { }
+    BinaryOperator(Keyword op, NodePtr&& lhs, NodePtr&& rhs);
 
     ValuePtr evaluate(Scope& scope) const override;
 

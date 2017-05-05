@@ -9,6 +9,16 @@ namespace vfn {
 
 namespace ast {
 
+FunctionValue::FunctionValue(std::vector<std::string>&& args, NodePtr&& body)
+    : Value(Type::Function)
+    , args(std::move(args))
+    , body(std::move(body))
+{ }
+
+FunctionValue::FunctionValue(NodePtr&& body)
+    : FunctionValue({}, std::move(body))
+{ }
+
 ValuePtr FunctionValue::call(Scope& scope, const std::vector<ValuePtr>& arg_values) const
 {
     if (arg_values.size() != args.size()) {

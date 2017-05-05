@@ -12,14 +12,8 @@ namespace ast {
 class ListValue : public Value
 {
   public:
-    ListValue(std::vector<ValuePtr>&& list)
-        : Value(Value::Type::List)
-        , list(std::move(list))
-    { }
-
-    ListValue()
-        : Value(Value::Type::List)
-    { }
+    ListValue(std::vector<ValuePtr>&& list);
+    ListValue();
 
     const std::vector<ValuePtr>& asList() const override { return list; }
 

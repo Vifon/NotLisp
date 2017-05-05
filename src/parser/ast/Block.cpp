@@ -8,6 +8,10 @@ namespace vfn {
 
 namespace ast {
 
+Block::Block(std::vector<NodePtr>&& subtrees)
+    : subtrees(std::move(subtrees))
+{ }
+
 ValuePtr Block::evaluate(Scope& scope) const
 {
     ValuePtr ret = Value::make<Void>();

@@ -10,9 +10,7 @@ namespace ast {
 class Variable : public Node
 {
   public:
-    Variable(const std::string& varname)
-        : name(varname)
-    { }
+    Variable(const std::string& varname);
 
     ValuePtr evaluate(Scope& scope) const override;
 

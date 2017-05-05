@@ -10,6 +10,10 @@ namespace vfn {
 
 namespace ast {
 
+Print::Print(NodePtr&& expr)
+    : expr(std::move(expr))
+{ }
+
 ValuePtr Print::evaluate(Scope& scope) const
 {
     std::cout << *expr->evaluate(scope) << std::endl;

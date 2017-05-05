@@ -10,10 +10,7 @@ namespace ast {
 class Filter : public Node
 {
   public:
-    Filter(NodePtr&& fun, NodePtr&& list)
-        : fun(std::move(fun))
-        , list(std::move(list))
-    { }
+    Filter(NodePtr&& fun, NodePtr&& list);
 
     ValuePtr evaluate(Scope& scope) const override;
 

@@ -13,13 +13,8 @@ namespace ast {
 class Scope
 {
   public:
-    Scope()
-        : parent(nullptr)
-    { }
-
-    Scope(Scope& parent)
-        : parent(&parent)
-    { }
+    Scope();
+    Scope(Scope& parent);
 
     ValuePtr& lookup(const std::string& varname);
     ValuePtr& addVar(const std::string& varname);

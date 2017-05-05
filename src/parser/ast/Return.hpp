@@ -21,10 +21,7 @@ class Return : public Node
     };
 
 
-    Return(NodePtr&& expr)
-        : expr(std::move(expr))
-    { }
-
+    Return(NodePtr&& expr);
     Return();
 
     ValuePtr evaluate(Scope& scope) const override;

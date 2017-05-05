@@ -12,12 +12,7 @@ namespace ast {
 class Cond : public Node
 {
   public:
-    Cond(NodePtr&& condition, NodePtr&& block, NodePtr&& else_block)
-        : condition(std::move(condition))
-        , block(std::move(block))
-        , else_block(std::move(else_block))
-    { }
-
+    Cond(NodePtr&& condition, NodePtr&& block, NodePtr&& else_block);
     Cond(NodePtr&& condition, NodePtr&& block);
 
     ValuePtr evaluate(Scope& scope) const override;

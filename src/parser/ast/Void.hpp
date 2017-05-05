@@ -13,9 +13,7 @@ class Void
     , public Node
 {
   public:
-    Void()
-        : Value(Value::Type::Void)
-    { }
+    Void();
 
     ValuePtr evaluate(Scope& scope) const override;
 

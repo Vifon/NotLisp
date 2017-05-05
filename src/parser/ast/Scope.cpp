@@ -8,6 +8,14 @@ namespace vfn {
 
 namespace ast {
 
+Scope::Scope()
+    : parent(nullptr)
+{ }
+
+Scope::Scope(Scope& parent)
+    : parent(&parent)
+{ }
+
 ValuePtr& Scope::lookup(const std::string& varname)
 {
     auto it = scope.find(varname);

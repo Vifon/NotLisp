@@ -10,9 +10,7 @@ namespace ast {
 class Print : public Node
 {
   public:
-    Print(NodePtr&& expr)
-        : expr(std::move(expr))
-    { }
+    Print(NodePtr&& expr);
 
     ValuePtr evaluate(Scope& scope) const override;
 

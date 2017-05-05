@@ -8,6 +8,10 @@ namespace vfn {
 
 namespace ast {
 
+Return::Return(NodePtr&& expr)
+    : expr(std::move(expr))
+{ }
+
 Return::Return()
     : expr(Node::make<Void>())
 { }

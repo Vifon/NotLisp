@@ -8,6 +8,12 @@ namespace vfn {
 
 namespace ast {
 
+Loop::Loop(const std::string& iterator_name, NodePtr&& collection, NodePtr&& block)
+    : iterator_name(std::move(iterator_name))
+    , collection(std::move(collection))
+    , block(std::move(block))
+{ }
+
 ValuePtr Loop::evaluate(Scope& scope) const
 {
     auto list = collection->evaluate(scope);

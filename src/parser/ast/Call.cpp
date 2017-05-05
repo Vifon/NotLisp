@@ -9,11 +9,15 @@ namespace vfn {
 
 namespace ast {
 
+Call::Call(const std::string& function, NodePtr&& args)
+    : function_name(function)
+    , arguments_tuple(std::move(args))
+{ }
+
 Call::Call(const std::string& function)
     : function_name(function)
     , arguments_tuple(Node::make<Tuple>())
 { }
-
 
 ValuePtr Call::evaluate(Scope& scope) const
 {

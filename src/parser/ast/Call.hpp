@@ -12,11 +12,7 @@ namespace ast {
 class Call : public Node
 {
   public:
-    Call(const std::string& function, NodePtr&& args)
-        : function_name(function)
-        , arguments_tuple(std::move(args))
-    { }
-
+    Call(const std::string& function, NodePtr&& args);
     Call(const std::string& function);
 
     ValuePtr evaluate(Scope& scope) const override;
